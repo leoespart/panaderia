@@ -96,8 +96,9 @@ export default function Home() {
   });
 
   const { scrollY } = useScroll();
-  const heroOpacity = useTransform(scrollY, [0, 300], [1, 0]);
-  const heroScale = useTransform(scrollY, [0, 300], [1, 0.95]);
+  // Modified scroll transform to start fading later and more slowly
+  const heroOpacity = useTransform(scrollY, [200, 600], [1, 0]);
+  const heroScale = useTransform(scrollY, [200, 600], [1, 0.95]);
 
   useEffect(() => {
     const savedLang = localStorage.getItem("preferred_lang") as Language;
@@ -354,7 +355,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=2072&auto=format&fit=crop')] bg-cover bg-center opacity-10 mix-blend-overlay"></div>
         <div className="absolute inset-0 bg-gradient-to-b from-primary/40 to-primary"></div>
         
-        <div className="container mx-auto relative z-10 text-center max-w-4xl pt-10">
+        <div className="container mx-auto relative z-10 text-center max-w-4xl pt-4 md:pt-0">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
