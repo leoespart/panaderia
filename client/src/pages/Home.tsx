@@ -87,8 +87,8 @@ export default function Home() {
     heroBadgeEs: "Desayunos & Almuerzos",
     heroBadgeEn: "Breakfast & Lunch",
     heroTitle: "Panaderia La Francesa",
-    heroDescEs: "Café, desayunos, sandwiches, dulces y almuerzos en Santurce. El sabor de la tradición en cada bocado.",
-    heroDescEn: "Coffee, breakfast, sandwiches, sweets and lunch in Santurce. The taste of tradition in every bite.",
+    heroDescEs: "Café, sandwiches, dulces y comida en Barrio Obrero. El sabor de la tradición en cada bocado.",
+    heroDescEn: "Coffee, sandwiches, sweets and food in Barrio Obrero. The taste of tradition in every bite.",
     avgPrice: "$5 - $10",
     phone: "(939) 337-4777",
     address: "1963 Av. Borinquen, San Juan, PR 00915",
@@ -145,7 +145,7 @@ export default function Home() {
       visitBtn: "Visítanos",
       menuBtn: "Ver Menú",
       aboutTitle: "Sobre Nosotros",
-      aboutDesc: "Somos una panadería y cafetería en Santurce, reconocida por nuestro pan fresco, postres artesanales y un servicio familiar. Ofrecemos desayunos, almuerzos y una gran variedad de sandwiches.",
+      aboutDesc: "Somos una panadería y cafetería en Barrio Obrero, reconocida por nuestro pan fresco, postres artesanales y un servicio familiar. Ofrecemos desayunos, almuerzos y una gran variedad de sandwiches.",
       menuTitle: "Nuestro Menú",
       viewFullMenu: "Ver menú completo",
       hoursTitle: "Horarios",
@@ -156,7 +156,7 @@ export default function Home() {
       closed: "Cerrado",
       langSelect: "Selecciona tu idioma",
       langDesc: "Bienvenido a Panadería La Francesa",
-      footerDesc: "Llevando el mejor pan, desayunos y almuerzos a tu mesa desde Santurce."
+      footerDesc: "Llevando el mejor pan, desayunos y almuerzos a tu mesa desde Barrio Obrero."
     },
     en: {
       heroBadge: siteData.heroBadgeEn,
@@ -165,7 +165,7 @@ export default function Home() {
       visitBtn: "Visit Us",
       menuBtn: "View Menu",
       aboutTitle: "About Us",
-      aboutDesc: "We are a bakery and cafeteria in Santurce, recognized for our fresh bread, artisanal desserts and family service. We offer breakfast, lunch and a wide variety of sandwiches.",
+      aboutDesc: "We are a bakery and cafeteria in Barrio Obrero, recognized for our fresh bread, artisanal desserts and family service. We offer breakfast, lunch and a wide variety of sandwiches.",
       menuTitle: "Our Menu",
       viewFullMenu: "View full menu",
       hoursTitle: "Hours",
@@ -176,7 +176,7 @@ export default function Home() {
       closed: "Closed",
       langSelect: "Select your language",
       langDesc: "Welcome to Panadería La Francesa",
-      footerDesc: "Bringing the best bread, breakfast and lunch to your table from Santurce."
+      footerDesc: "Bringing the best bread, breakfast and lunch to your table from Barrio Obrero."
     }
   }[lang || "es"];
 
