@@ -367,24 +367,24 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <Badge variant="secondary" className="mb-6 px-10 py-4 text-xl rounded-full shadow-lg border-2 border-white/20 uppercase font-black">{t.heroBadge}</Badge>
-            <div className="flex flex-col items-center gap-4 mb-8">
-              <h1 className="text-7xl md:text-9xl lg:text-[11rem] font-black leading-none tracking-tight drop-shadow-2xl uppercase">
+            <Badge variant="secondary" className="mb-6 px-6 md:px-10 py-3 md:py-4 text-sm md:text-xl rounded-full shadow-lg border-2 border-white/20 uppercase font-black">{t.heroBadge}</Badge>
+            <div className="flex flex-col items-center gap-2 md:gap-4 mb-8">
+              <h1 className="text-5xl md:text-9xl lg:text-[11rem] font-black leading-none tracking-tight drop-shadow-2xl uppercase">
                 Panaderia
               </h1>
-              <h1 className="text-6xl md:text-8xl lg:text-[9rem] font-black leading-none tracking-tight drop-shadow-2xl uppercase opacity-90 -mt-4">
+              <h1 className="text-4xl md:text-8xl lg:text-[9rem] font-black leading-none tracking-tight drop-shadow-2xl uppercase opacity-90 -mt-2 md:-mt-4">
                 La Francesa
               </h1>
             </div>
-            <p className="text-2xl md:text-3xl text-primary-foreground/90 mb-10 max-w-4xl mx-auto font-bold leading-relaxed uppercase opacity-80">
+            <p className="text-lg md:text-3xl text-primary-foreground/90 mb-10 max-w-4xl mx-auto font-bold leading-relaxed uppercase opacity-80">
               {t.heroDesc}
             </p>
-            <div className="flex flex-col sm:flex-row gap-8 justify-center">
-              <Button size="lg" variant="secondary" onClick={() => scrollTo("location")} className="gap-5 text-2xl h-20 px-16 shadow-2xl hover:scale-105 transition-transform font-black uppercase group rounded-3xl">
-                <MapPin className="h-8 w-8 group-hover:animate-bounce" /> {t.visitBtn}
+            <div className="flex flex-col sm:flex-row gap-4 md:gap-8 justify-center items-center">
+              <Button size="lg" variant="secondary" onClick={() => scrollTo("location")} className="w-full sm:w-auto gap-3 md:gap-5 text-lg md:text-2xl h-16 md:h-20 px-8 md:px-16 shadow-2xl hover:scale-105 transition-transform font-black uppercase group rounded-2xl md:rounded-3xl">
+                <MapPin className="h-6 w-6 md:h-8 md:w-8 group-hover:animate-bounce" /> {t.visitBtn}
               </Button>
-              <Button size="lg" variant="outline" onClick={() => scrollTo("menu")} className="gap-5 text-2xl h-20 px-16 bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary shadow-2xl hover:scale-105 transition-transform font-black uppercase group rounded-3xl">
-                <MenuIcon className="h-8 w-8 group-hover:rotate-12 transition-transform" /> {t.menuBtn}
+              <Button size="lg" variant="outline" onClick={() => scrollTo("menu")} className="w-full sm:w-auto gap-3 md:gap-5 text-lg md:text-2xl h-16 md:h-20 px-8 md:px-16 bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary shadow-2xl hover:scale-105 transition-transform font-black uppercase group rounded-2xl md:rounded-3xl">
+                <MenuIcon className="h-6 w-6 md:h-8 md:w-8 group-hover:rotate-12 transition-transform" /> {t.menuBtn}
               </Button>
             </div>
           </motion.div>
@@ -392,21 +392,21 @@ export default function Home() {
       </motion.section>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-16 space-y-32 -mt-10 relative z-20">
+      <main className="container mx-auto px-4 py-8 md:py-16 space-y-16 md:space-y-32 -mt-10 relative z-20">
         {/* About Card */}
         <motion.div id="about" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
           <Card className="shadow-2xl border-none overflow-hidden max-w-5xl mx-auto transform hover:-translate-y-2 transition-transform duration-500">
-            <div className="absolute top-0 left-0 w-4 h-full bg-primary"></div>
-            <CardHeader className="pb-6 p-10">
-              <div className="flex items-center gap-6 mb-4">
-                <div className="p-5 bg-primary/10 rounded-3xl">
-                  <Croissant className="h-12 w-12 text-primary" />
+            <div className="absolute top-0 left-0 w-2 md:w-4 h-full bg-primary"></div>
+            <CardHeader className="pb-4 md:pb-6 p-6 md:p-10">
+              <div className="flex items-center gap-4 md:gap-6 mb-2 md:mb-4">
+                <div className="p-3 md:p-5 bg-primary/10 rounded-2xl md:rounded-3xl">
+                  <Croissant className="h-8 w-8 md:h-12 md:w-12 text-primary" />
                 </div>
-                <h2 className="text-5xl font-black text-primary uppercase">{t.aboutTitle}</h2>
+                <h2 className="text-3xl md:text-5xl font-black text-primary uppercase">{t.aboutTitle}</h2>
               </div>
             </CardHeader>
-            <CardContent className="px-10 pb-10">
-              <p className="text-3xl text-muted-foreground leading-relaxed font-bold">
+            <CardContent className="px-6 md:px-10 pb-6 md:pb-10">
+              <p className="text-xl md:text-3xl text-muted-foreground leading-relaxed font-bold">
                 {t.aboutDesc}
               </p>
             </CardContent>
@@ -415,28 +415,28 @@ export default function Home() {
 
         {/* Menu Section */}
         <motion.div id="menu" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-5xl mx-auto">
-          <div className="flex flex-col items-center mb-20 text-center">
-            <div className="p-5 bg-primary/10 rounded-full mb-8">
-              <Utensils className="h-12 w-12 text-primary" />
+          <div className="flex flex-col items-center mb-12 md:mb-20 text-center">
+            <div className="p-3 md:p-5 bg-primary/10 rounded-full mb-4 md:mb-8">
+              <Utensils className="h-8 w-8 md:h-12 md:w-12 text-primary" />
             </div>
-            <h2 className="text-7xl font-black text-foreground mb-8 uppercase">{t.menuTitle}</h2>
-            <div className="w-40 h-3 bg-primary rounded-full"></div>
+            <h2 className="text-4xl md:text-7xl font-black text-foreground mb-4 md:mb-8 uppercase">{t.menuTitle}</h2>
+            <div className="w-20 md:w-40 h-2 md:h-3 bg-primary rounded-full"></div>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
             {siteData.categories.map((cat) => (
               <React.Fragment key={cat.id}>
                 {cat.items.map((item) => (
                   <motion.div key={item.id} variants={fadeInUp}>
-                    <Card className="h-full hover:shadow-2xl transition-all border-l-[16px] border-l-transparent hover:border-l-primary group bg-white p-4">
-                      <CardHeader>
-                        <CardTitle className="flex justify-between items-center group-hover:text-primary transition-colors text-4xl font-black uppercase">
+                    <Card className="h-full hover:shadow-2xl transition-all border-l-[8px] md:border-l-[16px] border-l-transparent hover:border-l-primary group bg-white p-4">
+                      <CardHeader className="p-4 md:p-6">
+                        <CardTitle className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 group-hover:text-primary transition-colors text-2xl md:text-4xl font-black uppercase">
                           <span>{lang === "es" ? item.nameEs : item.nameEn}</span>
-                          <Badge variant="secondary" className="text-2xl px-5 py-2 font-black">${item.price}</Badge>
+                          <Badge variant="secondary" className="text-lg md:text-2xl px-4 md:px-5 py-1 md:py-2 font-black">${item.price}</Badge>
                         </CardTitle>
                       </CardHeader>
-                      <CardContent>
-                        <p className="text-2xl text-muted-foreground font-bold">
+                      <CardContent className="px-4 md:px-6">
+                        <p className="text-lg md:text-2xl text-muted-foreground font-bold">
                           {lang === "es" ? item.descEs : item.descEn}
                         </p>
                       </CardContent>
@@ -446,10 +446,10 @@ export default function Home() {
               </React.Fragment>
             ))}
             <motion.div variants={fadeInUp} className="md:col-span-2">
-               <Card className="bg-primary text-primary-foreground border-none flex items-center justify-center p-20 cursor-pointer hover:bg-primary/90 transition-all shadow-xl group overflow-hidden relative rounded-[2rem]">
+               <Card className="bg-primary text-primary-foreground border-none flex items-center justify-center p-12 md:p-20 cursor-pointer hover:bg-primary/90 transition-all shadow-xl group overflow-hidden relative rounded-2xl md:rounded-[2rem]">
                 <div className="text-center relative z-10">
-                  <p className="text-5xl font-black mb-8 uppercase">{t.viewFullMenu}</p>
-                  <ArrowRight className="h-16 w-16 mx-auto group-hover:translate-x-8 transition-transform" />
+                  <p className="text-3xl md:text-5xl font-black mb-4 md:mb-8 uppercase">{t.viewFullMenu}</p>
+                  <ArrowRight className="h-10 w-10 md:h-16 md:w-16 mx-auto group-hover:translate-x-8 transition-transform" />
                 </div>
               </Card>
             </motion.div>
@@ -457,51 +457,51 @@ export default function Home() {
         </motion.div>
 
         {/* Info Grid */}
-        <div className="flex flex-col xl:flex-row gap-16 max-w-[1400px] mx-auto w-full">
+        <div className="flex flex-col xl:flex-row gap-8 md:gap-16 max-w-[1400px] mx-auto w-full">
           {/* Hours */}
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="flex-1">
-            <Card className="h-full border-t-[16px] border-t-primary shadow-2xl bg-white rounded-3xl">
-              <CardHeader className="p-10">
-                <div className="flex items-center gap-6">
-                  <div className="p-5 bg-primary/10 rounded-full">
-                    <Clock className="h-12 w-12 text-primary" />
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="flex-1 w-full">
+            <Card className="h-full border-t-[8px] md:border-t-[16px] border-t-primary shadow-2xl bg-white rounded-2xl md:rounded-3xl">
+              <CardHeader className="p-6 md:p-10">
+                <div className="flex items-center gap-4 md:gap-6">
+                  <div className="p-3 md:p-5 bg-primary/10 rounded-full">
+                    <Clock className="h-8 w-8 md:h-12 md:w-12 text-primary" />
                   </div>
-                  <CardTitle className="text-5xl font-black uppercase">{t.hoursTitle}</CardTitle>
+                  <CardTitle className="text-3xl md:text-5xl font-black uppercase">{t.hoursTitle}</CardTitle>
                 </div>
               </CardHeader>
-              <CardContent className="space-y-10 pt-8 px-10 pb-12">
-                <div className="flex justify-between items-center border-b-4 border-border pb-6 gap-4">
-                  <span className="text-3xl font-black uppercase whitespace-nowrap">Lun - Sáb</span>
-                  <span className="text-3xl text-muted-foreground font-bold whitespace-nowrap">6:00 AM - 7:00 PM</span>
+              <CardContent className="space-y-6 md:space-y-10 pt-4 md:pt-8 px-6 md:px-10 pb-8 md:pb-12">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b-2 md:border-b-4 border-border pb-4 md:pb-6 gap-2 sm:gap-4">
+                  <span className="text-xl md:text-3xl font-black uppercase whitespace-nowrap">Lun - Sáb</span>
+                  <span className="text-xl md:text-3xl text-muted-foreground font-bold whitespace-nowrap">6:00 AM - 7:00 PM</span>
                 </div>
-                <div className="flex justify-between items-center gap-4">
-                  <span className="text-3xl font-black uppercase whitespace-nowrap">Dom</span>
-                  <span className="text-3xl text-muted-foreground font-bold whitespace-nowrap">6:00 AM - 3:00 PM</span>
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4">
+                  <span className="text-xl md:text-3xl font-black uppercase whitespace-nowrap">Dom</span>
+                  <span className="text-xl md:text-3xl text-muted-foreground font-bold whitespace-nowrap">6:00 AM - 3:00 PM</span>
                 </div>
               </CardContent>
             </Card>
           </motion.div>
 
           {/* Contact */}
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="flex-1">
-            <Card className="h-full border-t-[16px] border-t-primary shadow-2xl flex flex-col bg-white rounded-3xl">
-              <CardHeader className="p-10">
-                <div className="flex items-center gap-6">
-                  <div className="p-5 bg-primary/10 rounded-full">
-                    <Phone className="h-12 w-12 text-primary" />
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="flex-1 w-full">
+            <Card className="h-full border-t-[8px] md:border-t-[16px] border-t-primary shadow-2xl flex flex-col bg-white rounded-2xl md:rounded-3xl">
+              <CardHeader className="p-6 md:p-10">
+                <div className="flex items-center gap-4 md:gap-6">
+                  <div className="p-3 md:p-5 bg-primary/10 rounded-full">
+                    <Phone className="h-8 w-8 md:h-12 md:w-12 text-primary" />
                   </div>
-                  <CardTitle className="text-5xl font-black uppercase">{t.contactTitle}</CardTitle>
+                  <CardTitle className="text-3xl md:text-5xl font-black uppercase">{t.contactTitle}</CardTitle>
                 </div>
               </CardHeader>
-              <CardContent className="flex-1 flex flex-col justify-between gap-16 pt-8 px-10 pb-12">
-                <div className="text-center md:text-left overflow-visible">
-                  <p className="text-5xl lg:text-6xl xl:text-7xl font-black text-primary mb-10 drop-shadow-md whitespace-nowrap leading-tight">{siteData.phone}</p>
-                  <Badge variant="secondary" className="text-2xl lg:text-3xl px-8 py-4 rounded-full font-black w-fit">
+              <CardContent className="flex-1 flex flex-col justify-between gap-8 md:gap-16 pt-4 md:pt-8 px-6 md:px-10 pb-8 md:pb-12">
+                <div className="text-center md:text-left overflow-hidden">
+                  <p className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-primary mb-6 md:mb-10 drop-shadow-md whitespace-nowrap leading-tight">{siteData.phone}</p>
+                  <Badge variant="secondary" className="text-lg md:text-2xl lg:text-3xl px-6 md:px-8 py-3 md:py-4 rounded-full font-black w-fit">
                     <span>{t.avgPriceLabel}</span>
                   </Badge>
                 </div>
-                <Button size="lg" className="w-full text-4xl h-28 shadow-2xl group rounded-[2rem] font-black uppercase hover:scale-[1.02] transition-transform">
-                  <Phone className="mr-6 h-12 w-12 group-hover:animate-pulse" /> {t.callNow}
+                <Button size="lg" className="w-full text-2xl md:text-4xl h-20 md:h-28 shadow-2xl group rounded-2xl md:rounded-[2rem] font-black uppercase hover:scale-[1.02] transition-transform">
+                  <Phone className="mr-4 md:mr-6 h-8 w-8 md:h-12 md:w-12 group-hover:animate-pulse" /> {t.callNow}
                 </Button>
               </CardContent>
             </Card>
@@ -509,27 +509,27 @@ export default function Home() {
         </div>
 
         {/* Location */}
-        <motion.div id="location" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="max-w-6xl mx-auto pb-20">
-          <div className="flex flex-col items-center mb-16 text-center">
-            <div className="p-5 bg-primary/10 rounded-full mb-8">
-              <MapPin className="h-12 w-12 text-primary" />
+        <motion.div id="location" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="max-w-6xl mx-auto pb-10 md:pb-20">
+          <div className="flex flex-col items-center mb-10 md:mb-16 text-center">
+            <div className="p-3 md:p-5 bg-primary/10 rounded-full mb-4 md:mb-8">
+              <MapPin className="h-8 w-8 md:h-12 md:w-12 text-primary" />
             </div>
-            <h2 className="text-7xl font-black text-foreground mb-8 uppercase">{t.locationTitle}</h2>
+            <h2 className="text-4xl md:text-7xl font-black text-foreground mb-4 md:mb-8 uppercase">{t.locationTitle}</h2>
           </div>
-          <Card className="overflow-hidden shadow-2xl border-none rounded-[4rem] group">
-            <div className="grid md:grid-cols-3">
-              <div className="p-16 md:col-span-1 bg-primary text-primary-foreground flex flex-col justify-center relative overflow-hidden">
+          <Card className="overflow-hidden shadow-2xl border-none rounded-3xl md:rounded-[4rem] group">
+            <div className="grid grid-cols-1 md:grid-cols-3">
+              <div className="p-8 md:p-16 md:col-span-1 bg-primary text-primary-foreground flex flex-col justify-center relative overflow-hidden">
                 <div className="relative z-10">
-                  <h3 className="font-black text-6xl mb-10 uppercase leading-none">{t.visitBtn}</h3>
-                  <p className="text-4xl text-primary-foreground/90 mb-16 font-bold leading-none">
+                  <h3 className="font-black text-4xl md:text-6xl mb-6 md:mb-10 uppercase leading-none">{t.visitBtn}</h3>
+                  <p className="text-2xl md:text-4xl text-primary-foreground/90 mb-10 md:mb-16 font-bold leading-none">
                     {siteData.address}
                   </p>
-                  <Button variant="secondary" className="w-full text-3xl h-24 font-black rounded-2xl shadow-xl hover:scale-105 transition-transform uppercase" size="lg">
+                  <Button variant="secondary" className="w-full text-xl md:text-3xl h-16 md:h-24 font-black rounded-xl md:rounded-2xl shadow-xl hover:scale-105 transition-transform uppercase" size="lg">
                     {t.directionsBtn}
                   </Button>
                 </div>
               </div>
-              <div className="h-[650px] md:h-auto md:col-span-2 relative overflow-hidden">
+              <div className="h-[400px] md:h-auto md:col-span-2 relative overflow-hidden">
                 <iframe 
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3786.1311026046416!2d-66.0592!3d18.4411!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c03666f2f2c8f61%3A0x6a0c0e0c0c0c0c0c!2s1963%20Av.%20Borinquen%2C%20San%20Juan%2C%2000915%2C%20Puerto%20Rico!5e0!3m2!1sen!2sus!4v1710000000000!5m2!1sen!2sus" 
                   width="100%" height="100%" style={{ border: 0 }} allowFullScreen={true} loading="lazy" referrerPolicy="no-referrer-when-downgrade"
@@ -543,23 +543,23 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-primary text-primary-foreground py-32 mt-auto relative overflow-hidden">
+      <footer className="bg-primary text-primary-foreground py-16 md:py-32 mt-auto relative overflow-hidden">
         <div className="container mx-auto px-4 text-center relative z-10">
-          <img src={logoImg} alt="Logo" className="h-40 w-40 mx-auto mb-12 rounded-full border-4 border-white shadow-2xl" />
-          <div className="mb-16">
-            <h3 className="text-7xl font-black mb-6 uppercase">Panaderia</h3>
-            <h3 className="text-6xl font-black mb-6 uppercase opacity-80">La Francesa</h3>
+          <img src={logoImg} alt="Logo" className="h-32 w-32 md:h-40 md:w-40 mx-auto mb-8 md:mb-12 rounded-full border-4 border-white shadow-2xl" />
+          <div className="mb-10 md:mb-16">
+            <h3 className="text-5xl md:text-7xl font-black mb-4 md:mb-6 uppercase">Panaderia</h3>
+            <h3 className="text-4xl md:text-6xl font-black mb-4 md:mb-6 uppercase opacity-80">La Francesa</h3>
           </div>
-          <p className="text-3xl text-primary-foreground/70 mb-20 max-w-3xl mx-auto font-bold uppercase">
+          <p className="text-xl md:text-3xl text-primary-foreground/70 mb-12 md:mb-20 max-w-3xl mx-auto font-bold uppercase">
             {t.footerDesc}
           </p>
-          <div className="bg-white/10 p-12 rounded-[3rem] inline-block mb-24 border-2 border-white/5">
-            <p className="text-lg uppercase tracking-widest mb-4 opacity-60 font-black">Soporte Técnico</p>
-            <p className="text-5xl font-black flex items-center justify-center gap-6">
-              <Phone className="h-10 w-10" /> 939-630-0315
+          <div className="bg-white/10 p-8 md:p-12 rounded-2xl md:rounded-[3rem] inline-block mb-16 md:mb-24 border-2 border-white/5">
+            <p className="text-sm md:text-lg uppercase tracking-widest mb-2 md:mb-4 opacity-60 font-black">Soporte Técnico</p>
+            <p className="text-3xl md:text-5xl font-black flex items-center justify-center gap-4 md:gap-6">
+              <Phone className="h-8 w-8 md:h-10 md:w-10" /> 939-630-0315
             </p>
           </div>
-          <div className="flex flex-wrap justify-center gap-16 text-2xl font-black opacity-60 uppercase">
+          <div className="flex flex-wrap justify-center gap-8 md:gap-16 text-lg md:text-2xl font-black opacity-60 uppercase">
             <span className="hover:opacity-100 transition-opacity cursor-pointer">© 2024</span>
             <span className="hover:opacity-100 transition-opacity cursor-pointer">Privacidad</span>
             <span className="hover:opacity-100 transition-opacity cursor-pointer">Términos</span>
