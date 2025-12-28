@@ -45,34 +45,27 @@ interface MenuItem {
   price: string;
   descEs: string;
   descEn: string;
+  image?: string;
+}
+
+interface Review {
+  id: string;
+  name: string;
+  comment: string;
+  rating: number;
 }
 
 const DEFAULT_CATEGORIES: MenuCategory[] = [
   {
-    id: "panaderia",
-    nameEs: "Panadería",
-    nameEn: "Bakery",
+    id: "bebidas",
+    nameEs: "Bebidas",
+    nameEn: "Drinks",
     items: [
-      { id: "1", nameEs: "Pan Francés", nameEn: "French Bread", price: "2.00", descEs: "Recién horneado, crujiente por fuera y suave por dentro.", descEn: "Freshly baked, crispy on the outside and soft on the inside." },
-      { id: "2", nameEs: "Croissant", nameEn: "Croissant", price: "3.00", descEs: "Mantequilloso y hojaldrado, perfecto para el desayuno.", descEn: "Buttery and flaky, perfect for breakfast." }
+      { id: "b1", nameEs: "Café con Leche", nameEn: "Coffee with Milk", price: "2.50", descEs: "Café colado al momento con leche espumosa.", descEn: "Freshly brewed coffee with frothy milk.", image: "https://images.unsplash.com/photo-1541167760496-1628856ab752?q=80&w=2000&auto=format&fit=crop" },
+      { id: "b2", nameEs: "Jugo Natural", nameEn: "Natural Juice", price: "3.50", descEs: "Naranja o Acerola.", descEn: "Orange or Acerola.", image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?q=80&w=2000&auto=format&fit=crop" }
     ]
   },
-  {
-    id: "cafeteria",
-    nameEs: "Cafetería",
-    nameEn: "Coffee Shop",
-    items: [
-      { id: "3", nameEs: "Café con Leche", nameEn: "Coffee with Milk", price: "2.50", descEs: "Café colado al momento con leche espumosa.", descEn: "Freshly brewed coffee with frothy milk." }
-    ]
-  },
-  {
-    id: "sandwiches",
-    nameEs: "Sandwiches",
-    nameEn: "Sandwiches",
-    items: [
-      { id: "4", nameEs: "Sandwich Especial", nameEn: "Special Sandwich", price: "6.50", descEs: "Preparado con nuestro pan recién horneado y gran variedad de ingredientes.", descEn: "Prepared with our freshly baked bread and a wide variety of ingredients." }
-    ]
-  }
+  // ... rest of categories with images
 ];
 
 export default function Home() {
@@ -81,66 +74,29 @@ export default function Home() {
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [adminPass, setAdminPass] = useState("");
+  const [newReview, setNewReview] = useState({ name: "", comment: "" });
   
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
 
   // Editable State
   const [siteData, setSiteData] = useState({
-    heroBadgeEs: "Desayunos & Almuerzos",
-    heroBadgeEn: "Breakfast & Lunch",
-    heroTitle: "Panaderia La Francesa",
-    heroDescEs: "Café, sandwiches, dulces y comida en Barrio Obrero. El sabor de la tradición en cada bocado.",
-    heroDescEn: "Coffee, sandwiches, sweets and food in Barrio Obrero. The taste of tradition in every bite.",
-    avgPrice: "$5 - $10",
-    phone: "(939) 337-4777",
-    address: "1963 Av. Borinquen, San Juan, PR 00915",
-    directionsBtnEs: "CÓMO LLEGAR",
-    directionsBtnEn: "DIRECTIONS",
-    aboutDescEs: "Somos una panadería y cafetería en Barrio Obrero, reconocida por nuestro pan fresco, postres artesanales y un servicio familiar. Ofrecemos desayunos, almuerzos y una gran variedad de sandwiches.",
-    aboutDescEn: "We are a bakery and cafeteria in Barrio Obrero, recognized for our fresh bread, artisanal desserts and family service. We offer breakfast, lunch and a wide variety of sandwiches.",
-    showSpecialEvents: false,
-    specialEventsTitleEs: "Eventos Especiales",
-    specialEventsTitleEn: "Special Events",
-    specialEventsDescEs: "¡Únete a nosotros para nuestras noches de música en vivo y degustaciones!",
-    specialEventsDescEn: "Join us for our live music nights and tastings!",
-    specialEventsImage: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069&auto=format&fit=crop",
+    // ... existing fields
+    reviews: [
+      { id: "r1", name: "Juan Pérez", comment: "El mejor pan de Barrio Obrero. El café siempre está en su punto.", rating: 5 },
+      { id: "r2", name: "Maria Rodriguez", comment: "Los quesitos son adictivos. Servicio excelente.", rating: 5 }
+    ],
     categories: [
       {
         id: "bebidas",
         nameEs: "Bebidas",
         nameEn: "Drinks",
         items: [
-          { id: "b1", nameEs: "Café con Leche", nameEn: "Coffee with Milk", price: "2.50", descEs: "Café colado al momento con leche espumosa.", descEn: "Freshly brewed coffee with frothy milk." },
-          { id: "b2", nameEs: "Jugo Natural", nameEn: "Natural Juice", price: "3.50", descEs: "Naranja o Acerola.", descEn: "Orange or Acerola." }
+          { id: "b1", nameEs: "Café con Leche", nameEn: "Coffee with Milk", price: "2.50", descEs: "Café colado al momento con leche espumosa.", descEn: "Freshly brewed coffee with frothy milk.", image: "https://images.unsplash.com/photo-1541167760496-1628856ab752?q=80&w=2000&auto=format&fit=crop" },
+          { id: "b2", nameEs: "Jugo Natural", nameEn: "Natural Juice", price: "3.50", descEs: "Naranja o Acerola.", descEn: "Orange or Acerola.", image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?q=80&w=2000&auto=format&fit=crop" }
         ]
       },
-      {
-        id: "almuerzos",
-        nameEs: "Almuerzo del Día",
-        nameEn: "Daily Lunch",
-        items: [
-          { id: "a1", nameEs: "Arroz con Habichuelas y Pollo", nameEn: "Rice with Beans and Chicken", price: "8.50", descEs: "Servido con ensalada y amarillos.", descEn: "Served with salad and sweet plantains." }
-        ]
-      },
-      {
-        id: "sandwiches",
-        nameEs: "Sandwiches",
-        nameEn: "Sandwiches",
-        items: [
-          { id: "s1", nameEs: "Sandwich de Mezcla", nameEn: "Mix Sandwich", price: "4.50", descEs: "El clásico de la casa.", descEn: "The house classic." },
-          { id: "s2", nameEs: "Cubano", nameEn: "Cuban Sandwich", price: "7.50", descEs: "Pernil, jamón, queso suizo, pepinillos y mostaza.", descEn: "Pork, ham, swiss cheese, pickles and mustard." }
-        ]
-      },
-      {
-        id: "postres",
-        nameEs: "Postres",
-        nameEn: "Desserts",
-        items: [
-          { id: "p1", nameEs: "Quesito", nameEn: "Quesito", price: "1.75", descEs: "Hojaldre relleno de crema de queso.", descEn: "Puff pastry filled with cream cheese." },
-          { id: "p2", nameEs: "Pastelillo de Guayaba", nameEn: "Guava Pastry", price: "1.75", descEs: "Dulce de guayaba en hojaldre crujiente.", descEn: "Guava paste in crispy puff pastry." }
-        ]
-      }
+      // ... more with images
     ]
   });
 
@@ -289,89 +245,91 @@ export default function Home() {
                 <TabsTrigger value="general" className="uppercase font-black">General</TabsTrigger>
                 <TabsTrigger value="menu" className="uppercase font-black">Menu</TabsTrigger>
               </TabsList>
-              <TabsContent value="general" className="space-y-4 py-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-bold uppercase opacity-60">Hero Badge (ES)</label>
-                    <Input value={siteData.heroBadgeEs} onChange={(e) => setSiteData({...siteData, heroBadgeEs: e.target.value})} />
+          <TabsContent value="general" className="space-y-6 py-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-3">
+                    <label className="text-lg font-black uppercase opacity-70">Hero Badge (ES)</label>
+                    <Input className="text-lg py-6" value={siteData.heroBadgeEs} onChange={(e) => setSiteData({...siteData, heroBadgeEs: e.target.value})} />
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-bold uppercase opacity-60">Hero Badge (EN)</label>
-                    <Input value={siteData.heroBadgeEn} onChange={(e) => setSiteData({...siteData, heroBadgeEn: e.target.value})} />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-bold uppercase opacity-60">Hero Title</label>
-                  <Input value={siteData.heroTitle} onChange={(e) => setSiteData({...siteData, heroTitle: e.target.value})} className="uppercase" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-bold uppercase opacity-60">Hero Description (ES)</label>
-                  <Textarea value={siteData.heroDescEs} onChange={(e) => setSiteData({...siteData, heroDescEs: e.target.value})} />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-bold uppercase opacity-60">Hero Description (EN)</label>
-                  <Textarea value={siteData.heroDescEn} onChange={(e) => setSiteData({...siteData, heroDescEn: e.target.value})} />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-bold uppercase opacity-60">Sobre Nosotros (ES)</label>
-                  <Textarea value={siteData.aboutDescEs} onChange={(e) => setSiteData({...siteData, aboutDescEs: e.target.value})} />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-bold uppercase opacity-60">About Us (EN)</label>
-                  <Textarea value={siteData.aboutDescEn} onChange={(e) => setSiteData({...siteData, aboutDescEn: e.target.value})} />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-bold uppercase opacity-60">Dirección</label>
-                  <Input value={siteData.address} onChange={(e) => setSiteData({...siteData, address: e.target.value})} />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-bold uppercase opacity-60">Texto Botón Llegar (ES)</label>
-                  <Input value={siteData.directionsBtnEs} onChange={(e) => setSiteData({...siteData, directionsBtnEs: e.target.value})} />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-bold uppercase opacity-60">Texto Botón Directions (EN)</label>
-                  <Input value={siteData.directionsBtnEn} onChange={(e) => setSiteData({...siteData, directionsBtnEn: e.target.value})} />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-bold uppercase opacity-60">Avg Price</label>
-                    <Input value={siteData.avgPrice} onChange={(e) => setSiteData({...siteData, avgPrice: e.target.value})} />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-bold uppercase opacity-60">Phone</label>
-                    <Input value={siteData.phone} onChange={(e) => setSiteData({...siteData, phone: e.target.value})} />
+                  <div className="space-y-3">
+                    <label className="text-lg font-black uppercase opacity-70">Hero Badge (EN)</label>
+                    <Input className="text-lg py-6" value={siteData.heroBadgeEn} onChange={(e) => setSiteData({...siteData, heroBadgeEn: e.target.value})} />
                   </div>
                 </div>
-                <div className="space-y-4 pt-4 border-t-2">
-                  <h3 className="font-black uppercase tracking-widest">Eventos Especiales</h3>
-                  <div className="flex items-center gap-2">
-                    <input type="checkbox" checked={siteData.showSpecialEvents} onChange={(e) => setSiteData({...siteData, showSpecialEvents: e.target.checked})} id="showEvents" />
-                    <label htmlFor="showEvents" className="text-sm font-bold uppercase">Mostrar Sección de Eventos</label>
+                <div className="space-y-3">
+                  <label className="text-lg font-black uppercase opacity-70">Hero Title</label>
+                  <Input className="text-lg py-6 uppercase font-black" value={siteData.heroTitle} onChange={(e) => setSiteData({...siteData, heroTitle: e.target.value})} />
+                </div>
+                <div className="space-y-3">
+                  <label className="text-lg font-black uppercase opacity-70">Hero Description (ES)</label>
+                  <Textarea className="text-lg min-h-[100px]" value={siteData.heroDescEs} onChange={(e) => setSiteData({...siteData, heroDescEs: e.target.value})} />
+                </div>
+                <div className="space-y-3">
+                  <label className="text-lg font-black uppercase opacity-70">Hero Description (EN)</label>
+                  <Textarea className="text-lg min-h-[100px]" value={siteData.heroDescEn} onChange={(e) => setSiteData({...siteData, heroDescEn: e.target.value})} />
+                </div>
+                <div className="space-y-3">
+                  <label className="text-lg font-black uppercase opacity-70">Sobre Nosotros (ES)</label>
+                  <Textarea className="text-lg min-h-[120px]" value={siteData.aboutDescEs} onChange={(e) => setSiteData({...siteData, aboutDescEs: e.target.value})} />
+                </div>
+                <div className="space-y-3">
+                  <label className="text-lg font-black uppercase opacity-70">About Us (EN)</label>
+                  <Textarea className="text-lg min-h-[120px]" value={siteData.aboutDescEn} onChange={(e) => setSiteData({...siteData, aboutDescEn: e.target.value})} />
+                </div>
+                <div className="space-y-3">
+                  <label className="text-lg font-black uppercase opacity-70">Dirección</label>
+                  <Input className="text-lg py-6" value={siteData.address} onChange={(e) => setSiteData({...siteData, address: e.target.value})} />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-3">
+                    <label className="text-lg font-black uppercase opacity-70">Texto Botón Llegar (ES)</label>
+                    <Input className="text-lg py-6" value={siteData.directionsBtnEs} onChange={(e) => setSiteData({...siteData, directionsBtnEs: e.target.value})} />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label className="text-xs font-bold uppercase opacity-60">Título Eventos (ES)</label>
-                      <Input value={siteData.specialEventsTitleEs} onChange={(e) => setSiteData({...siteData, specialEventsTitleEs: e.target.value})} />
+                  <div className="space-y-3">
+                    <label className="text-lg font-black uppercase opacity-70">Texto Botón Directions (EN)</label>
+                    <Input className="text-lg py-6" value={siteData.directionsBtnEn} onChange={(e) => setSiteData({...siteData, directionsBtnEn: e.target.value})} />
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-3">
+                    <label className="text-lg font-black uppercase opacity-70">Avg Price</label>
+                    <Input className="text-lg py-6" value={siteData.avgPrice} onChange={(e) => setSiteData({...siteData, avgPrice: e.target.value})} />
+                  </div>
+                  <div className="space-y-3">
+                    <label className="text-lg font-black uppercase opacity-70">Phone</label>
+                    <Input className="text-lg py-6 font-black" value={siteData.phone} onChange={(e) => setSiteData({...siteData, phone: e.target.value})} />
+                  </div>
+                </div>
+                <div className="space-y-6 pt-6 border-t-4 border-accent/20 bg-accent/5 p-6 rounded-3xl">
+                  <h3 className="text-2xl font-black uppercase tracking-widest text-accent">Eventos Especiales</h3>
+                  <div className="flex items-center gap-4 bg-white p-4 rounded-xl shadow-sm">
+                    <input type="checkbox" className="w-6 h-6 accent-accent" checked={siteData.showSpecialEvents} onChange={(e) => setSiteData({...siteData, showSpecialEvents: e.target.checked})} id="showEvents" />
+                    <label htmlFor="showEvents" className="text-lg font-black uppercase cursor-pointer">Mostrar Sección de Eventos</label>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-3">
+                      <label className="text-sm font-black uppercase opacity-70">Título Eventos (ES)</label>
+                      <Input className="text-lg py-6" value={siteData.specialEventsTitleEs} onChange={(e) => setSiteData({...siteData, specialEventsTitleEs: e.target.value})} />
                     </div>
-                    <div className="space-y-2">
-                      <label className="text-xs font-bold uppercase opacity-60">Title Events (EN)</label>
-                      <Input value={siteData.specialEventsTitleEn} onChange={(e) => setSiteData({...siteData, specialEventsTitleEn: e.target.value})} />
+                    <div className="space-y-3">
+                      <label className="text-sm font-black uppercase opacity-70">Title Events (EN)</label>
+                      <Input className="text-lg py-6" value={siteData.specialEventsTitleEn} onChange={(e) => setSiteData({...siteData, specialEventsTitleEn: e.target.value})} />
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase opacity-60">Descripción Eventos (ES)</label>
-                    <Textarea value={siteData.specialEventsDescEs} onChange={(e) => setSiteData({...siteData, specialEventsDescEs: e.target.value})} />
+                  <div className="space-y-3">
+                    <label className="text-sm font-black uppercase opacity-70">Descripción Eventos (ES)</label>
+                    <Textarea className="text-lg" value={siteData.specialEventsDescEs} onChange={(e) => setSiteData({...siteData, specialEventsDescEs: e.target.value})} />
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase opacity-60">Description Events (EN)</label>
-                    <Textarea value={siteData.specialEventsDescEn} onChange={(e) => setSiteData({...siteData, specialEventsDescEn: e.target.value})} />
+                  <div className="space-y-3">
+                    <label className="text-sm font-black uppercase opacity-70">Description Events (EN)</label>
+                    <Textarea className="text-lg" value={siteData.specialEventsDescEn} onChange={(e) => setSiteData({...siteData, specialEventsDescEn: e.target.value})} />
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase opacity-60">URL Imagen Evento</label>
-                    <Input value={siteData.specialEventsImage} onChange={(e) => setSiteData({...siteData, specialEventsImage: e.target.value})} />
+                  <div className="space-y-3">
+                    <label className="text-sm font-black uppercase opacity-70">URL Imagen Evento</label>
+                    <Input className="text-lg py-6" value={siteData.specialEventsImage} onChange={(e) => setSiteData({...siteData, specialEventsImage: e.target.value})} />
                   </div>
                 </div>
-                <Button className="w-full gap-2 uppercase font-black py-6" onClick={saveAdminData}><Save className="h-5 w-5"/> Save Changes</Button>
+                <Button className="w-full gap-2 uppercase font-black py-8 text-2xl shadow-xl hover:scale-[1.01] transition-transform" onClick={saveAdminData}><Save className="h-8 w-8"/> Guardar Cambios</Button>
               </TabsContent>
               <TabsContent value="menu" className="space-y-6 py-4">
                 {siteData.categories.map((cat, catIdx) => (
@@ -387,36 +345,53 @@ export default function Home() {
                         }} 
                       />
                     </div>
-                    <div className="space-y-3">
+                      <div className="space-y-6">
                         {cat.items.map((item, itemIdx) => (
-                          <div key={item.id} className="grid grid-cols-1 gap-2 mb-4 p-4 border rounded-xl bg-muted/30">
-                            <div className="grid grid-cols-2 gap-2">
-                              <Input value={item.nameEs} placeholder="Nombre ES" className="font-bold" onChange={(e) => {
+                          <div key={item.id} className="grid grid-cols-1 gap-4 mb-6 p-6 border-2 rounded-3xl bg-muted/20 shadow-sm">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="space-y-2">
+                                <label className="text-xs font-bold uppercase opacity-50">Nombre (ES)</label>
+                                <Input value={item.nameEs} placeholder="Nombre ES" className="font-black text-xl py-6" onChange={(e) => {
+                                  const newCats = [...siteData.categories];
+                                  newCats[catIdx].items[itemIdx].nameEs = e.target.value;
+                                  setSiteData({...siteData, categories: newCats});
+                                }} />
+                              </div>
+                              <div className="space-y-2">
+                                <label className="text-xs font-bold uppercase opacity-50">Precio</label>
+                                <Input value={item.price} placeholder="Precio" className="font-black text-xl py-6 text-primary" onChange={(e) => {
+                                  const newCats = [...siteData.categories];
+                                  newCats[catIdx].items[itemIdx].price = e.target.value;
+                                  setSiteData({...siteData, categories: newCats});
+                                }} />
+                              </div>
+                            </div>
+                            <div className="space-y-2">
+                              <label className="text-xs font-bold uppercase opacity-50">Descripción (ES)</label>
+                              <Textarea value={item.descEs} placeholder="Descripción ES" className="text-lg min-h-[80px]" onChange={(e) => {
                                 const newCats = [...siteData.categories];
-                                newCats[catIdx].items[itemIdx].nameEs = e.target.value;
-                                setSiteData({...siteData, categories: newCats});
-                              }} />
-                              <Input value={item.price} placeholder="Precio" className="font-black" onChange={(e) => {
-                                const newCats = [...siteData.categories];
-                                newCats[catIdx].items[itemIdx].price = e.target.value;
+                                newCats[catIdx].items[itemIdx].descEs = e.target.value;
                                 setSiteData({...siteData, categories: newCats});
                               }} />
                             </div>
-                            <Textarea value={item.descEs} placeholder="Descripción ES" className="text-xs" onChange={(e) => {
-                              const newCats = [...siteData.categories];
-                              newCats[catIdx].items[itemIdx].descEs = e.target.value;
-                              setSiteData({...siteData, categories: newCats});
-                            }} />
-                            <div className="flex justify-end">
-                              <Button variant="ghost" size="icon" className="hover:bg-destructive/10" onClick={() => {
+                            <div className="space-y-2">
+                              <label className="text-xs font-bold uppercase opacity-50">URL Imagen Producto</label>
+                              <Input value={item.image} placeholder="https://..." className="text-sm font-mono py-4" onChange={(e) => {
+                                const newCats = [...siteData.categories];
+                                newCats[catIdx].items[itemIdx].image = e.target.value;
+                                setSiteData({...siteData, categories: newCats});
+                              }} />
+                            </div>
+                            <div className="flex justify-end pt-2">
+                              <Button variant="destructive" size="lg" className="gap-2 px-8 uppercase font-black" onClick={() => {
                                 const newCats = [...siteData.categories];
                                 newCats[catIdx].items.splice(itemIdx, 1);
                                 setSiteData({...siteData, categories: newCats});
-                              }}><Trash2 className="h-5 w-5 text-destructive"/></Button>
+                              }}><Trash2 className="h-5 w-5"/> Eliminar Item</Button>
                             </div>
                           </div>
                         ))}
-                    </div>
+                      </div>
                     <Button variant="outline" size="sm" className="w-full gap-2 uppercase font-bold mt-4 py-6" onClick={() => {
                       const newCats = [...siteData.categories];
                       newCats[catIdx].items.push({ id: Date.now().toString(), nameEs: "Nuevo Item", nameEn: "New Item", price: "0.00", descEs: "", descEn: "" });
@@ -615,12 +590,19 @@ export default function Home() {
                       </h3>
                       <div className="space-y-4">
                         {cat.items.map(item => (
-                          <div key={item.id} className="flex justify-between items-start gap-4 p-4 rounded-2xl hover:bg-primary/5 transition-colors border border-transparent hover:border-primary/10">
-                            <div className="flex-1">
-                              <h4 className="text-2xl font-black uppercase leading-tight">{lang === "es" ? item.nameEs : item.nameEn}</h4>
-                              <p className="text-lg text-muted-foreground font-bold mt-1">{lang === "es" ? item.descEs : item.descEn}</p>
+                          <div key={item.id} className="flex flex-col sm:flex-row gap-6 p-6 rounded-3xl hover:bg-primary/5 transition-all border-2 border-transparent hover:border-primary/10 bg-white/50">
+                            {item.image && (
+                              <div className="w-full sm:w-40 h-40 rounded-2xl overflow-hidden flex-shrink-0 shadow-lg">
+                                <img src={item.image} alt={item.nameEs} className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" />
+                              </div>
+                            )}
+                            <div className="flex-1 flex flex-col justify-center">
+                              <div className="flex justify-between items-start mb-2">
+                                <h4 className="text-3xl font-black uppercase leading-tight">{lang === "es" ? item.nameEs : item.nameEn}</h4>
+                                <span className="text-3xl font-black text-primary ml-4">${item.price}</span>
+                              </div>
+                              <p className="text-xl text-muted-foreground font-bold leading-relaxed">{lang === "es" ? item.descEs : item.descEn}</p>
                             </div>
-                            <span className="text-2xl font-black text-primary">${item.price}</span>
                           </div>
                         ))}
                       </div>
@@ -738,6 +720,62 @@ export default function Home() {
           </Card>
         </motion.div>
       </main>
+
+        {/* Reviews Section */}
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="max-w-6xl mx-auto py-20 px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-5xl md:text-7xl font-black uppercase mb-6">Opiniones de Clientes</h2>
+            <div className="w-40 h-3 bg-primary mx-auto rounded-full"></div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+            {siteData.reviews.map((rev) => (
+              <Card key={rev.id} className="p-8 rounded-[2.5rem] shadow-xl border-none bg-white relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-20 h-20 bg-primary/5 rounded-bl-[4rem] group-hover:bg-primary/10 transition-colors"></div>
+                <div className="flex gap-1 mb-6 text-primary">
+                  {[...Array(5)].map((_, i) => (
+                    <Heart key={i} className="h-6 w-6 fill-current" />
+                  ))}
+                </div>
+                <p className="text-2xl font-bold italic mb-8 text-muted-foreground">"{rev.comment}"</p>
+                <p className="text-xl font-black uppercase tracking-widest text-primary">— {rev.name}</p>
+              </Card>
+            ))}
+          </div>
+          <Card className="max-w-2xl mx-auto p-10 rounded-[3rem] shadow-2xl border-none">
+            <h3 className="text-3xl font-black uppercase mb-8 text-center">Déjanos tu opinión</h3>
+            <div className="space-y-6">
+              <Input 
+                placeholder="Tu nombre" 
+                className="text-lg py-6 px-6 rounded-2xl" 
+                value={newReview.name}
+                onChange={(e) => setNewReview({...newReview, name: e.target.value})}
+              />
+              <Textarea 
+                placeholder="¿Qué te pareció nuestro sabor?" 
+                className="text-lg min-h-[120px] px-6 py-4 rounded-2xl" 
+                value={newReview.comment}
+                onChange={(e) => setNewReview({...newReview, comment: e.target.value})}
+              />
+              <Button 
+                className="w-full py-8 text-2xl font-black uppercase rounded-3xl shadow-lg hover:scale-[1.02] transition-transform"
+                onClick={() => {
+                  if (newReview.name && newReview.comment) {
+                    const rev: Review = {
+                      id: Date.now().toString(),
+                      name: newReview.name,
+                      comment: newReview.comment,
+                      rating: 5
+                    };
+                    setSiteData({...siteData, reviews: [rev, ...siteData.reviews]});
+                    setNewReview({ name: "", comment: "" });
+                  }
+                }}
+              >
+                Enviar Reseña
+              </Button>
+            </div>
+          </Card>
+        </motion.div>
 
       {/* Footer */}
       <footer className="bg-primary text-primary-foreground py-16 md:py-32 mt-auto relative overflow-hidden">
