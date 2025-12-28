@@ -317,12 +317,12 @@ export default function Home() {
           <div className="flex items-center gap-6">
             <motion.img 
               initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
+              animate={{ scale: 1.1, opacity: 1 }}
               src={logoImg} 
               alt="Logo" 
-              className="h-28 w-28 rounded-full border-4 border-white shadow-xl -mb-4 z-50" 
+              className="h-48 w-48 rounded-full border-4 border-white shadow-2xl -mb-16 z-50 transform hover:scale-110 transition-transform duration-500 origin-top" 
             />
-            <div className="hidden sm:flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-2 pl-20">
               <ChefHat className="h-6 w-6" />
               <span className="text-xl font-bold tracking-tight">Panaderia La Francesa</span>
             </div>
@@ -348,20 +348,20 @@ export default function Home() {
 
       {/* Hero Section */}
       <motion.section 
-        className="relative bg-primary text-primary-foreground py-24 md:py-40 px-4 overflow-hidden"
+        className="relative bg-primary text-primary-foreground py-32 md:py-48 px-4 overflow-hidden"
         style={{ opacity: heroOpacity, scale: heroScale }}
       >
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=2072&auto=format&fit=crop')] bg-cover bg-center opacity-10 mix-blend-overlay"></div>
         <div className="absolute inset-0 bg-gradient-to-b from-primary/40 to-primary"></div>
         
-        <div className="container mx-auto relative z-10 text-center max-w-4xl">
+        <div className="container mx-auto relative z-10 text-center max-w-4xl pt-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
             <Badge variant="secondary" className="mb-8 px-6 py-2 text-md rounded-full shadow-lg border-2 border-white/20 uppercase tracking-widest">{t.heroBadge}</Badge>
-            <h1 className="text-5xl md:text-8xl lg:text-9xl font-bold mb-8 leading-none tracking-tighter">
+            <h1 className="text-6xl md:text-9xl lg:text-[10rem] font-bold mb-8 leading-none tracking-tighter drop-shadow-2xl">
               {t.heroTitle}
             </h1>
             <p className="text-xl md:text-2xl text-primary-foreground/90 mb-12 max-w-2xl mx-auto font-light leading-relaxed">
