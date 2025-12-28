@@ -329,7 +329,7 @@ export default function Home() {
             />
             <div className="hidden md:flex items-center gap-2 pl-28">
               <ChefHat className="h-6 w-6" />
-              <span className="text-xl font-black uppercase">Panaderia La Francesa</span>
+              <span className="text-xl font-black uppercase whitespace-nowrap">Panaderia La Francesa</span>
             </div>
           </div>
           <div className="flex items-center gap-8">
