@@ -103,8 +103,11 @@ export default function Home() {
     const savedLang = localStorage.getItem("preferred_lang") as Language;
     if (savedLang) {
       setLang(savedLang);
+      // Even if saved, we can show it once or just ensure it's working
     } else {
-      setIsLangOpen(true);
+      // Small delay to ensure the dialog can mount properly
+      const timer = setTimeout(() => setIsLangOpen(true), 500);
+      return () => clearTimeout(timer);
     }
 
     const savedData = localStorage.getItem("bakery_site_data");
@@ -184,7 +187,7 @@ export default function Home() {
     <div className="min-h-screen flex flex-col">
       {/* Language Selector */}
       <Dialog open={isLangOpen} onOpenChange={setIsLangOpen}>
-        <DialogContent className="sm:max-w-md bg-background border-primary">
+        <DialogContent className="sm:max-w-md bg-background border-primary z-[100]">
           <DialogHeader className="text-center">
             <div className="mx-auto mb-4 bg-primary/10 p-3 rounded-full w-fit">
               <Globe className="h-8 w-8 text-primary" />
@@ -207,7 +210,7 @@ export default function Home() {
 
       {/* Admin Panel Dialog */}
       <Dialog open={isAdminOpen} onOpenChange={setIsAdminOpen}>
-        <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto z-[90]">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 font-black uppercase">
               <Settings className="h-5 w-5" /> Admin Panel
@@ -338,7 +341,7 @@ export default function Home() {
             <div className="flex items-center gap-4">
               <Button variant="secondary" size="sm" onClick={() => setIsLangOpen(true)} className="gap-2 font-black shadow-lg px-6">
                 <Globe className="h-4 w-4" />
-                {lang?.toUpperCase()}
+                {lang?.toUpperCase() || "..."}
               </Button>
               <Button variant="ghost" size="icon" onClick={() => setIsAdminOpen(true)} className="text-white hover:bg-white/10">
                 <Settings className="h-6 w-6" />
