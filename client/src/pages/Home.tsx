@@ -82,6 +82,9 @@ export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [adminPass, setAdminPass] = useState("");
   
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
+
   // Editable State
   const [siteData, setSiteData] = useState({
     heroBadgeEs: "Desayunos & Almuerzos",
@@ -94,7 +97,43 @@ export default function Home() {
     address: "1963 Av. Borinquen, San Juan, PR 00915",
     directionsBtnEs: "CÓMO LLEGAR",
     directionsBtnEn: "DIRECTIONS",
-    categories: DEFAULT_CATEGORIES
+    categories: [
+      {
+        id: "bebidas",
+        nameEs: "Bebidas",
+        nameEn: "Drinks",
+        items: [
+          { id: "b1", nameEs: "Café con Leche", nameEn: "Coffee with Milk", price: "2.50", descEs: "Café colado al momento con leche espumosa.", descEn: "Freshly brewed coffee with frothy milk." },
+          { id: "b2", nameEs: "Jugo Natural", nameEn: "Natural Juice", price: "3.50", descEs: "Naranja o Acerola.", descEn: "Orange or Acerola." }
+        ]
+      },
+      {
+        id: "almuerzos",
+        nameEs: "Almuerzo del Día",
+        nameEn: "Daily Lunch",
+        items: [
+          { id: "a1", nameEs: "Arroz con Habichuelas y Pollo", nameEn: "Rice with Beans and Chicken", price: "8.50", descEs: "Servido con ensalada y amarillos.", descEn: "Served with salad and sweet plantains." }
+        ]
+      },
+      {
+        id: "sandwiches",
+        nameEs: "Sandwiches",
+        nameEn: "Sandwiches",
+        items: [
+          { id: "s1", nameEs: "Sandwich de Mezcla", nameEn: "Mix Sandwich", price: "4.50", descEs: "El clásico de la casa.", descEn: "The house classic." },
+          { id: "s2", nameEs: "Cubano", nameEn: "Cuban Sandwich", price: "7.50", descEs: "Pernil, jamón, queso suizo, pepinillos y mostaza.", descEn: "Pork, ham, swiss cheese, pickles and mustard." }
+        ]
+      },
+      {
+        id: "postres",
+        nameEs: "Postres",
+        nameEn: "Desserts",
+        items: [
+          { id: "p1", nameEs: "Quesito", nameEn: "Quesito", price: "1.75", descEs: "Hojaldre relleno de crema de queso.", descEn: "Puff pastry filled with cream cheese." },
+          { id: "p2", nameEs: "Pastelillo de Guayaba", nameEn: "Guava Pastry", price: "1.75", descEs: "Dulce de guayaba en hojaldre crujiente.", descEn: "Guava paste in crispy puff pastry." }
+        ]
+      }
+    ]
   });
 
   const { scrollY } = useScroll();
@@ -460,7 +499,9 @@ export default function Home() {
               </React.Fragment>
             ))}
             <motion.div variants={fadeInUp} className="md:col-span-2">
-               <Card className="bg-primary text-primary-foreground border-none flex items-center justify-center p-12 md:p-20 cursor-pointer hover:bg-primary/90 transition-all shadow-xl group overflow-hidden relative rounded-2xl md:rounded-[2rem]">
+               <Card 
+                onClick={() => setIsMenuModalOpen(true)}
+                className="bg-primary text-primary-foreground border-none flex items-center justify-center p-12 md:p-20 cursor-pointer hover:bg-primary/90 transition-all shadow-xl group overflow-hidden relative rounded-2xl md:rounded-[2rem]">
                 <div className="text-center relative z-10">
                   <p className="text-3xl md:text-5xl font-black mb-4 md:mb-8 uppercase">{t.viewFullMenu}</p>
                   <ArrowRight className="h-10 w-10 md:h-16 md:w-16 mx-auto group-hover:translate-x-8 transition-transform" />
@@ -469,6 +510,61 @@ export default function Home() {
             </motion.div>
           </div>
         </motion.div>
+
+        {/* Full Menu Modal */}
+        <Dialog open={isMenuModalOpen} onOpenChange={setIsMenuModalOpen}>
+          <DialogContent className="max-w-6xl w-[95vw] max-h-[90vh] overflow-y-auto p-0 border-none bg-background rounded-3xl">
+            <div className="sticky top-0 z-30 bg-primary text-white p-8 md:p-12 text-center">
+              <h2 className="text-5xl md:text-7xl font-black uppercase mb-4">{t.menuTitle}</h2>
+              <p className="text-xl opacity-80 font-bold uppercase tracking-widest">Panaderia La Francesa</p>
+            </div>
+
+            <div className="p-6 md:p-12">
+              <div className="flex flex-wrap justify-center gap-4 mb-12">
+                <Button 
+                  variant={selectedCategory === "all" ? "default" : "outline"}
+                  onClick={() => setSelectedCategory("all")}
+                  className="px-8 py-6 text-xl font-black uppercase rounded-2xl h-auto"
+                >
+                  TODOS
+                </Button>
+                {siteData.categories.map(cat => (
+                  <Button 
+                    key={cat.id}
+                    variant={selectedCategory === cat.id ? "default" : "outline"}
+                    onClick={() => setSelectedCategory(cat.id)}
+                    className="px-8 py-6 text-xl font-black uppercase rounded-2xl h-auto"
+                  >
+                    {lang === "es" ? cat.nameEs : cat.nameEn}
+                  </Button>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {siteData.categories
+                  .filter(cat => selectedCategory === "all" || selectedCategory === cat.id)
+                  .map(cat => (
+                    <div key={cat.id} className="space-y-6">
+                      <h3 className="text-4xl font-black text-primary uppercase border-b-4 border-primary/20 pb-2 mb-8">
+                        {lang === "es" ? cat.nameEs : cat.nameEn}
+                      </h3>
+                      <div className="space-y-4">
+                        {cat.items.map(item => (
+                          <div key={item.id} className="flex justify-between items-start gap-4 p-4 rounded-2xl hover:bg-primary/5 transition-colors border border-transparent hover:border-primary/10">
+                            <div className="flex-1">
+                              <h4 className="text-2xl font-black uppercase leading-tight">{lang === "es" ? item.nameEs : item.nameEn}</h4>
+                              <p className="text-lg text-muted-foreground font-bold mt-1">{lang === "es" ? item.descEs : item.descEn}</p>
+                            </div>
+                            <span className="text-2xl font-black text-primary">${item.price}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
 
         {/* Info Grid */}
         <div className="flex flex-col xl:flex-row gap-8 md:gap-16 max-w-[1400px] mx-auto w-full">
