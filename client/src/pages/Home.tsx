@@ -189,15 +189,15 @@ export default function Home() {
             <div className="mx-auto mb-4 bg-primary/10 p-3 rounded-full w-fit">
               <Globe className="h-8 w-8 text-primary" />
             </div>
-            <DialogTitle className="text-2xl font-bold tracking-tight">{t.langSelect}</DialogTitle>
-            <DialogDescription className="tracking-wide">{t.langDesc}</DialogDescription>
+            <DialogTitle className="text-2xl font-bold tracking-[0.15em]">{t.langSelect}</DialogTitle>
+            <DialogDescription className="tracking-widest uppercase text-xs mt-2">{t.langDesc}</DialogDescription>
           </DialogHeader>
           <div className="grid grid-cols-2 gap-4 pt-4">
-            <Button variant="outline" size="lg" onClick={() => selectLanguage("es")} className="h-24 flex flex-col gap-2 hover:border-primary hover:bg-primary/5 tracking-wider">
+            <Button variant="outline" size="lg" onClick={() => selectLanguage("es")} className="h-24 flex flex-col gap-2 hover:border-primary hover:bg-primary/5 tracking-[0.2em] font-black uppercase">
               <span className="text-2xl">🇪🇸</span>
               Español
             </Button>
-            <Button variant="outline" size="lg" onClick={() => selectLanguage("en")} className="h-24 flex flex-col gap-2 hover:border-primary hover:bg-primary/5 tracking-wider">
+            <Button variant="outline" size="lg" onClick={() => selectLanguage("en")} className="h-24 flex flex-col gap-2 hover:border-primary hover:bg-primary/5 tracking-[0.2em] font-black uppercase">
               <span className="text-2xl">🇺🇸</span>
               English
             </Button>
@@ -209,7 +209,7 @@ export default function Home() {
       <Dialog open={isAdminOpen} onOpenChange={setIsAdminOpen}>
         <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 tracking-tight">
+            <DialogTitle className="flex items-center gap-2 tracking-[0.1em] font-black uppercase">
               <Settings className="h-5 w-5" /> Admin Panel
             </DialogTitle>
           </DialogHeader>
@@ -221,55 +221,55 @@ export default function Home() {
                 value={adminPass} 
                 onChange={(e) => setAdminPass(e.target.value)}
               />
-              <Button className="w-full tracking-widest uppercase font-bold" onClick={handleAdminLogin}>Login</Button>
+              <Button className="w-full tracking-[0.3em] uppercase font-black" onClick={handleAdminLogin}>Login</Button>
             </div>
           ) : (
             <Tabs defaultValue="general">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="general" className="tracking-widest uppercase font-bold">General</TabsTrigger>
-                <TabsTrigger value="menu" className="tracking-widest uppercase font-bold">Menu</TabsTrigger>
+                <TabsTrigger value="general" className="tracking-[0.2em] uppercase font-black">General</TabsTrigger>
+                <TabsTrigger value="menu" className="tracking-[0.2em] uppercase font-black">Menu</TabsTrigger>
               </TabsList>
               <TabsContent value="general" className="space-y-4 py-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-bold tracking-wider">Hero Badge (ES)</label>
-                    <Input value={siteData.heroBadgeEs} onChange={(e) => setSiteData({...siteData, heroBadgeEs: e.target.value})} />
+                    <label className="text-sm font-bold tracking-widest uppercase opacity-60">Hero Badge (ES)</label>
+                    <Input value={siteData.heroBadgeEs} onChange={(e) => setSiteData({...siteData, heroBadgeEs: e.target.value})} className="tracking-wide" />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-bold tracking-wider">Hero Badge (EN)</label>
-                    <Input value={siteData.heroBadgeEn} onChange={(e) => setSiteData({...siteData, heroBadgeEn: e.target.value})} />
+                    <label className="text-sm font-bold tracking-widest uppercase opacity-60">Hero Badge (EN)</label>
+                    <Input value={siteData.heroBadgeEn} onChange={(e) => setSiteData({...siteData, heroBadgeEn: e.target.value})} className="tracking-wide" />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold tracking-wider">Hero Title</label>
-                  <Input value={siteData.heroTitle} onChange={(e) => setSiteData({...siteData, heroTitle: e.target.value})} />
+                  <label className="text-sm font-bold tracking-widest uppercase opacity-60">Hero Title</label>
+                  <Input value={siteData.heroTitle} onChange={(e) => setSiteData({...siteData, heroTitle: e.target.value})} className="tracking-widest uppercase" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold tracking-wider">Hero Description (ES)</label>
-                  <Textarea value={siteData.heroDescEs} onChange={(e) => setSiteData({...siteData, heroDescEs: e.target.value})} />
+                  <label className="text-sm font-bold tracking-widest uppercase opacity-60">Hero Description (ES)</label>
+                  <Textarea value={siteData.heroDescEs} onChange={(e) => setSiteData({...siteData, heroDescEs: e.target.value})} className="tracking-wide" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold tracking-wider">Hero Description (EN)</label>
-                  <Textarea value={siteData.heroDescEn} onChange={(e) => setSiteData({...siteData, heroDescEn: e.target.value})} />
+                  <label className="text-sm font-bold tracking-widest uppercase opacity-60">Hero Description (EN)</label>
+                  <Textarea value={siteData.heroDescEn} onChange={(e) => setSiteData({...siteData, heroDescEn: e.target.value})} className="tracking-wide" />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-bold tracking-wider">Avg Price</label>
-                    <Input value={siteData.avgPrice} onChange={(e) => setSiteData({...siteData, avgPrice: e.target.value})} />
+                    <label className="text-sm font-bold tracking-widest uppercase opacity-60">Avg Price</label>
+                    <Input value={siteData.avgPrice} onChange={(e) => setSiteData({...siteData, avgPrice: e.target.value})} className="tracking-widest" />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-bold tracking-wider">Phone</label>
-                    <Input value={siteData.phone} onChange={(e) => setSiteData({...siteData, phone: e.target.value})} />
+                    <label className="text-sm font-bold tracking-widest uppercase opacity-60">Phone</label>
+                    <Input value={siteData.phone} onChange={(e) => setSiteData({...siteData, phone: e.target.value})} className="tracking-widest" />
                   </div>
                 </div>
-                <Button className="w-full gap-2 tracking-widest uppercase font-bold" onClick={saveAdminData}><Save className="h-4 w-4"/> Save Changes</Button>
+                <Button className="w-full gap-2 tracking-[0.3em] uppercase font-black py-6" onClick={saveAdminData}><Save className="h-5 w-5"/> Save Changes</Button>
               </TabsContent>
               <TabsContent value="menu" className="space-y-6 py-4">
                 {siteData.categories.map((cat, catIdx) => (
-                  <Card key={cat.id} className="p-4 border-2">
-                    <div className="flex justify-between items-center mb-4">
+                  <Card key={cat.id} className="p-6 border-2">
+                    <div className="flex justify-between items-center mb-6">
                       <Input 
-                        className="font-bold w-1/2 tracking-wider" 
+                        className="font-black w-1/2 tracking-[0.2em] uppercase text-xl" 
                         value={cat.nameEs} 
                         onChange={(e) => {
                           const newCats = [...siteData.categories];
@@ -278,33 +278,35 @@ export default function Home() {
                         }} 
                       />
                     </div>
-                    {cat.items.map((item, itemIdx) => (
-                      <div key={item.id} className="grid grid-cols-4 gap-2 mb-2 p-2 border rounded">
-                        <Input value={item.nameEs} placeholder="Name ES" className="tracking-wide" onChange={(e) => {
-                          const newCats = [...siteData.categories];
-                          newCats[catIdx].items[itemIdx].nameEs = e.target.value;
-                          setSiteData({...siteData, categories: newCats});
-                        }} />
-                        <Input value={item.price} placeholder="Price" className="tracking-wide" onChange={(e) => {
-                          const newCats = [...siteData.categories];
-                          newCats[catIdx].items[itemIdx].price = e.target.value;
-                          setSiteData({...siteData, categories: newCats});
-                        }} />
-                        <Button variant="ghost" size="icon" onClick={() => {
-                          const newCats = [...siteData.categories];
-                          newCats[catIdx].items.splice(itemIdx, 1);
-                          setSiteData({...siteData, categories: newCats});
-                        }}><Trash2 className="h-4 w-4 text-destructive"/></Button>
-                      </div>
-                    ))}
-                    <Button variant="outline" size="sm" className="w-full gap-2 tracking-widest uppercase" onClick={() => {
+                    <div className="space-y-3">
+                      {cat.items.map((item, itemIdx) => (
+                        <div key={item.id} className="grid grid-cols-4 gap-4 mb-2 p-4 border rounded-xl bg-muted/30">
+                          <Input value={item.nameEs} placeholder="Name ES" className="tracking-wider font-bold" onChange={(e) => {
+                            const newCats = [...siteData.categories];
+                            newCats[catIdx].items[itemIdx].nameEs = e.target.value;
+                            setSiteData({...siteData, categories: newCats});
+                          }} />
+                          <Input value={item.price} placeholder="Price" className="tracking-widest font-black" onChange={(e) => {
+                            const newCats = [...siteData.categories];
+                            newCats[catIdx].items[itemIdx].price = e.target.value;
+                            setSiteData({...siteData, categories: newCats});
+                          }} />
+                          <Button variant="ghost" size="icon" className="hover:bg-destructive/10" onClick={() => {
+                            const newCats = [...siteData.categories];
+                            newCats[catIdx].items.splice(itemIdx, 1);
+                            setSiteData({...siteData, categories: newCats});
+                          }}><Trash2 className="h-5 w-5 text-destructive"/></Button>
+                        </div>
+                      ))}
+                    </div>
+                    <Button variant="outline" size="sm" className="w-full gap-2 tracking-[0.2em] uppercase font-bold mt-4 py-6" onClick={() => {
                       const newCats = [...siteData.categories];
                       newCats[catIdx].items.push({ id: Date.now().toString(), nameEs: "Nuevo Item", nameEn: "New Item", price: "0.00", descEs: "", descEn: "" });
                       setSiteData({...siteData, categories: newCats});
-                    }}><Plus className="h-4 w-4"/> Add Item</Button>
+                    }}><Plus className="h-5 w-5"/> Add Item</Button>
                   </Card>
                 ))}
-                <Button className="w-full gap-2 tracking-widest uppercase font-bold" onClick={saveAdminData}><Save className="h-4 w-4"/> Save Changes</Button>
+                <Button className="w-full gap-2 tracking-[0.3em] uppercase font-black py-6 mt-6" onClick={saveAdminData}><Save className="h-5 w-5"/> Save Changes</Button>
               </TabsContent>
             </Tabs>
           )}
@@ -322,24 +324,24 @@ export default function Home() {
               alt="Logo" 
               className="h-48 w-48 rounded-full border-4 border-white shadow-2xl -mb-16 z-50 transform hover:scale-110 transition-transform duration-500 origin-top" 
             />
-            <div className="hidden md:flex items-center gap-2 pl-24">
+            <div className="hidden md:flex items-center gap-2 pl-28">
               <ChefHat className="h-6 w-6" />
-              <span className="text-xl font-bold tracking-widest uppercase">Panaderia La Francesa</span>
+              <span className="text-xl font-black tracking-[0.3em] uppercase">Panaderia La Francesa</span>
             </div>
           </div>
           <div className="flex items-center gap-8">
-            <div className="hidden lg:flex gap-8 text-sm font-bold tracking-widest uppercase">
+            <div className="hidden lg:flex gap-10 text-sm font-black tracking-[0.25em] uppercase">
               <button onClick={() => scrollTo("about")} className="hover:text-white/80 transition-colors cursor-pointer">{t.aboutTitle}</button>
               <button onClick={() => scrollTo("menu")} className="hover:text-white/80 transition-colors cursor-pointer">Menu</button>
               <button onClick={() => scrollTo("location")} className="hover:text-white/80 transition-colors cursor-pointer">{t.locationTitle}</button>
             </div>
             <div className="flex items-center gap-4">
-              <Button variant="secondary" size="sm" onClick={() => setIsLangOpen(true)} className="gap-2 font-black tracking-widest shadow-lg">
+              <Button variant="secondary" size="sm" onClick={() => setIsLangOpen(true)} className="gap-2 font-black tracking-[0.2em] shadow-lg px-6">
                 <Globe className="h-4 w-4" />
                 {lang?.toUpperCase()}
               </Button>
               <Button variant="ghost" size="icon" onClick={() => setIsAdminOpen(true)} className="text-white hover:bg-white/10">
-                <Settings className="h-5 w-5" />
+                <Settings className="h-6 w-6" />
               </Button>
             </div>
           </div>
@@ -354,30 +356,30 @@ export default function Home() {
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=2072&auto=format&fit=crop')] bg-cover bg-center opacity-10 mix-blend-overlay"></div>
         <div className="absolute inset-0 bg-gradient-to-b from-primary/40 to-primary"></div>
         
-        <div className="container mx-auto relative z-10 text-center max-w-5xl pt-8">
+        <div className="container mx-auto relative z-10 text-center max-w-5xl pt-12">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <Badge variant="secondary" className="mb-10 px-8 py-3 text-lg rounded-full shadow-lg border-2 border-white/20 uppercase tracking-[0.3em] font-black">{t.heroBadge}</Badge>
-            <div className="flex flex-col items-center gap-2 mb-10">
-              <h1 className="text-6xl md:text-8xl lg:text-[9rem] font-black leading-none tracking-tighter drop-shadow-2xl uppercase">
+            <Badge variant="secondary" className="mb-12 px-10 py-4 text-xl rounded-full shadow-lg border-2 border-white/20 uppercase tracking-[0.5em] font-black">{t.heroBadge}</Badge>
+            <div className="flex flex-col items-center gap-4 mb-12">
+              <h1 className="text-7xl md:text-9xl lg:text-[11rem] font-black leading-none tracking-[-0.05em] drop-shadow-2xl uppercase">
                 Panaderia
               </h1>
-              <h1 className="text-5xl md:text-7xl lg:text-[8rem] font-black leading-none tracking-tighter drop-shadow-2xl uppercase opacity-90">
+              <h1 className="text-6xl md:text-8xl lg:text-[9rem] font-black leading-none tracking-[-0.05em] drop-shadow-2xl uppercase opacity-90 -mt-4">
                 La Francesa
               </h1>
             </div>
-            <p className="text-xl md:text-2xl text-primary-foreground/90 mb-12 max-w-3xl mx-auto font-medium tracking-wide leading-relaxed">
+            <p className="text-2xl md:text-3xl text-primary-foreground/90 mb-16 max-w-4xl mx-auto font-bold tracking-[0.1em] leading-relaxed uppercase opacity-80">
               {t.heroDesc}
             </p>
-            <div className="flex flex-col sm:flex-row gap-8 justify-center">
-              <Button size="lg" variant="secondary" onClick={() => scrollTo("location")} className="gap-4 text-xl h-16 px-12 shadow-2xl hover:scale-105 transition-transform font-black tracking-widest uppercase group rounded-2xl">
-                <MapPin className="h-7 w-7 group-hover:animate-bounce" /> {t.visitBtn}
+            <div className="flex flex-col sm:flex-row gap-10 justify-center">
+              <Button size="lg" variant="secondary" onClick={() => scrollTo("location")} className="gap-5 text-2xl h-20 px-16 shadow-2xl hover:scale-105 transition-transform font-black tracking-[0.2em] uppercase group rounded-3xl">
+                <MapPin className="h-8 w-8 group-hover:animate-bounce" /> {t.visitBtn}
               </Button>
-              <Button size="lg" variant="outline" onClick={() => scrollTo("menu")} className="gap-4 text-xl h-16 px-12 bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary shadow-2xl hover:scale-105 transition-transform font-black tracking-widest uppercase group rounded-2xl">
-                <MenuIcon className="h-7 w-7 group-hover:rotate-12 transition-transform" /> {t.menuBtn}
+              <Button size="lg" variant="outline" onClick={() => scrollTo("menu")} className="gap-5 text-2xl h-20 px-16 bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary shadow-2xl hover:scale-105 transition-transform font-black tracking-[0.2em] uppercase group rounded-3xl">
+                <MenuIcon className="h-8 w-8 group-hover:rotate-12 transition-transform" /> {t.menuBtn}
               </Button>
             </div>
           </motion.div>
@@ -385,21 +387,21 @@ export default function Home() {
       </motion.section>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-16 space-y-24 -mt-10 relative z-20">
+      <main className="container mx-auto px-4 py-16 space-y-32 -mt-10 relative z-20">
         {/* About Card */}
         <motion.div id="about" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
-          <Card className="shadow-2xl border-none overflow-hidden max-w-4xl mx-auto transform hover:-translate-y-2 transition-transform duration-500">
-            <div className="absolute top-0 left-0 w-3 h-full bg-primary"></div>
-            <CardHeader className="pb-4">
-              <div className="flex items-center gap-5 mb-2">
-                <div className="p-4 bg-primary/10 rounded-2xl">
-                  <Croissant className="h-10 w-10 text-primary" />
+          <Card className="shadow-2xl border-none overflow-hidden max-w-5xl mx-auto transform hover:-translate-y-2 transition-transform duration-500">
+            <div className="absolute top-0 left-0 w-4 h-full bg-primary"></div>
+            <CardHeader className="pb-6 p-10">
+              <div className="flex items-center gap-6 mb-4">
+                <div className="p-5 bg-primary/10 rounded-3xl">
+                  <Croissant className="h-12 w-12 text-primary" />
                 </div>
-                <h2 className="text-4xl font-black text-primary tracking-tighter uppercase">{t.aboutTitle}</h2>
+                <h2 className="text-5xl font-black text-primary tracking-[-0.03em] uppercase">{t.aboutTitle}</h2>
               </div>
             </CardHeader>
-            <CardContent>
-              <p className="text-2xl text-muted-foreground leading-relaxed font-medium tracking-wide">
+            <CardContent className="px-10 pb-10">
+              <p className="text-3xl text-muted-foreground leading-relaxed font-bold tracking-[0.05em]">
                 {t.aboutDesc}
               </p>
             </CardContent>
@@ -407,29 +409,29 @@ export default function Home() {
         </motion.div>
 
         {/* Menu Section */}
-        <motion.div id="menu" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-4xl mx-auto">
-          <div className="flex flex-col items-center mb-16 text-center">
-            <div className="p-4 bg-primary/10 rounded-full mb-6">
-              <Utensils className="h-10 w-10 text-primary" />
+        <motion.div id="menu" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-5xl mx-auto">
+          <div className="flex flex-col items-center mb-20 text-center">
+            <div className="p-5 bg-primary/10 rounded-full mb-8">
+              <Utensils className="h-12 w-12 text-primary" />
             </div>
-            <h2 className="text-6xl font-black text-foreground mb-6 tracking-tighter uppercase">{t.menuTitle}</h2>
-            <div className="w-32 h-2 bg-primary rounded-full"></div>
+            <h2 className="text-7xl font-black text-foreground mb-8 tracking-[-0.05em] uppercase">{t.menuTitle}</h2>
+            <div className="w-40 h-3 bg-primary rounded-full"></div>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-10">
+          <div className="grid md:grid-cols-2 gap-12">
             {siteData.categories.map((cat) => (
               <React.Fragment key={cat.id}>
                 {cat.items.map((item) => (
                   <motion.div key={item.id} variants={fadeInUp}>
-                    <Card className="h-full hover:shadow-2xl transition-all border-l-[12px] border-l-transparent hover:border-l-primary group bg-white p-2">
+                    <Card className="h-full hover:shadow-2xl transition-all border-l-[16px] border-l-transparent hover:border-l-primary group bg-white p-4">
                       <CardHeader>
-                        <CardTitle className="flex justify-between items-center group-hover:text-primary transition-colors text-3xl font-black tracking-tighter uppercase">
+                        <CardTitle className="flex justify-between items-center group-hover:text-primary transition-colors text-4xl font-black tracking-[-0.05em] uppercase">
                           <span>{lang === "es" ? item.nameEs : item.nameEn}</span>
-                          <Badge variant="secondary" className="text-xl px-4 py-1 font-black">${item.price}</Badge>
+                          <Badge variant="secondary" className="text-2xl px-5 py-2 font-black tracking-widest">${item.price}</Badge>
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <p className="text-xl text-muted-foreground tracking-wide font-medium">
+                        <p className="text-2xl text-muted-foreground tracking-wide font-bold">
                           {lang === "es" ? item.descEs : item.descEn}
                         </p>
                       </CardContent>
@@ -439,10 +441,10 @@ export default function Home() {
               </React.Fragment>
             ))}
             <motion.div variants={fadeInUp} className="md:col-span-2">
-               <Card className="bg-primary text-primary-foreground border-none flex items-center justify-center p-14 cursor-pointer hover:bg-primary/90 transition-all shadow-xl group overflow-hidden relative rounded-3xl">
+               <Card className="bg-primary text-primary-foreground border-none flex items-center justify-center p-20 cursor-pointer hover:bg-primary/90 transition-all shadow-xl group overflow-hidden relative rounded-[2rem]">
                 <div className="text-center relative z-10">
-                  <p className="text-4xl font-black mb-6 uppercase tracking-[0.2em]">{t.viewFullMenu}</p>
-                  <ArrowRight className="h-12 w-12 mx-auto group-hover:translate-x-6 transition-transform" />
+                  <p className="text-5xl font-black mb-8 uppercase tracking-[0.4em]">{t.viewFullMenu}</p>
+                  <ArrowRight className="h-16 w-16 mx-auto group-hover:translate-x-8 transition-transform" />
                 </div>
               </Card>
             </motion.div>
@@ -450,26 +452,26 @@ export default function Home() {
         </motion.div>
 
         {/* Info Grid */}
-        <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-16 max-w-6xl mx-auto">
           {/* Hours */}
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
-            <Card className="h-full border-t-[12px] border-t-primary shadow-2xl bg-white">
-              <CardHeader>
-                <div className="flex items-center gap-5">
-                  <div className="p-4 bg-primary/10 rounded-full">
-                    <Clock className="h-10 w-10 text-primary" />
+            <Card className="h-full border-t-[16px] border-t-primary shadow-2xl bg-white rounded-3xl">
+              <CardHeader className="p-10">
+                <div className="flex items-center gap-6">
+                  <div className="p-5 bg-primary/10 rounded-full">
+                    <Clock className="h-12 w-12 text-primary" />
                   </div>
-                  <CardTitle className="text-4xl font-black tracking-tighter uppercase">{t.hoursTitle}</CardTitle>
+                  <CardTitle className="text-5xl font-black tracking-[-0.05em] uppercase">{t.hoursTitle}</CardTitle>
                 </div>
               </CardHeader>
-              <CardContent className="space-y-8 pt-8 px-8">
-                <div className="flex justify-between items-center border-b-2 border-border pb-4">
-                  <span className="text-2xl font-bold tracking-tight">Lun - Sáb</span>
-                  <span className="text-2xl text-muted-foreground font-medium tracking-wide">6:00 AM - 7:00 PM</span>
+              <CardContent className="space-y-10 pt-8 px-10 pb-12">
+                <div className="flex justify-between items-center border-b-4 border-border pb-6">
+                  <span className="text-3xl font-black tracking-[0.1em] uppercase">Lun - Sáb</span>
+                  <span className="text-3xl text-muted-foreground font-bold tracking-widest">6:00 AM - 7:00 PM</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-2xl font-bold tracking-tight">Dom</span>
-                  <span className="text-2xl text-muted-foreground font-medium tracking-wide">6:00 AM - 3:00 PM</span>
+                  <span className="text-3xl font-black tracking-[0.1em] uppercase">Dom</span>
+                  <span className="text-3xl text-muted-foreground font-bold tracking-widest">6:00 AM - 3:00 PM</span>
                 </div>
               </CardContent>
             </Card>
@@ -477,24 +479,24 @@ export default function Home() {
 
           {/* Contact */}
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
-            <Card className="h-full border-t-[12px] border-t-primary shadow-2xl flex flex-col bg-white">
-              <CardHeader>
-                <div className="flex items-center gap-5">
-                  <div className="p-4 bg-primary/10 rounded-full">
-                    <Phone className="h-10 w-10 text-primary" />
+            <Card className="h-full border-t-[16px] border-t-primary shadow-2xl flex flex-col bg-white rounded-3xl">
+              <CardHeader className="p-10">
+                <div className="flex items-center gap-6">
+                  <div className="p-5 bg-primary/10 rounded-full">
+                    <Phone className="h-12 w-12 text-primary" />
                   </div>
-                  <CardTitle className="text-4xl font-black tracking-tighter uppercase">{t.contactTitle}</CardTitle>
+                  <CardTitle className="text-5xl font-black tracking-[-0.05em] uppercase">{t.contactTitle}</CardTitle>
                 </div>
               </CardHeader>
-              <CardContent className="flex-1 flex flex-col justify-between gap-12 pt-8 px-8">
+              <CardContent className="flex-1 flex flex-col justify-between gap-16 pt-8 px-10 pb-12">
                 <div className="text-center md:text-left">
-                  <p className="text-6xl font-black text-primary mb-8 tracking-tighter drop-shadow-sm">{siteData.phone}</p>
-                  <Badge variant="secondary" className="text-2xl px-8 py-3 rounded-full font-black tracking-widest">
+                  <p className="text-7xl font-black text-primary mb-10 tracking-[-0.05em] drop-shadow-md">{siteData.phone}</p>
+                  <Badge variant="secondary" className="text-3xl px-10 py-4 rounded-full font-black tracking-[0.2em]">
                     {t.avgPriceLabel}
                   </Badge>
                 </div>
-                <Button size="lg" className="w-full text-3xl h-24 shadow-2xl group rounded-3xl font-black uppercase tracking-[0.1em] hover:scale-[1.02] transition-transform">
-                  <Phone className="mr-4 h-10 w-10 group-hover:animate-pulse" /> {t.callNow}
+                <Button size="lg" className="w-full text-4xl h-28 shadow-2xl group rounded-[2rem] font-black uppercase tracking-[0.2em] hover:scale-[1.02] transition-transform">
+                  <Phone className="mr-6 h-12 w-12 group-hover:animate-pulse" /> {t.callNow}
                 </Button>
               </CardContent>
             </Card>
@@ -502,27 +504,27 @@ export default function Home() {
         </div>
 
         {/* Location */}
-        <motion.div id="location" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="max-w-5xl mx-auto">
-          <div className="flex flex-col items-center mb-12 text-center">
-            <div className="p-4 bg-primary/10 rounded-full mb-6">
-              <MapPin className="h-10 w-10 text-primary" />
+        <motion.div id="location" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="max-w-6xl mx-auto pb-20">
+          <div className="flex flex-col items-center mb-16 text-center">
+            <div className="p-5 bg-primary/10 rounded-full mb-8">
+              <MapPin className="h-12 w-12 text-primary" />
             </div>
-            <h2 className="text-6xl font-black text-foreground mb-6 tracking-tighter uppercase">{t.locationTitle}</h2>
+            <h2 className="text-7xl font-black text-foreground mb-8 tracking-[-0.05em] uppercase">{t.locationTitle}</h2>
           </div>
-          <Card className="overflow-hidden shadow-2xl border-none rounded-[3rem] group">
+          <Card className="overflow-hidden shadow-2xl border-none rounded-[4rem] group">
             <div className="grid md:grid-cols-3">
-              <div className="p-12 md:col-span-1 bg-primary text-primary-foreground flex flex-col justify-center relative overflow-hidden">
+              <div className="p-16 md:col-span-1 bg-primary text-primary-foreground flex flex-col justify-center relative overflow-hidden">
                 <div className="relative z-10">
-                  <h3 className="font-black text-5xl mb-8 tracking-tighter uppercase leading-none">{t.visitBtn}</h3>
-                  <p className="text-3xl text-primary-foreground/90 mb-12 font-medium tracking-wide leading-tight">
+                  <h3 className="font-black text-6xl mb-10 tracking-tighter uppercase leading-none">{t.visitBtn}</h3>
+                  <p className="text-4xl text-primary-foreground/90 mb-16 font-bold tracking-tight leading-none">
                     {siteData.address}
                   </p>
-                  <Button variant="secondary" className="w-full text-2xl h-20 font-black rounded-2xl shadow-xl hover:scale-105 transition-transform uppercase tracking-widest" size="lg">
+                  <Button variant="secondary" className="w-full text-3xl h-24 font-black rounded-2xl shadow-xl hover:scale-105 transition-transform uppercase tracking-[0.2em]" size="lg">
                     CÓMO LLEGAR
                   </Button>
                 </div>
               </div>
-              <div className="h-[550px] md:h-auto md:col-span-2 relative overflow-hidden">
+              <div className="h-[650px] md:h-auto md:col-span-2 relative overflow-hidden">
                 <iframe 
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3786.1311026046416!2d-66.0592!3d18.4411!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c03666f2f2c8f61%3A0x6a0c0e0c0c0c0c0c!2s1963%20Av.%20Borinquen%2C%20San%20Juan%2C%2000915%2C%20Puerto%20Rico!5e0!3m2!1sen!2sus!4v1710000000000!5m2!1sen!2sus" 
                   width="100%" height="100%" style={{ border: 0 }} allowFullScreen={true} loading="lazy" referrerPolicy="no-referrer-when-downgrade"
@@ -536,23 +538,23 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-primary text-primary-foreground py-24 mt-auto relative overflow-hidden">
+      <footer className="bg-primary text-primary-foreground py-32 mt-auto relative overflow-hidden">
         <div className="container mx-auto px-4 text-center relative z-10">
-          <img src={logoImg} alt="Logo" className="h-32 w-32 mx-auto mb-10 rounded-full border-4 border-white shadow-2xl" />
-          <div className="mb-12">
-            <h3 className="text-5xl font-black mb-4 tracking-tighter uppercase">Panaderia</h3>
-            <h3 className="text-4xl font-black mb-4 tracking-tighter uppercase opacity-80">La Francesa</h3>
+          <img src={logoImg} alt="Logo" className="h-40 w-40 mx-auto mb-12 rounded-full border-4 border-white shadow-2xl" />
+          <div className="mb-16">
+            <h3 className="text-7xl font-black mb-6 tracking-[-0.05em] uppercase">Panaderia</h3>
+            <h3 className="text-6xl font-black mb-6 tracking-[-0.05em] uppercase opacity-80">La Francesa</h3>
           </div>
-          <p className="text-2xl text-primary-foreground/70 mb-16 max-w-2xl mx-auto font-medium tracking-wide leading-relaxed">
+          <p className="text-3xl text-primary-foreground/70 mb-20 max-w-3xl mx-auto font-bold tracking-wide leading-relaxed uppercase">
             {t.footerDesc}
           </p>
-          <div className="bg-white/10 p-8 rounded-3xl inline-block mb-16">
-            <p className="text-sm uppercase tracking-[0.3em] mb-3 opacity-60">Soporte Técnico</p>
-            <p className="text-3xl font-black tracking-widest flex items-center gap-3">
-              <Phone className="h-6 w-6" /> 939-630-0315
+          <div className="bg-white/10 p-12 rounded-[3rem] inline-block mb-24 border-2 border-white/5">
+            <p className="text-lg uppercase tracking-[0.5em] mb-4 opacity-60 font-black">Soporte Técnico</p>
+            <p className="text-5xl font-black tracking-[0.2em] flex items-center justify-center gap-6">
+              <Phone className="h-10 w-10" /> 939-630-0315
             </p>
           </div>
-          <div className="flex flex-wrap justify-center gap-12 text-xl font-black opacity-60 uppercase tracking-[0.2em]">
+          <div className="flex flex-wrap justify-center gap-16 text-2xl font-black opacity-60 uppercase tracking-[0.4em]">
             <span className="hover:opacity-100 transition-opacity cursor-pointer">© 2024</span>
             <span className="hover:opacity-100 transition-opacity cursor-pointer">Privacidad</span>
             <span className="hover:opacity-100 transition-opacity cursor-pointer">Términos</span>
