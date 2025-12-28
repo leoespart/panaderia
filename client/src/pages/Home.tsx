@@ -92,6 +92,8 @@ export default function Home() {
     avgPrice: "$5 - $10",
     phone: "(939) 337-4777",
     address: "1963 Av. Borinquen, San Juan, PR 00915",
+    directionsBtnEs: "CÓMO LLEGAR",
+    directionsBtnEn: "DIRECTIONS",
     categories: DEFAULT_CATEGORIES
   });
 
@@ -135,7 +137,7 @@ export default function Home() {
   };
 
   const handleAdminLogin = () => {
-    if (adminPass === "admin123") {
+    if (adminPass === "Yadiel132") {
       setIsLoggedIn(true);
     }
   };
@@ -146,7 +148,7 @@ export default function Home() {
       heroTitle: siteData.heroTitle,
       heroDesc: siteData.heroDescEs,
       visitBtn: "Visítanos",
-      directionsBtn: "CÓMO LLEGAR",
+      directionsBtn: siteData.directionsBtnEs || "CÓMO LLEGAR",
       menuBtn: "Ver Menú",
       aboutTitle: "Sobre Nosotros",
       aboutDesc: "Somos una panadería y cafetería en Barrio Obrero, reconocida por nuestro pan fresco, postres artesanales y un servicio familiar. Ofrecemos desayunos, almuerzos y una gran variedad de sandwiches.",
@@ -167,7 +169,7 @@ export default function Home() {
       heroTitle: siteData.heroTitle,
       heroDesc: siteData.heroDescEn,
       visitBtn: "Visit Us",
-      directionsBtn: "DIRECTIONS",
+      directionsBtn: siteData.directionsBtnEn || "DIRECTIONS",
       menuBtn: "View Menu",
       aboutTitle: "About Us",
       aboutDesc: "We are a bakery and cafeteria in Barrio Obrero, recognized for our fresh bread, artisanal desserts and family service. We offer breakfast, lunch and a wide variety of sandwiches.",
@@ -222,11 +224,11 @@ export default function Home() {
             <div className="space-y-4 py-4">
               <Input 
                 type="password" 
-                placeholder="Password (admin123)" 
+                placeholder="Contraseña de administrador" 
                 value={adminPass} 
                 onChange={(e) => setAdminPass(e.target.value)}
               />
-              <Button className="w-full uppercase font-black" onClick={handleAdminLogin}>Login</Button>
+              <Button className="w-full uppercase font-black" onClick={handleAdminLogin}>Acceder</Button>
             </div>
           ) : (
             <Tabs defaultValue="general">
@@ -256,6 +258,18 @@ export default function Home() {
                 <div className="space-y-2">
                   <label className="text-sm font-bold uppercase opacity-60">Hero Description (EN)</label>
                   <Textarea value={siteData.heroDescEn} onChange={(e) => setSiteData({...siteData, heroDescEn: e.target.value})} />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold uppercase opacity-60">Dirección</label>
+                  <Input value={siteData.address} onChange={(e) => setSiteData({...siteData, address: e.target.value})} />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold uppercase opacity-60">Texto Botón Llegar (ES)</label>
+                  <Input value={siteData.directionsBtnEs} onChange={(e) => setSiteData({...siteData, directionsBtnEs: e.target.value})} />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold uppercase opacity-60">Texto Botón Directions (EN)</label>
+                  <Input value={siteData.directionsBtnEn} onChange={(e) => setSiteData({...siteData, directionsBtnEn: e.target.value})} />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
