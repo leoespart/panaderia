@@ -457,9 +457,9 @@ export default function Home() {
         </motion.div>
 
         {/* Info Grid */}
-        <div className="grid md:grid-cols-2 gap-16 max-w-6xl mx-auto">
+        <div className="flex flex-col xl:flex-row gap-16 max-w-[1400px] mx-auto w-full">
           {/* Hours */}
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="flex-1">
             <Card className="h-full border-t-[16px] border-t-primary shadow-2xl bg-white rounded-3xl">
               <CardHeader className="p-10">
                 <div className="flex items-center gap-6">
@@ -470,20 +470,20 @@ export default function Home() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-10 pt-8 px-10 pb-12">
-                <div className="flex justify-between items-center border-b-4 border-border pb-6">
-                  <span className="text-3xl font-black uppercase">Lun - Sáb</span>
-                  <span className="text-3xl text-muted-foreground font-bold">6:00 AM - 7:00 PM</span>
+                <div className="flex justify-between items-center border-b-4 border-border pb-6 gap-4">
+                  <span className="text-3xl font-black uppercase whitespace-nowrap">Lun - Sáb</span>
+                  <span className="text-3xl text-muted-foreground font-bold whitespace-nowrap">6:00 AM - 7:00 PM</span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-3xl font-black uppercase">Dom</span>
-                  <span className="text-3xl text-muted-foreground font-bold">6:00 AM - 3:00 PM</span>
+                <div className="flex justify-between items-center gap-4">
+                  <span className="text-3xl font-black uppercase whitespace-nowrap">Dom</span>
+                  <span className="text-3xl text-muted-foreground font-bold whitespace-nowrap">6:00 AM - 3:00 PM</span>
                 </div>
               </CardContent>
             </Card>
           </motion.div>
 
           {/* Contact */}
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="flex-1">
             <Card className="h-full border-t-[16px] border-t-primary shadow-2xl flex flex-col bg-white rounded-3xl">
               <CardHeader className="p-10">
                 <div className="flex items-center gap-6">
@@ -494,10 +494,10 @@ export default function Home() {
                 </div>
               </CardHeader>
               <CardContent className="flex-1 flex flex-col justify-between gap-16 pt-8 px-10 pb-12">
-                <div className="text-center md:text-left">
-                  <p className="text-5xl lg:text-7xl font-black text-primary mb-10 drop-shadow-md whitespace-nowrap overflow-hidden text-ellipsis">{siteData.phone}</p>
-                  <Badge variant="secondary" className="text-2xl lg:text-3xl px-8 py-4 rounded-full font-black max-w-full">
-                    <span className="truncate">{t.avgPriceLabel}</span>
+                <div className="text-center md:text-left overflow-visible">
+                  <p className="text-5xl lg:text-6xl xl:text-7xl font-black text-primary mb-10 drop-shadow-md whitespace-nowrap leading-tight">{siteData.phone}</p>
+                  <Badge variant="secondary" className="text-2xl lg:text-3xl px-8 py-4 rounded-full font-black w-fit">
+                    <span>{t.avgPriceLabel}</span>
                   </Badge>
                 </div>
                 <Button size="lg" className="w-full text-4xl h-28 shadow-2xl group rounded-[2rem] font-black uppercase hover:scale-[1.02] transition-transform">
