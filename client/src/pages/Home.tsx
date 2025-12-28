@@ -353,20 +353,20 @@ export default function Home() {
 
       {/* Hero Section */}
       <motion.section 
-        className="relative bg-primary text-primary-foreground py-32 md:py-48 px-4 overflow-hidden"
+        className="relative bg-primary text-primary-foreground py-16 md:py-24 px-4 overflow-hidden"
         style={{ opacity: heroOpacity, scale: heroScale }}
       >
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=2072&auto=format&fit=crop')] bg-cover bg-center opacity-10 mix-blend-overlay"></div>
         <div className="absolute inset-0 bg-gradient-to-b from-primary/40 to-primary"></div>
         
-        <div className="container mx-auto relative z-10 text-center max-w-5xl pt-12">
+        <div className="container mx-auto relative z-10 text-center max-w-5xl pt-4">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <Badge variant="secondary" className="mb-12 px-10 py-4 text-xl rounded-full shadow-lg border-2 border-white/20 uppercase font-black">{t.heroBadge}</Badge>
-            <div className="flex flex-col items-center gap-4 mb-12">
+            <Badge variant="secondary" className="mb-6 px-10 py-4 text-xl rounded-full shadow-lg border-2 border-white/20 uppercase font-black">{t.heroBadge}</Badge>
+            <div className="flex flex-col items-center gap-4 mb-8">
               <h1 className="text-7xl md:text-9xl lg:text-[11rem] font-black leading-none tracking-tight drop-shadow-2xl uppercase">
                 Panaderia
               </h1>
@@ -374,10 +374,10 @@ export default function Home() {
                 La Francesa
               </h1>
             </div>
-            <p className="text-2xl md:text-3xl text-primary-foreground/90 mb-16 max-w-4xl mx-auto font-bold leading-relaxed uppercase opacity-80">
+            <p className="text-2xl md:text-3xl text-primary-foreground/90 mb-10 max-w-4xl mx-auto font-bold leading-relaxed uppercase opacity-80">
               {t.heroDesc}
             </p>
-            <div className="flex flex-col sm:flex-row gap-10 justify-center">
+            <div className="flex flex-col sm:flex-row gap-8 justify-center">
               <Button size="lg" variant="secondary" onClick={() => scrollTo("location")} className="gap-5 text-2xl h-20 px-16 shadow-2xl hover:scale-105 transition-transform font-black uppercase group rounded-3xl">
                 <MapPin className="h-8 w-8 group-hover:animate-bounce" /> {t.visitBtn}
               </Button>
