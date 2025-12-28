@@ -146,6 +146,7 @@ export default function Home() {
       heroTitle: siteData.heroTitle,
       heroDesc: siteData.heroDescEs,
       visitBtn: "Visítanos",
+      directionsBtn: "CÓMO LLEGAR",
       menuBtn: "Ver Menú",
       aboutTitle: "Sobre Nosotros",
       aboutDesc: "Somos una panadería y cafetería en Barrio Obrero, reconocida por nuestro pan fresco, postres artesanales y un servicio familiar. Ofrecemos desayunos, almuerzos y una gran variedad de sandwiches.",
@@ -166,6 +167,7 @@ export default function Home() {
       heroTitle: siteData.heroTitle,
       heroDesc: siteData.heroDescEn,
       visitBtn: "Visit Us",
+      directionsBtn: "DIRECTIONS",
       menuBtn: "View Menu",
       aboutTitle: "About Us",
       aboutDesc: "We are a bakery and cafeteria in Barrio Obrero, recognized for our fresh bread, artisanal desserts and family service. We offer breakfast, lunch and a wide variety of sandwiches.",
@@ -493,9 +495,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="flex-1 flex flex-col justify-between gap-16 pt-8 px-10 pb-12">
                 <div className="text-center md:text-left">
-                  <p className="text-7xl font-black text-primary mb-10 drop-shadow-md">{siteData.phone}</p>
-                  <Badge variant="secondary" className="text-3xl px-10 py-4 rounded-full font-black">
-                    {t.avgPriceLabel}
+                  <p className="text-5xl lg:text-7xl font-black text-primary mb-10 drop-shadow-md whitespace-nowrap overflow-hidden text-ellipsis">{siteData.phone}</p>
+                  <Badge variant="secondary" className="text-2xl lg:text-3xl px-8 py-4 rounded-full font-black max-w-full">
+                    <span className="truncate">{t.avgPriceLabel}</span>
                   </Badge>
                 </div>
                 <Button size="lg" className="w-full text-4xl h-28 shadow-2xl group rounded-[2rem] font-black uppercase hover:scale-[1.02] transition-transform">
@@ -523,7 +525,7 @@ export default function Home() {
                     {siteData.address}
                   </p>
                   <Button variant="secondary" className="w-full text-3xl h-24 font-black rounded-2xl shadow-xl hover:scale-105 transition-transform uppercase" size="lg">
-                    CÓMO LLEGAR
+                    {t.directionsBtn}
                   </Button>
                 </div>
               </div>
