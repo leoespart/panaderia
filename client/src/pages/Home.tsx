@@ -97,6 +97,14 @@ export default function Home() {
     address: "1963 Av. Borinquen, San Juan, PR 00915",
     directionsBtnEs: "CÓMO LLEGAR",
     directionsBtnEn: "DIRECTIONS",
+    aboutDescEs: "Somos una panadería y cafetería en Barrio Obrero, reconocida por nuestro pan fresco, postres artesanales y un servicio familiar. Ofrecemos desayunos, almuerzos y una gran variedad de sandwiches.",
+    aboutDescEn: "We are a bakery and cafeteria in Barrio Obrero, recognized for our fresh bread, artisanal desserts and family service. We offer breakfast, lunch and a wide variety of sandwiches.",
+    showSpecialEvents: false,
+    specialEventsTitleEs: "Eventos Especiales",
+    specialEventsTitleEn: "Special Events",
+    specialEventsDescEs: "¡Únete a nosotros para nuestras noches de música en vivo y degustaciones!",
+    specialEventsDescEn: "Join us for our live music nights and tastings!",
+    specialEventsImage: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069&auto=format&fit=crop",
     categories: [
       {
         id: "bebidas",
@@ -190,9 +198,12 @@ export default function Home() {
       directionsBtn: siteData.directionsBtnEs || "CÓMO LLEGAR",
       menuBtn: "Ver Menú",
       aboutTitle: "Sobre Nosotros",
-      aboutDesc: "Somos una panadería y cafetería en Barrio Obrero, reconocida por nuestro pan fresco, postres artesanales y un servicio familiar. Ofrecemos desayunos, almuerzos y una gran variedad de sandwiches.",
+      aboutDesc: siteData.aboutDescEs,
       menuTitle: "Nuestro Menú",
       viewFullMenu: "Ver menú completo",
+      specialEventsBtn: "Eventos",
+      specialEventsTitle: siteData.specialEventsTitleEs,
+      specialEventsDesc: siteData.specialEventsDescEs,
       hoursTitle: "Horarios",
       contactTitle: "Contacto",
       callNow: "Llamar ahora",
@@ -211,9 +222,12 @@ export default function Home() {
       directionsBtn: siteData.directionsBtnEn || "DIRECTIONS",
       menuBtn: "View Menu",
       aboutTitle: "About Us",
-      aboutDesc: "We are a bakery and cafeteria in Barrio Obrero, recognized for our fresh bread, artisanal desserts and family service. We offer breakfast, lunch and a wide variety of sandwiches.",
+      aboutDesc: siteData.aboutDescEn,
       menuTitle: "Our Menu",
       viewFullMenu: "View full menu",
+      specialEventsBtn: "Events",
+      specialEventsTitle: siteData.specialEventsTitleEn,
+      specialEventsDesc: siteData.specialEventsDescEn,
       hoursTitle: "Hours",
       contactTitle: "Contact",
       callNow: "Call now",
@@ -299,6 +313,14 @@ export default function Home() {
                   <Textarea value={siteData.heroDescEn} onChange={(e) => setSiteData({...siteData, heroDescEn: e.target.value})} />
                 </div>
                 <div className="space-y-2">
+                  <label className="text-sm font-bold uppercase opacity-60">Sobre Nosotros (ES)</label>
+                  <Textarea value={siteData.aboutDescEs} onChange={(e) => setSiteData({...siteData, aboutDescEs: e.target.value})} />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold uppercase opacity-60">About Us (EN)</label>
+                  <Textarea value={siteData.aboutDescEn} onChange={(e) => setSiteData({...siteData, aboutDescEn: e.target.value})} />
+                </div>
+                <div className="space-y-2">
                   <label className="text-sm font-bold uppercase opacity-60">Dirección</label>
                   <Input value={siteData.address} onChange={(e) => setSiteData({...siteData, address: e.target.value})} />
                 </div>
@@ -320,6 +342,35 @@ export default function Home() {
                     <Input value={siteData.phone} onChange={(e) => setSiteData({...siteData, phone: e.target.value})} />
                   </div>
                 </div>
+                <div className="space-y-4 pt-4 border-t-2">
+                  <h3 className="font-black uppercase tracking-widest">Eventos Especiales</h3>
+                  <div className="flex items-center gap-2">
+                    <input type="checkbox" checked={siteData.showSpecialEvents} onChange={(e) => setSiteData({...siteData, showSpecialEvents: e.target.checked})} id="showEvents" />
+                    <label htmlFor="showEvents" className="text-sm font-bold uppercase">Mostrar Sección de Eventos</label>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase opacity-60">Título Eventos (ES)</label>
+                      <Input value={siteData.specialEventsTitleEs} onChange={(e) => setSiteData({...siteData, specialEventsTitleEs: e.target.value})} />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase opacity-60">Title Events (EN)</label>
+                      <Input value={siteData.specialEventsTitleEn} onChange={(e) => setSiteData({...siteData, specialEventsTitleEn: e.target.value})} />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase opacity-60">Descripción Eventos (ES)</label>
+                    <Textarea value={siteData.specialEventsDescEs} onChange={(e) => setSiteData({...siteData, specialEventsDescEs: e.target.value})} />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase opacity-60">Description Events (EN)</label>
+                    <Textarea value={siteData.specialEventsDescEn} onChange={(e) => setSiteData({...siteData, specialEventsDescEn: e.target.value})} />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase opacity-60">URL Imagen Evento</label>
+                    <Input value={siteData.specialEventsImage} onChange={(e) => setSiteData({...siteData, specialEventsImage: e.target.value})} />
+                  </div>
+                </div>
                 <Button className="w-full gap-2 uppercase font-black py-6" onClick={saveAdminData}><Save className="h-5 w-5"/> Save Changes</Button>
               </TabsContent>
               <TabsContent value="menu" className="space-y-6 py-4">
@@ -337,25 +388,34 @@ export default function Home() {
                       />
                     </div>
                     <div className="space-y-3">
-                      {cat.items.map((item, itemIdx) => (
-                        <div key={item.id} className="grid grid-cols-4 gap-4 mb-2 p-4 border rounded-xl bg-muted/30">
-                          <Input value={item.nameEs} placeholder="Name ES" className="font-bold" onChange={(e) => {
-                            const newCats = [...siteData.categories];
-                            newCats[catIdx].items[itemIdx].nameEs = e.target.value;
-                            setSiteData({...siteData, categories: newCats});
-                          }} />
-                          <Input value={item.price} placeholder="Price" className="font-black" onChange={(e) => {
-                            const newCats = [...siteData.categories];
-                            newCats[catIdx].items[itemIdx].price = e.target.value;
-                            setSiteData({...siteData, categories: newCats});
-                          }} />
-                          <Button variant="ghost" size="icon" className="hover:bg-destructive/10" onClick={() => {
-                            const newCats = [...siteData.categories];
-                            newCats[catIdx].items.splice(itemIdx, 1);
-                            setSiteData({...siteData, categories: newCats});
-                          }}><Trash2 className="h-5 w-5 text-destructive"/></Button>
-                        </div>
-                      ))}
+                        {cat.items.map((item, itemIdx) => (
+                          <div key={item.id} className="grid grid-cols-1 gap-2 mb-4 p-4 border rounded-xl bg-muted/30">
+                            <div className="grid grid-cols-2 gap-2">
+                              <Input value={item.nameEs} placeholder="Nombre ES" className="font-bold" onChange={(e) => {
+                                const newCats = [...siteData.categories];
+                                newCats[catIdx].items[itemIdx].nameEs = e.target.value;
+                                setSiteData({...siteData, categories: newCats});
+                              }} />
+                              <Input value={item.price} placeholder="Precio" className="font-black" onChange={(e) => {
+                                const newCats = [...siteData.categories];
+                                newCats[catIdx].items[itemIdx].price = e.target.value;
+                                setSiteData({...siteData, categories: newCats});
+                              }} />
+                            </div>
+                            <Textarea value={item.descEs} placeholder="Descripción ES" className="text-xs" onChange={(e) => {
+                              const newCats = [...siteData.categories];
+                              newCats[catIdx].items[itemIdx].descEs = e.target.value;
+                              setSiteData({...siteData, categories: newCats});
+                            }} />
+                            <div className="flex justify-end">
+                              <Button variant="ghost" size="icon" className="hover:bg-destructive/10" onClick={() => {
+                                const newCats = [...siteData.categories];
+                                newCats[catIdx].items.splice(itemIdx, 1);
+                                setSiteData({...siteData, categories: newCats});
+                              }}><Trash2 className="h-5 w-5 text-destructive"/></Button>
+                            </div>
+                          </div>
+                        ))}
                     </div>
                     <Button variant="outline" size="sm" className="w-full gap-2 uppercase font-bold mt-4 py-6" onClick={() => {
                       const newCats = [...siteData.categories];
@@ -433,12 +493,17 @@ export default function Home() {
               {t.heroDesc}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 md:gap-8 justify-center items-center">
-              <Button size="lg" variant="secondary" onClick={() => scrollTo("location")} className="w-full sm:w-auto gap-3 md:gap-5 text-lg md:text-2xl h-16 md:h-20 px-8 md:px-16 shadow-2xl hover:scale-105 transition-transform font-black uppercase group rounded-2xl md:rounded-3xl">
+              <Button size="lg" variant="secondary" onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(siteData.address)}`, '_blank')} className="w-full sm:w-auto gap-3 md:gap-5 text-lg md:text-2xl h-16 md:h-20 px-8 md:px-16 shadow-2xl hover:scale-105 transition-transform font-black uppercase group rounded-2xl md:rounded-3xl">
                 <MapPin className="h-6 w-6 md:h-8 md:w-8 group-hover:animate-bounce" /> {t.visitBtn}
               </Button>
               <Button size="lg" variant="outline" onClick={() => scrollTo("menu")} className="w-full sm:w-auto gap-3 md:gap-5 text-lg md:text-2xl h-16 md:h-20 px-8 md:px-16 bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary shadow-2xl hover:scale-105 transition-transform font-black uppercase group rounded-2xl md:rounded-3xl">
                 <MenuIcon className="h-6 w-6 md:h-8 md:w-8 group-hover:rotate-12 transition-transform" /> {t.menuBtn}
               </Button>
+              {siteData.showSpecialEvents && (
+                <Button size="lg" variant="outline" onClick={() => scrollTo("specials")} className="w-full sm:w-auto gap-3 md:gap-5 text-lg md:text-2xl h-16 md:h-20 px-8 md:px-16 bg-accent border-2 border-white text-white hover:bg-white hover:text-accent shadow-2xl hover:scale-105 transition-transform font-black uppercase group rounded-2xl md:rounded-3xl">
+                  <Heart className="h-6 w-6 md:h-8 md:w-8 group-hover:scale-125 transition-transform" /> {t.specialEventsBtn}
+                </Button>
+              )}
             </div>
           </motion.div>
         </div>
@@ -610,13 +675,35 @@ export default function Home() {
                     <span>{t.avgPriceLabel}</span>
                   </Badge>
                 </div>
-                <Button size="lg" className="w-full text-2xl md:text-4xl h-20 md:h-28 shadow-2xl group rounded-2xl md:rounded-[2rem] font-black uppercase hover:scale-[1.02] transition-transform">
-                  <Phone className="mr-4 md:mr-6 h-8 w-8 md:h-12 md:w-12 group-hover:animate-pulse" /> {t.callNow}
+                <Button size="lg" asChild className="w-full text-2xl md:text-4xl h-20 md:h-28 shadow-2xl group rounded-2xl md:rounded-[2rem] font-black uppercase hover:scale-[1.02] transition-transform">
+                  <a href={`tel:${siteData.phone.replace(/\D/g,'')}`}>
+                    <Phone className="mr-4 md:mr-6 h-8 w-8 md:h-12 md:w-12 group-hover:animate-pulse" /> {t.callNow}
+                  </a>
                 </Button>
               </CardContent>
             </Card>
           </motion.div>
         </div>
+
+        {/* Special Events Section */}
+        {siteData.showSpecialEvents && (
+          <motion.div id="specials" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="max-w-6xl mx-auto">
+            <Card className="bg-accent text-white overflow-hidden rounded-[3rem] shadow-2xl border-none">
+              <div className="grid md:grid-cols-2">
+                <div className="p-12 md:p-20 flex flex-col justify-center">
+                  <Badge variant="secondary" className="w-fit mb-8 px-6 py-2 rounded-full font-black uppercase tracking-widest bg-white text-accent">¡PRÓXIMAMENTE!</Badge>
+                  <h2 className="text-5xl md:text-7xl font-black uppercase mb-8 leading-none">{t.specialEventsTitle}</h2>
+                  <p className="text-2xl md:text-3xl font-bold opacity-90 leading-relaxed mb-12">
+                    {t.specialEventsDesc}
+                  </p>
+                </div>
+                <div className="h-[400px] md:h-auto overflow-hidden">
+                  <img src={siteData.specialEventsImage} alt="Special Event" className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" />
+                </div>
+              </div>
+            </Card>
+          </motion.div>
+        )}
 
         {/* Location */}
         <motion.div id="location" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="max-w-6xl mx-auto pb-10 md:pb-20">
@@ -634,7 +721,7 @@ export default function Home() {
                   <p className="text-2xl md:text-4xl text-primary-foreground/90 mb-10 md:mb-16 font-bold leading-none">
                     {siteData.address}
                   </p>
-                  <Button variant="secondary" className="w-full text-xl md:text-3xl h-16 md:h-24 font-black rounded-xl md:rounded-2xl shadow-xl hover:scale-105 transition-transform uppercase" size="lg">
+                  <Button variant="secondary" onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(siteData.address)}`, '_blank')} className="w-full text-xl md:text-3xl h-16 md:h-24 font-black rounded-xl md:rounded-2xl shadow-xl hover:scale-105 transition-transform uppercase" size="lg">
                     {t.directionsBtn}
                   </Button>
                 </div>
