@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { Phone, MapPin, Clock, Croissant, ChefHat, ArrowRight, Menu as MenuIcon, Utensils, Globe, Sandwich } from "lucide-react";
+import { Phone, MapPin, Clock, Croissant, ChefHat, ArrowRight, Menu as MenuIcon, Utensils, Globe, Sandwich, Settings, LogOut, Save, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import logoImg from "@assets/logo_1766883612871.png";
 
 const fadeInUp = {
@@ -28,68 +31,70 @@ const staggerContainer = {
 
 type Language = "es" | "en";
 
-const translations = {
-  es: {
-    heroBadge: "Pan fresco & café",
-    heroTitle: "Panaderia La Francesa",
-    heroDesc: "Café, desayunos, sandwiches y dulces en Santurce. El sabor de la tradición en cada bocado.",
-    visitBtn: "Visítanos",
-    menuBtn: "Ver Menú",
-    aboutTitle: "Sobre Nosotros",
-    aboutDesc: "Somos una panadería y cafetería en Santurce, reconocida por nuestro pan fresco, postres artesanales y un servicio familiar. Desde nuestros inicios, nos hemos dedicado a traer el mejor sabor a tu mesa con ingredientes de primera calidad y mucho amor.",
-    menuTitle: "Nuestro Menú",
-    breadTitle: "Pan Francés",
-    breadDesc: "Recién horneado, crujiente por fuera y suave por dentro.",
-    croissantTitle: "Croissant",
-    croissantDesc: "Mantequilloso y hojaldrado, perfecto para el desayuno.",
-    coffeeTitle: "Café con Leche",
-    coffeeDesc: "Café colado al momento con leche espumosa.",
-    sandwichTitle: "Sandwiches Especiales",
-    sandwichDesc: "Contamos con una gran variedad de sandwiches preparados con nuestro pan recién horneado.",
-    viewFullMenu: "Ver menú completo",
-    hoursTitle: "Horarios",
-    contactTitle: "Contacto",
-    callNow: "Llamar ahora",
-    locationTitle: "Ubicación",
-    avgPrice: "Precio promedio: $10 - $20",
-    closed: "Cerrado",
-    langSelect: "Selecciona tu idioma",
-    langDesc: "Bienvenido a Panadería La Francesa",
-    footerDesc: "Llevando el mejor pan a tu mesa desde Santurce. Calidad, frescura y tradición en cada producto."
+interface MenuCategory {
+  id: string;
+  nameEs: string;
+  nameEn: string;
+  items: MenuItem[];
+}
+
+interface MenuItem {
+  id: string;
+  nameEs: string;
+  nameEn: string;
+  price: string;
+  descEs: string;
+  descEn: string;
+}
+
+const DEFAULT_CATEGORIES: MenuCategory[] = [
+  {
+    id: "panaderia",
+    nameEs: "Panadería",
+    nameEn: "Bakery",
+    items: [
+      { id: "1", nameEs: "Pan Francés", nameEn: "French Bread", price: "2.00", descEs: "Recién horneado, crujiente por fuera y suave por dentro.", descEn: "Freshly baked, crispy on the outside and soft on the inside." },
+      { id: "2", nameEs: "Croissant", nameEn: "Croissant", price: "3.00", descEs: "Mantequilloso y hojaldrado, perfecto para el desayuno.", descEn: "Buttery and flaky, perfect for breakfast." }
+    ]
   },
-  en: {
-    heroBadge: "Fresh bread & coffee",
-    heroTitle: "Panaderia La Francesa",
-    heroDesc: "Coffee, breakfast, sandwiches and sweets in Santurce. The taste of tradition in every bite.",
-    visitBtn: "Visit Us",
-    menuBtn: "View Menu",
-    aboutTitle: "About Us",
-    aboutDesc: "We are a bakery and cafeteria in Santurce, recognized for our fresh bread, artisanal desserts and family service. Since our beginnings, we have been dedicated to bringing the best flavor to your table with top quality ingredients and lots of love.",
-    menuTitle: "Our Menu",
-    breadTitle: "French Bread",
-    breadDesc: "Freshly baked, crispy on the outside and soft on the inside.",
-    croissantTitle: "Croissant",
-    croissantDesc: "Buttery and flaky, perfect for breakfast.",
-    coffeeTitle: "Coffee with Milk",
-    coffeeDesc: "Freshly brewed coffee with frothy milk.",
-    sandwichTitle: "Special Sandwiches",
-    sandwichDesc: "We have a wide variety of sandwiches prepared with our freshly baked bread.",
-    viewFullMenu: "View full menu",
-    hoursTitle: "Hours",
-    contactTitle: "Contact",
-    callNow: "Call now",
-    locationTitle: "Location",
-    avgPrice: "Average price: $10 - $20",
-    closed: "Closed",
-    langSelect: "Select your language",
-    langDesc: "Welcome to Panadería La Francesa",
-    footerDesc: "Bringing the best bread to your table from Santurce. Quality, freshness and tradition in every product."
+  {
+    id: "cafeteria",
+    nameEs: "Cafetería",
+    nameEn: "Coffee Shop",
+    items: [
+      { id: "3", nameEs: "Café con Leche", nameEn: "Coffee with Milk", price: "2.50", descEs: "Café colado al momento con leche espumosa.", descEn: "Freshly brewed coffee with frothy milk." }
+    ]
+  },
+  {
+    id: "sandwiches",
+    nameEs: "Sandwiches",
+    nameEn: "Sandwiches",
+    items: [
+      { id: "4", nameEs: "Sandwich Especial", nameEn: "Special Sandwich", price: "6.50", descEs: "Preparado con nuestro pan recién horneado y gran variedad de ingredientes.", descEn: "Prepared with our freshly baked bread and a wide variety of ingredients." }
+    ]
   }
-};
+];
 
 export default function Home() {
   const [lang, setLang] = useState<Language | null>(null);
   const [isLangOpen, setIsLangOpen] = useState(false);
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [adminPass, setAdminPass] = useState("");
+  
+  // Editable State
+  const [siteData, setSiteData] = useState({
+    heroBadgeEs: "Desayunos & Almuerzos",
+    heroBadgeEn: "Breakfast & Lunch",
+    heroTitle: "Panaderia La Francesa",
+    heroDescEs: "Café, desayunos, sandwiches, dulces y almuerzos en Santurce. El sabor de la tradición en cada bocado.",
+    heroDescEn: "Coffee, breakfast, sandwiches, sweets and lunch in Santurce. The taste of tradition in every bite.",
+    avgPrice: "$5 - $10",
+    phone: "(939) 337-4777",
+    address: "1963 Av. Borinquen, San Juan, PR 00915",
+    categories: DEFAULT_CATEGORIES
+  });
+
   const { scrollY } = useScroll();
   const heroOpacity = useTransform(scrollY, [0, 300], [1, 0]);
   const heroScale = useTransform(scrollY, [0, 300], [1, 0.95]);
@@ -100,6 +105,11 @@ export default function Home() {
       setLang(savedLang);
     } else {
       setIsLangOpen(true);
+    }
+
+    const savedData = localStorage.getItem("bakery_site_data");
+    if (savedData) {
+      setSiteData(JSON.parse(savedData));
     }
   }, []);
 
@@ -116,10 +126,63 @@ export default function Home() {
     }
   };
 
-  const t = translations[lang || "es"];
+  const saveAdminData = () => {
+    localStorage.setItem("bakery_site_data", JSON.stringify(siteData));
+    setIsAdminOpen(false);
+  };
+
+  const handleAdminLogin = () => {
+    if (adminPass === "admin123") {
+      setIsLoggedIn(true);
+    }
+  };
+
+  const t = {
+    es: {
+      heroBadge: siteData.heroBadgeEs,
+      heroTitle: siteData.heroTitle,
+      heroDesc: siteData.heroDescEs,
+      visitBtn: "Visítanos",
+      menuBtn: "Ver Menú",
+      aboutTitle: "Sobre Nosotros",
+      aboutDesc: "Somos una panadería y cafetería en Santurce, reconocida por nuestro pan fresco, postres artesanales y un servicio familiar. Ofrecemos desayunos, almuerzos y una gran variedad de sandwiches.",
+      menuTitle: "Nuestro Menú",
+      viewFullMenu: "Ver menú completo",
+      hoursTitle: "Horarios",
+      contactTitle: "Contacto",
+      callNow: "Llamar ahora",
+      locationTitle: "Ubicación",
+      avgPriceLabel: `Precio promedio: ${siteData.avgPrice}`,
+      closed: "Cerrado",
+      langSelect: "Selecciona tu idioma",
+      langDesc: "Bienvenido a Panadería La Francesa",
+      footerDesc: "Llevando el mejor pan, desayunos y almuerzos a tu mesa desde Santurce."
+    },
+    en: {
+      heroBadge: siteData.heroBadgeEn,
+      heroTitle: siteData.heroTitle,
+      heroDesc: siteData.heroDescEn,
+      visitBtn: "Visit Us",
+      menuBtn: "View Menu",
+      aboutTitle: "About Us",
+      aboutDesc: "We are a bakery and cafeteria in Santurce, recognized for our fresh bread, artisanal desserts and family service. We offer breakfast, lunch and a wide variety of sandwiches.",
+      menuTitle: "Our Menu",
+      viewFullMenu: "View full menu",
+      hoursTitle: "Hours",
+      contactTitle: "Contact",
+      callNow: "Call now",
+      locationTitle: "Location",
+      avgPriceLabel: `Average price: ${siteData.avgPrice}`,
+      closed: "Closed",
+      langSelect: "Select your language",
+      langDesc: "Welcome to Panadería La Francesa",
+      footerDesc: "Bringing the best bread, breakfast and lunch to your table from Santurce."
+    }
+  }[lang || "es"];
 
   return (
     <div className="min-h-screen flex flex-col">
+      {/* Language Selector */}
       <Dialog open={isLangOpen} onOpenChange={setIsLangOpen}>
         <DialogContent className="sm:max-w-md bg-background border-primary">
           <DialogHeader className="text-center">
@@ -139,6 +202,112 @@ export default function Home() {
               English
             </Button>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Admin Panel Dialog */}
+      <Dialog open={isAdminOpen} onOpenChange={setIsAdminOpen}>
+        <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Settings className="h-5 w-5" /> Admin Panel
+            </DialogTitle>
+          </DialogHeader>
+          {!isLoggedIn ? (
+            <div className="space-y-4 py-4">
+              <Input 
+                type="password" 
+                placeholder="Password (admin123)" 
+                value={adminPass} 
+                onChange={(e) => setAdminPass(e.target.value)}
+              />
+              <Button className="w-full" onClick={handleAdminLogin}>Login</Button>
+            </div>
+          ) : (
+            <Tabs defaultValue="general">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="general">General</TabsTrigger>
+                <TabsTrigger value="menu">Menu</TabsTrigger>
+              </TabsList>
+              <TabsContent value="general" className="space-y-4 py-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold">Hero Badge (ES)</label>
+                    <Input value={siteData.heroBadgeEs} onChange={(e) => setSiteData({...siteData, heroBadgeEs: e.target.value})} />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold">Hero Badge (EN)</label>
+                    <Input value={siteData.heroBadgeEn} onChange={(e) => setSiteData({...siteData, heroBadgeEn: e.target.value})} />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold">Hero Title</label>
+                  <Input value={siteData.heroTitle} onChange={(e) => setSiteData({...siteData, heroTitle: e.target.value})} />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold">Hero Description (ES)</label>
+                  <Textarea value={siteData.heroDescEs} onChange={(e) => setSiteData({...siteData, heroDescEs: e.target.value})} />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold">Hero Description (EN)</label>
+                  <Textarea value={siteData.heroDescEn} onChange={(e) => setSiteData({...siteData, heroDescEn: e.target.value})} />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold">Avg Price</label>
+                    <Input value={siteData.avgPrice} onChange={(e) => setSiteData({...siteData, avgPrice: e.target.value})} />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold">Phone</label>
+                    <Input value={siteData.phone} onChange={(e) => setSiteData({...siteData, phone: e.target.value})} />
+                  </div>
+                </div>
+                <Button className="w-full gap-2" onClick={saveAdminData}><Save className="h-4 w-4"/> Save Changes</Button>
+              </TabsContent>
+              <TabsContent value="menu" className="space-y-6 py-4">
+                {siteData.categories.map((cat, catIdx) => (
+                  <Card key={cat.id} className="p-4 border-2">
+                    <div className="flex justify-between items-center mb-4">
+                      <Input 
+                        className="font-bold w-1/2" 
+                        value={cat.nameEs} 
+                        onChange={(e) => {
+                          const newCats = [...siteData.categories];
+                          newCats[catIdx].nameEs = e.target.value;
+                          setSiteData({...siteData, categories: newCats});
+                        }} 
+                      />
+                    </div>
+                    {cat.items.map((item, itemIdx) => (
+                      <div key={item.id} className="grid grid-cols-4 gap-2 mb-2 p-2 border rounded">
+                        <Input value={item.nameEs} placeholder="Name ES" onChange={(e) => {
+                          const newCats = [...siteData.categories];
+                          newCats[catIdx].items[itemIdx].nameEs = e.target.value;
+                          setSiteData({...siteData, categories: newCats});
+                        }} />
+                        <Input value={item.price} placeholder="Price" onChange={(e) => {
+                          const newCats = [...siteData.categories];
+                          newCats[catIdx].items[itemIdx].price = e.target.value;
+                          setSiteData({...siteData, categories: newCats});
+                        }} />
+                        <Button variant="ghost" size="icon" onClick={() => {
+                          const newCats = [...siteData.categories];
+                          newCats[catIdx].items.splice(itemIdx, 1);
+                          setSiteData({...siteData, categories: newCats});
+                        }}><Trash2 className="h-4 w-4 text-destructive"/></Button>
+                      </div>
+                    ))}
+                    <Button variant="outline" size="sm" className="w-full gap-2" onClick={() => {
+                      const newCats = [...siteData.categories];
+                      newCats[catIdx].items.push({ id: Date.now().toString(), nameEs: "Nuevo Item", nameEn: "New Item", price: "0.00", descEs: "", descEn: "" });
+                      setSiteData({...siteData, categories: newCats});
+                    }}><Plus className="h-4 w-4"/> Add Item</Button>
+                  </Card>
+                ))}
+                <Button className="w-full gap-2" onClick={saveAdminData}><Save className="h-4 w-4"/> Save Changes</Button>
+              </TabsContent>
+            </Tabs>
+          )}
         </DialogContent>
       </Dialog>
 
@@ -164,10 +333,15 @@ export default function Home() {
               <button onClick={() => scrollTo("menu")} className="hover:text-white/80 transition-colors cursor-pointer">Menu</button>
               <button onClick={() => scrollTo("location")} className="hover:text-white/80 transition-colors cursor-pointer">{t.locationTitle}</button>
             </div>
-            <Button variant="secondary" size="sm" onClick={() => setIsLangOpen(true)} className="gap-2 font-bold shadow-lg">
-              <Globe className="h-4 w-4" />
-              {lang?.toUpperCase()}
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button variant="secondary" size="sm" onClick={() => setIsLangOpen(true)} className="gap-2 font-bold shadow-lg">
+                <Globe className="h-4 w-4" />
+                {lang?.toUpperCase()}
+              </Button>
+              <Button variant="ghost" size="icon" onClick={() => setIsAdminOpen(true)} className="text-white hover:bg-white/10">
+                <Settings className="h-5 w-5" />
+              </Button>
+            </div>
           </div>
         </div>
       </nav>
@@ -203,31 +377,12 @@ export default function Home() {
             </div>
           </motion.div>
         </div>
-        
-        {/* Animated decorative elements */}
-        <motion.div 
-          animate={{ rotate: 360 }} 
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="absolute -top-24 -left-24 w-64 h-64 border-2 border-white/10 rounded-full"
-        />
-        <motion.div 
-          animate={{ scale: [1, 1.2, 1] }} 
-          transition={{ duration: 10, repeat: Infinity }}
-          className="absolute top-1/2 -right-32 w-96 h-96 bg-yellow-400/20 rounded-full filter blur-3xl"
-        />
       </motion.section>
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-16 space-y-24 -mt-10 relative z-20">
-        
         {/* About Card */}
-        <motion.div
-          id="about"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={fadeInUp}
-        >
+        <motion.div id="about" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
           <Card className="shadow-2xl border-none overflow-hidden max-w-4xl mx-auto transform hover:-translate-y-2 transition-transform duration-500">
             <div className="absolute top-0 left-0 w-3 h-full bg-primary"></div>
             <CardHeader className="pb-4">
@@ -247,14 +402,7 @@ export default function Home() {
         </motion.div>
 
         {/* Menu Section */}
-        <motion.div 
-          id="menu"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={staggerContainer}
-          className="max-w-4xl mx-auto"
-        >
+        <motion.div id="menu" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-4xl mx-auto">
           <div className="flex flex-col items-center mb-12 text-center">
             <div className="p-3 bg-primary/10 rounded-full mb-4">
               <Utensils className="h-8 w-8 text-primary" />
@@ -264,71 +412,29 @@ export default function Home() {
           </div>
           
           <div className="grid md:grid-cols-2 gap-8">
-            <motion.div variants={fadeInUp}>
-              <Card className="h-full hover:shadow-2xl transition-all border-l-8 border-l-transparent hover:border-l-primary group bg-white">
-                <CardHeader>
-                  <CardTitle className="flex justify-between items-center group-hover:text-primary transition-colors text-2xl">
-                    <span>{t.breadTitle}</span>
-                    <Badge variant="secondary" className="text-lg px-3">$2.00</Badge>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-lg text-muted-foreground">{t.breadDesc}</p>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            <motion.div variants={fadeInUp}>
-              <Card className="h-full hover:shadow-2xl transition-all border-l-8 border-l-transparent hover:border-l-primary group bg-white">
-                <CardHeader>
-                  <CardTitle className="flex justify-between items-center group-hover:text-primary transition-colors text-2xl">
-                    <span>{t.croissantTitle}</span>
-                    <Badge variant="secondary" className="text-lg px-3">$3.00</Badge>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-lg text-muted-foreground">{t.croissantDesc}</p>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            <motion.div variants={fadeInUp}>
-              <Card className="h-full hover:shadow-2xl transition-all border-l-8 border-l-transparent hover:border-l-primary group bg-white">
-                <CardHeader>
-                  <CardTitle className="flex justify-between items-center group-hover:text-primary transition-colors text-2xl">
-                    <span>{t.coffeeTitle}</span>
-                    <Badge variant="secondary" className="text-lg px-3">$2.50</Badge>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-lg text-muted-foreground">{t.coffeeDesc}</p>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            <motion.div variants={fadeInUp}>
-              <Card className="h-full hover:shadow-2xl transition-all border-l-8 border-l-primary bg-primary/5 group">
-                <CardHeader>
-                  <CardTitle className="flex justify-between items-center text-primary text-2xl">
-                    <div className="flex items-center gap-3">
-                      <Sandwich className="h-7 w-7" />
-                      <span>{t.sandwichTitle}</span>
-                    </div>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-lg text-muted-foreground">{t.sandwichDesc}</p>
-                </CardContent>
-              </Card>
-            </motion.div>
-
+            {siteData.categories.map((cat) => (
+              <React.Fragment key={cat.id}>
+                {cat.items.map((item) => (
+                  <motion.div key={item.id} variants={fadeInUp}>
+                    <Card className="h-full hover:shadow-2xl transition-all border-l-8 border-l-transparent hover:border-l-primary group bg-white">
+                      <CardHeader>
+                        <CardTitle className="flex justify-between items-center group-hover:text-primary transition-colors text-2xl">
+                          <span>{lang === "es" ? item.nameEs : item.nameEn}</span>
+                          <Badge variant="secondary" className="text-lg px-3">${item.price}</Badge>
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-lg text-muted-foreground">
+                          {lang === "es" ? item.descEs : item.descEn}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
+              </React.Fragment>
+            ))}
             <motion.div variants={fadeInUp} className="md:col-span-2">
                <Card className="bg-primary text-primary-foreground border-none flex items-center justify-center p-10 cursor-pointer hover:bg-primary/90 transition-all shadow-xl group overflow-hidden relative">
-                <motion.div 
-                  className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"
-                  initial={false}
-                  whileHover={{ scale: 1.5 }}
-                />
                 <div className="text-center relative z-10">
                   <p className="text-3xl font-bold mb-4 uppercase tracking-tighter">{t.viewFullMenu}</p>
                   <ArrowRight className="h-8 w-8 mx-auto group-hover:translate-x-4 transition-transform" />
@@ -341,12 +447,7 @@ export default function Home() {
         {/* Info Grid */}
         <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
           {/* Hours */}
-          <motion.div 
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeInUp}
-          >
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
             <Card className="h-full border-t-8 border-t-primary shadow-2xl bg-white">
               <CardHeader>
                 <div className="flex items-center gap-4">
@@ -358,19 +459,7 @@ export default function Home() {
               </CardHeader>
               <CardContent className="space-y-6 pt-6">
                 <div className="flex justify-between items-center border-b border-border pb-3">
-                  <span className="text-xl font-medium">Lun - Mar</span>
-                  <span className="text-xl text-muted-foreground">6:00 AM - 7:00 PM</span>
-                </div>
-                <div className="flex justify-between items-center border-b border-border pb-3">
-                  <span className="text-xl font-medium">Mié</span>
-                  <span className="text-xl text-muted-foreground">6:00 AM - 3:00 PM</span>
-                </div>
-                <div className="flex justify-between items-center border-b border-border pb-3">
-                  <span className="text-xl font-medium text-destructive">Jue</span>
-                  <span className="text-xl text-destructive font-black uppercase">{t.closed}</span>
-                </div>
-                <div className="flex justify-between items-center border-b border-border pb-3">
-                  <span className="text-xl font-medium">Vie - Sáb</span>
+                  <span className="text-xl font-medium">Lun - Sáb</span>
                   <span className="text-xl text-muted-foreground">6:00 AM - 7:00 PM</span>
                 </div>
                 <div className="flex justify-between items-center">
@@ -382,12 +471,7 @@ export default function Home() {
           </motion.div>
 
           {/* Contact */}
-          <motion.div 
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeInUp}
-          >
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
             <Card className="h-full border-t-8 border-t-primary shadow-2xl flex flex-col bg-white">
               <CardHeader>
                 <div className="flex items-center gap-4">
@@ -399,9 +483,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="flex-1 flex flex-col justify-between gap-10 pt-6">
                 <div className="text-center md:text-left">
-                  <p className="text-5xl font-black text-primary mb-6 tracking-tighter">(939) 337-4777</p>
+                  <p className="text-5xl font-black text-primary mb-6 tracking-tighter">{siteData.phone}</p>
                   <Badge variant="secondary" className="text-xl px-6 py-2 rounded-full font-bold">
-                    {t.avgPrice}
+                    {t.avgPriceLabel}
                   </Badge>
                 </div>
                 <Button size="lg" className="w-full text-2xl h-20 shadow-2xl group rounded-2xl font-black uppercase tracking-tighter hover:scale-[1.02] transition-transform">
@@ -413,36 +497,20 @@ export default function Home() {
         </div>
 
         {/* Location */}
-        <motion.div 
-          id="location"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={fadeInUp}
-          className="max-w-5xl mx-auto"
-        >
+        <motion.div id="location" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="max-w-5xl mx-auto">
           <div className="flex flex-col items-center mb-10 text-center">
             <div className="p-3 bg-primary/10 rounded-full mb-4">
               <MapPin className="h-8 w-8 text-primary" />
             </div>
             <h2 className="text-5xl font-bold text-foreground mb-4">{t.locationTitle}</h2>
           </div>
-          
           <Card className="overflow-hidden shadow-2xl border-none rounded-3xl group">
             <div className="grid md:grid-cols-3">
               <div className="p-10 md:col-span-1 bg-primary text-primary-foreground flex flex-col justify-center relative overflow-hidden">
-                <motion.div 
-                  animate={{ rotate: [0, 10, 0] }}
-                  transition={{ duration: 5, repeat: Infinity }}
-                  className="absolute -top-10 -right-10 opacity-10"
-                >
-                  <MapPin className="h-40 w-40" />
-                </motion.div>
                 <div className="relative z-10">
                   <h3 className="font-black text-4xl mb-6 tracking-tighter uppercase">{t.visitBtn}</h3>
                   <p className="text-2xl text-primary-foreground/90 mb-10 font-light leading-tight">
-                    1963 Av. Borinquen,<br/>
-                    San Juan, PR 00915
+                    {siteData.address}
                   </p>
                   <Button variant="secondary" className="w-full text-xl h-14 font-black rounded-xl shadow-xl hover:scale-105 transition-transform" size="lg">
                     CÓMO LLEGAR
@@ -450,15 +518,9 @@ export default function Home() {
                 </div>
               </div>
               <div className="h-[450px] md:h-auto md:col-span-2 relative overflow-hidden">
-                {/* Real Interactive Map Iframe */}
                 <iframe 
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3786.1311026046416!2d-66.0592!3d18.4411!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c03666f2f2c8f61%3A0x6a0c0e0c0c0c0c0c!2s1963%20Av.%20Borinquen%2C%20San%20Juan%2C%2000915%2C%20Puerto%20Rico!5e0!3m2!1sen!2sus!4v1710000000000!5m2!1sen!2sus" 
-                  width="100%" 
-                  height="100%" 
-                  style={{ border: 0 }} 
-                  allowFullScreen={true} 
-                  loading="lazy" 
-                  referrerPolicy="no-referrer-when-downgrade"
+                  width="100%" height="100%" style={{ border: 0 }} allowFullScreen={true} loading="lazy" referrerPolicy="no-referrer-when-downgrade"
                   className="absolute inset-0 grayscale contrast-125 hover:grayscale-0 transition-all duration-1000"
                 ></iframe>
                 <div className="absolute inset-0 bg-primary/10 pointer-events-none group-hover:bg-transparent transition-colors duration-1000"></div>
@@ -470,22 +532,12 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="bg-primary text-primary-foreground py-20 mt-auto relative overflow-hidden">
-        <motion.div 
-          animate={{ rotate: -360 }}
-          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-          className="absolute -bottom-32 -left-32 w-96 h-96 border-4 border-white/5 rounded-full"
-        />
         <div className="container mx-auto px-4 text-center relative z-10">
           <img src={logoImg} alt="Logo" className="h-24 w-24 mx-auto mb-8 rounded-full border-4 border-white shadow-2xl" />
-          <h3 className="text-4xl font-black mb-6 tracking-tighter uppercase">Panaderia La Francesa</h3>
+          <h3 className="text-4xl font-black mb-6 tracking-tighter uppercase">{siteData.heroTitle}</h3>
           <p className="text-xl text-primary-foreground/70 mb-12 max-w-xl mx-auto font-light leading-relaxed">
             {t.footerDesc}
           </p>
-          <div className="flex flex-wrap justify-center gap-8 text-lg font-bold opacity-60">
-            <span className="hover:opacity-100 transition-opacity cursor-pointer tracking-widest">© 2024</span>
-            <span className="hover:opacity-100 transition-opacity cursor-pointer tracking-widest uppercase">Privacidad</span>
-            <span className="hover:opacity-100 transition-opacity cursor-pointer tracking-widest uppercase">Términos</span>
-          </div>
         </div>
       </footer>
     </div>
