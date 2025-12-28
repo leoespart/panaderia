@@ -189,15 +189,15 @@ export default function Home() {
             <div className="mx-auto mb-4 bg-primary/10 p-3 rounded-full w-fit">
               <Globe className="h-8 w-8 text-primary" />
             </div>
-            <DialogTitle className="text-2xl font-bold tracking-[0.15em]">{t.langSelect}</DialogTitle>
-            <DialogDescription className="tracking-widest uppercase text-xs mt-2">{t.langDesc}</DialogDescription>
+            <DialogTitle className="text-2xl font-bold tracking-tight">{t.langSelect}</DialogTitle>
+            <DialogDescription className="mt-2">{t.langDesc}</DialogDescription>
           </DialogHeader>
           <div className="grid grid-cols-2 gap-4 pt-4">
-            <Button variant="outline" size="lg" onClick={() => selectLanguage("es")} className="h-24 flex flex-col gap-2 hover:border-primary hover:bg-primary/5 tracking-[0.2em] font-black uppercase">
+            <Button variant="outline" size="lg" onClick={() => selectLanguage("es")} className="h-24 flex flex-col gap-2 hover:border-primary hover:bg-primary/5 font-bold uppercase">
               <span className="text-2xl">🇪🇸</span>
               Español
             </Button>
-            <Button variant="outline" size="lg" onClick={() => selectLanguage("en")} className="h-24 flex flex-col gap-2 hover:border-primary hover:bg-primary/5 tracking-[0.2em] font-black uppercase">
+            <Button variant="outline" size="lg" onClick={() => selectLanguage("en")} className="h-24 flex flex-col gap-2 hover:border-primary hover:bg-primary/5 font-bold uppercase">
               <span className="text-2xl">🇺🇸</span>
               English
             </Button>
@@ -209,7 +209,7 @@ export default function Home() {
       <Dialog open={isAdminOpen} onOpenChange={setIsAdminOpen}>
         <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 tracking-[0.1em] font-black uppercase">
+            <DialogTitle className="flex items-center gap-2 font-black uppercase">
               <Settings className="h-5 w-5" /> Admin Panel
             </DialogTitle>
           </DialogHeader>
@@ -221,55 +221,55 @@ export default function Home() {
                 value={adminPass} 
                 onChange={(e) => setAdminPass(e.target.value)}
               />
-              <Button className="w-full tracking-[0.3em] uppercase font-black" onClick={handleAdminLogin}>Login</Button>
+              <Button className="w-full uppercase font-black" onClick={handleAdminLogin}>Login</Button>
             </div>
           ) : (
             <Tabs defaultValue="general">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="general" className="tracking-[0.2em] uppercase font-black">General</TabsTrigger>
-                <TabsTrigger value="menu" className="tracking-[0.2em] uppercase font-black">Menu</TabsTrigger>
+                <TabsTrigger value="general" className="uppercase font-black">General</TabsTrigger>
+                <TabsTrigger value="menu" className="uppercase font-black">Menu</TabsTrigger>
               </TabsList>
               <TabsContent value="general" className="space-y-4 py-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-bold tracking-widest uppercase opacity-60">Hero Badge (ES)</label>
-                    <Input value={siteData.heroBadgeEs} onChange={(e) => setSiteData({...siteData, heroBadgeEs: e.target.value})} className="tracking-wide" />
+                    <label className="text-sm font-bold uppercase opacity-60">Hero Badge (ES)</label>
+                    <Input value={siteData.heroBadgeEs} onChange={(e) => setSiteData({...siteData, heroBadgeEs: e.target.value})} />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-bold tracking-widest uppercase opacity-60">Hero Badge (EN)</label>
-                    <Input value={siteData.heroBadgeEn} onChange={(e) => setSiteData({...siteData, heroBadgeEn: e.target.value})} className="tracking-wide" />
+                    <label className="text-sm font-bold uppercase opacity-60">Hero Badge (EN)</label>
+                    <Input value={siteData.heroBadgeEn} onChange={(e) => setSiteData({...siteData, heroBadgeEn: e.target.value})} />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold tracking-widest uppercase opacity-60">Hero Title</label>
-                  <Input value={siteData.heroTitle} onChange={(e) => setSiteData({...siteData, heroTitle: e.target.value})} className="tracking-widest uppercase" />
+                  <label className="text-sm font-bold uppercase opacity-60">Hero Title</label>
+                  <Input value={siteData.heroTitle} onChange={(e) => setSiteData({...siteData, heroTitle: e.target.value})} className="uppercase" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold tracking-widest uppercase opacity-60">Hero Description (ES)</label>
-                  <Textarea value={siteData.heroDescEs} onChange={(e) => setSiteData({...siteData, heroDescEs: e.target.value})} className="tracking-wide" />
+                  <label className="text-sm font-bold uppercase opacity-60">Hero Description (ES)</label>
+                  <Textarea value={siteData.heroDescEs} onChange={(e) => setSiteData({...siteData, heroDescEs: e.target.value})} />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold tracking-widest uppercase opacity-60">Hero Description (EN)</label>
-                  <Textarea value={siteData.heroDescEn} onChange={(e) => setSiteData({...siteData, heroDescEn: e.target.value})} className="tracking-wide" />
+                  <label className="text-sm font-bold uppercase opacity-60">Hero Description (EN)</label>
+                  <Textarea value={siteData.heroDescEn} onChange={(e) => setSiteData({...siteData, heroDescEn: e.target.value})} />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-bold tracking-widest uppercase opacity-60">Avg Price</label>
-                    <Input value={siteData.avgPrice} onChange={(e) => setSiteData({...siteData, avgPrice: e.target.value})} className="tracking-widest" />
+                    <label className="text-sm font-bold uppercase opacity-60">Avg Price</label>
+                    <Input value={siteData.avgPrice} onChange={(e) => setSiteData({...siteData, avgPrice: e.target.value})} />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-bold tracking-widest uppercase opacity-60">Phone</label>
-                    <Input value={siteData.phone} onChange={(e) => setSiteData({...siteData, phone: e.target.value})} className="tracking-widest" />
+                    <label className="text-sm font-bold uppercase opacity-60">Phone</label>
+                    <Input value={siteData.phone} onChange={(e) => setSiteData({...siteData, phone: e.target.value})} />
                   </div>
                 </div>
-                <Button className="w-full gap-2 tracking-[0.3em] uppercase font-black py-6" onClick={saveAdminData}><Save className="h-5 w-5"/> Save Changes</Button>
+                <Button className="w-full gap-2 uppercase font-black py-6" onClick={saveAdminData}><Save className="h-5 w-5"/> Save Changes</Button>
               </TabsContent>
               <TabsContent value="menu" className="space-y-6 py-4">
                 {siteData.categories.map((cat, catIdx) => (
                   <Card key={cat.id} className="p-6 border-2">
                     <div className="flex justify-between items-center mb-6">
                       <Input 
-                        className="font-black w-1/2 tracking-[0.2em] uppercase text-xl" 
+                        className="font-black w-1/2 uppercase text-xl" 
                         value={cat.nameEs} 
                         onChange={(e) => {
                           const newCats = [...siteData.categories];
@@ -281,12 +281,12 @@ export default function Home() {
                     <div className="space-y-3">
                       {cat.items.map((item, itemIdx) => (
                         <div key={item.id} className="grid grid-cols-4 gap-4 mb-2 p-4 border rounded-xl bg-muted/30">
-                          <Input value={item.nameEs} placeholder="Name ES" className="tracking-wider font-bold" onChange={(e) => {
+                          <Input value={item.nameEs} placeholder="Name ES" className="font-bold" onChange={(e) => {
                             const newCats = [...siteData.categories];
                             newCats[catIdx].items[itemIdx].nameEs = e.target.value;
                             setSiteData({...siteData, categories: newCats});
                           }} />
-                          <Input value={item.price} placeholder="Price" className="tracking-widest font-black" onChange={(e) => {
+                          <Input value={item.price} placeholder="Price" className="font-black" onChange={(e) => {
                             const newCats = [...siteData.categories];
                             newCats[catIdx].items[itemIdx].price = e.target.value;
                             setSiteData({...siteData, categories: newCats});
@@ -299,14 +299,14 @@ export default function Home() {
                         </div>
                       ))}
                     </div>
-                    <Button variant="outline" size="sm" className="w-full gap-2 tracking-[0.2em] uppercase font-bold mt-4 py-6" onClick={() => {
+                    <Button variant="outline" size="sm" className="w-full gap-2 uppercase font-bold mt-4 py-6" onClick={() => {
                       const newCats = [...siteData.categories];
                       newCats[catIdx].items.push({ id: Date.now().toString(), nameEs: "Nuevo Item", nameEn: "New Item", price: "0.00", descEs: "", descEn: "" });
                       setSiteData({...siteData, categories: newCats});
                     }}><Plus className="h-5 w-5"/> Add Item</Button>
                   </Card>
                 ))}
-                <Button className="w-full gap-2 tracking-[0.3em] uppercase font-black py-6 mt-6" onClick={saveAdminData}><Save className="h-5 w-5"/> Save Changes</Button>
+                <Button className="w-full gap-2 uppercase font-black py-6 mt-6" onClick={saveAdminData}><Save className="h-5 w-5"/> Save Changes</Button>
               </TabsContent>
             </Tabs>
           )}
@@ -326,17 +326,17 @@ export default function Home() {
             />
             <div className="hidden md:flex items-center gap-2 pl-28">
               <ChefHat className="h-6 w-6" />
-              <span className="text-xl font-black tracking-[0.3em] uppercase">Panaderia La Francesa</span>
+              <span className="text-xl font-black uppercase">Panaderia La Francesa</span>
             </div>
           </div>
           <div className="flex items-center gap-8">
-            <div className="hidden lg:flex gap-10 text-sm font-black tracking-[0.25em] uppercase">
+            <div className="hidden lg:flex gap-10 text-sm font-black uppercase">
               <button onClick={() => scrollTo("about")} className="hover:text-white/80 transition-colors cursor-pointer">{t.aboutTitle}</button>
               <button onClick={() => scrollTo("menu")} className="hover:text-white/80 transition-colors cursor-pointer">Menu</button>
               <button onClick={() => scrollTo("location")} className="hover:text-white/80 transition-colors cursor-pointer">{t.locationTitle}</button>
             </div>
             <div className="flex items-center gap-4">
-              <Button variant="secondary" size="sm" onClick={() => setIsLangOpen(true)} className="gap-2 font-black tracking-[0.2em] shadow-lg px-6">
+              <Button variant="secondary" size="sm" onClick={() => setIsLangOpen(true)} className="gap-2 font-black shadow-lg px-6">
                 <Globe className="h-4 w-4" />
                 {lang?.toUpperCase()}
               </Button>
@@ -362,23 +362,23 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <Badge variant="secondary" className="mb-12 px-10 py-4 text-xl rounded-full shadow-lg border-2 border-white/20 uppercase tracking-[0.5em] font-black">{t.heroBadge}</Badge>
+            <Badge variant="secondary" className="mb-12 px-10 py-4 text-xl rounded-full shadow-lg border-2 border-white/20 uppercase font-black">{t.heroBadge}</Badge>
             <div className="flex flex-col items-center gap-4 mb-12">
-              <h1 className="text-7xl md:text-9xl lg:text-[11rem] font-black leading-none tracking-[-0.05em] drop-shadow-2xl uppercase">
+              <h1 className="text-7xl md:text-9xl lg:text-[11rem] font-black leading-none tracking-tight drop-shadow-2xl uppercase">
                 Panaderia
               </h1>
-              <h1 className="text-6xl md:text-8xl lg:text-[9rem] font-black leading-none tracking-[-0.05em] drop-shadow-2xl uppercase opacity-90 -mt-4">
+              <h1 className="text-6xl md:text-8xl lg:text-[9rem] font-black leading-none tracking-tight drop-shadow-2xl uppercase opacity-90 -mt-4">
                 La Francesa
               </h1>
             </div>
-            <p className="text-2xl md:text-3xl text-primary-foreground/90 mb-16 max-w-4xl mx-auto font-bold tracking-[0.1em] leading-relaxed uppercase opacity-80">
+            <p className="text-2xl md:text-3xl text-primary-foreground/90 mb-16 max-w-4xl mx-auto font-bold leading-relaxed uppercase opacity-80">
               {t.heroDesc}
             </p>
             <div className="flex flex-col sm:flex-row gap-10 justify-center">
-              <Button size="lg" variant="secondary" onClick={() => scrollTo("location")} className="gap-5 text-2xl h-20 px-16 shadow-2xl hover:scale-105 transition-transform font-black tracking-[0.2em] uppercase group rounded-3xl">
+              <Button size="lg" variant="secondary" onClick={() => scrollTo("location")} className="gap-5 text-2xl h-20 px-16 shadow-2xl hover:scale-105 transition-transform font-black uppercase group rounded-3xl">
                 <MapPin className="h-8 w-8 group-hover:animate-bounce" /> {t.visitBtn}
               </Button>
-              <Button size="lg" variant="outline" onClick={() => scrollTo("menu")} className="gap-5 text-2xl h-20 px-16 bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary shadow-2xl hover:scale-105 transition-transform font-black tracking-[0.2em] uppercase group rounded-3xl">
+              <Button size="lg" variant="outline" onClick={() => scrollTo("menu")} className="gap-5 text-2xl h-20 px-16 bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary shadow-2xl hover:scale-105 transition-transform font-black uppercase group rounded-3xl">
                 <MenuIcon className="h-8 w-8 group-hover:rotate-12 transition-transform" /> {t.menuBtn}
               </Button>
             </div>
@@ -397,11 +397,11 @@ export default function Home() {
                 <div className="p-5 bg-primary/10 rounded-3xl">
                   <Croissant className="h-12 w-12 text-primary" />
                 </div>
-                <h2 className="text-5xl font-black text-primary tracking-[-0.03em] uppercase">{t.aboutTitle}</h2>
+                <h2 className="text-5xl font-black text-primary uppercase">{t.aboutTitle}</h2>
               </div>
             </CardHeader>
             <CardContent className="px-10 pb-10">
-              <p className="text-3xl text-muted-foreground leading-relaxed font-bold tracking-[0.05em]">
+              <p className="text-3xl text-muted-foreground leading-relaxed font-bold">
                 {t.aboutDesc}
               </p>
             </CardContent>
@@ -414,7 +414,7 @@ export default function Home() {
             <div className="p-5 bg-primary/10 rounded-full mb-8">
               <Utensils className="h-12 w-12 text-primary" />
             </div>
-            <h2 className="text-7xl font-black text-foreground mb-8 tracking-[-0.05em] uppercase">{t.menuTitle}</h2>
+            <h2 className="text-7xl font-black text-foreground mb-8 uppercase">{t.menuTitle}</h2>
             <div className="w-40 h-3 bg-primary rounded-full"></div>
           </div>
           
@@ -425,13 +425,13 @@ export default function Home() {
                   <motion.div key={item.id} variants={fadeInUp}>
                     <Card className="h-full hover:shadow-2xl transition-all border-l-[16px] border-l-transparent hover:border-l-primary group bg-white p-4">
                       <CardHeader>
-                        <CardTitle className="flex justify-between items-center group-hover:text-primary transition-colors text-4xl font-black tracking-[-0.05em] uppercase">
+                        <CardTitle className="flex justify-between items-center group-hover:text-primary transition-colors text-4xl font-black uppercase">
                           <span>{lang === "es" ? item.nameEs : item.nameEn}</span>
-                          <Badge variant="secondary" className="text-2xl px-5 py-2 font-black tracking-widest">${item.price}</Badge>
+                          <Badge variant="secondary" className="text-2xl px-5 py-2 font-black">${item.price}</Badge>
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <p className="text-2xl text-muted-foreground tracking-wide font-bold">
+                        <p className="text-2xl text-muted-foreground font-bold">
                           {lang === "es" ? item.descEs : item.descEn}
                         </p>
                       </CardContent>
@@ -443,7 +443,7 @@ export default function Home() {
             <motion.div variants={fadeInUp} className="md:col-span-2">
                <Card className="bg-primary text-primary-foreground border-none flex items-center justify-center p-20 cursor-pointer hover:bg-primary/90 transition-all shadow-xl group overflow-hidden relative rounded-[2rem]">
                 <div className="text-center relative z-10">
-                  <p className="text-5xl font-black mb-8 uppercase tracking-[0.4em]">{t.viewFullMenu}</p>
+                  <p className="text-5xl font-black mb-8 uppercase">{t.viewFullMenu}</p>
                   <ArrowRight className="h-16 w-16 mx-auto group-hover:translate-x-8 transition-transform" />
                 </div>
               </Card>
@@ -461,17 +461,17 @@ export default function Home() {
                   <div className="p-5 bg-primary/10 rounded-full">
                     <Clock className="h-12 w-12 text-primary" />
                   </div>
-                  <CardTitle className="text-5xl font-black tracking-[-0.05em] uppercase">{t.hoursTitle}</CardTitle>
+                  <CardTitle className="text-5xl font-black uppercase">{t.hoursTitle}</CardTitle>
                 </div>
               </CardHeader>
               <CardContent className="space-y-10 pt-8 px-10 pb-12">
                 <div className="flex justify-between items-center border-b-4 border-border pb-6">
-                  <span className="text-3xl font-black tracking-[0.1em] uppercase">Lun - Sáb</span>
-                  <span className="text-3xl text-muted-foreground font-bold tracking-widest">6:00 AM - 7:00 PM</span>
+                  <span className="text-3xl font-black uppercase">Lun - Sáb</span>
+                  <span className="text-3xl text-muted-foreground font-bold">6:00 AM - 7:00 PM</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-3xl font-black tracking-[0.1em] uppercase">Dom</span>
-                  <span className="text-3xl text-muted-foreground font-bold tracking-widest">6:00 AM - 3:00 PM</span>
+                  <span className="text-3xl font-black uppercase">Dom</span>
+                  <span className="text-3xl text-muted-foreground font-bold">6:00 AM - 3:00 PM</span>
                 </div>
               </CardContent>
             </Card>
@@ -485,17 +485,17 @@ export default function Home() {
                   <div className="p-5 bg-primary/10 rounded-full">
                     <Phone className="h-12 w-12 text-primary" />
                   </div>
-                  <CardTitle className="text-5xl font-black tracking-[-0.05em] uppercase">{t.contactTitle}</CardTitle>
+                  <CardTitle className="text-5xl font-black uppercase">{t.contactTitle}</CardTitle>
                 </div>
               </CardHeader>
               <CardContent className="flex-1 flex flex-col justify-between gap-16 pt-8 px-10 pb-12">
                 <div className="text-center md:text-left">
-                  <p className="text-7xl font-black text-primary mb-10 tracking-[-0.05em] drop-shadow-md">{siteData.phone}</p>
-                  <Badge variant="secondary" className="text-3xl px-10 py-4 rounded-full font-black tracking-[0.2em]">
+                  <p className="text-7xl font-black text-primary mb-10 drop-shadow-md">{siteData.phone}</p>
+                  <Badge variant="secondary" className="text-3xl px-10 py-4 rounded-full font-black">
                     {t.avgPriceLabel}
                   </Badge>
                 </div>
-                <Button size="lg" className="w-full text-4xl h-28 shadow-2xl group rounded-[2rem] font-black uppercase tracking-[0.2em] hover:scale-[1.02] transition-transform">
+                <Button size="lg" className="w-full text-4xl h-28 shadow-2xl group rounded-[2rem] font-black uppercase hover:scale-[1.02] transition-transform">
                   <Phone className="mr-6 h-12 w-12 group-hover:animate-pulse" /> {t.callNow}
                 </Button>
               </CardContent>
@@ -509,17 +509,17 @@ export default function Home() {
             <div className="p-5 bg-primary/10 rounded-full mb-8">
               <MapPin className="h-12 w-12 text-primary" />
             </div>
-            <h2 className="text-7xl font-black text-foreground mb-8 tracking-[-0.05em] uppercase">{t.locationTitle}</h2>
+            <h2 className="text-7xl font-black text-foreground mb-8 uppercase">{t.locationTitle}</h2>
           </div>
           <Card className="overflow-hidden shadow-2xl border-none rounded-[4rem] group">
             <div className="grid md:grid-cols-3">
               <div className="p-16 md:col-span-1 bg-primary text-primary-foreground flex flex-col justify-center relative overflow-hidden">
                 <div className="relative z-10">
-                  <h3 className="font-black text-6xl mb-10 tracking-tighter uppercase leading-none">{t.visitBtn}</h3>
-                  <p className="text-4xl text-primary-foreground/90 mb-16 font-bold tracking-tight leading-none">
+                  <h3 className="font-black text-6xl mb-10 uppercase leading-none">{t.visitBtn}</h3>
+                  <p className="text-4xl text-primary-foreground/90 mb-16 font-bold leading-none">
                     {siteData.address}
                   </p>
-                  <Button variant="secondary" className="w-full text-3xl h-24 font-black rounded-2xl shadow-xl hover:scale-105 transition-transform uppercase tracking-[0.2em]" size="lg">
+                  <Button variant="secondary" className="w-full text-3xl h-24 font-black rounded-2xl shadow-xl hover:scale-105 transition-transform uppercase" size="lg">
                     CÓMO LLEGAR
                   </Button>
                 </div>
@@ -542,19 +542,19 @@ export default function Home() {
         <div className="container mx-auto px-4 text-center relative z-10">
           <img src={logoImg} alt="Logo" className="h-40 w-40 mx-auto mb-12 rounded-full border-4 border-white shadow-2xl" />
           <div className="mb-16">
-            <h3 className="text-7xl font-black mb-6 tracking-[-0.05em] uppercase">Panaderia</h3>
-            <h3 className="text-6xl font-black mb-6 tracking-[-0.05em] uppercase opacity-80">La Francesa</h3>
+            <h3 className="text-7xl font-black mb-6 uppercase">Panaderia</h3>
+            <h3 className="text-6xl font-black mb-6 uppercase opacity-80">La Francesa</h3>
           </div>
-          <p className="text-3xl text-primary-foreground/70 mb-20 max-w-3xl mx-auto font-bold tracking-wide leading-relaxed uppercase">
+          <p className="text-3xl text-primary-foreground/70 mb-20 max-w-3xl mx-auto font-bold uppercase">
             {t.footerDesc}
           </p>
           <div className="bg-white/10 p-12 rounded-[3rem] inline-block mb-24 border-2 border-white/5">
-            <p className="text-lg uppercase tracking-[0.5em] mb-4 opacity-60 font-black">Soporte Técnico</p>
-            <p className="text-5xl font-black tracking-[0.2em] flex items-center justify-center gap-6">
+            <p className="text-lg uppercase tracking-widest mb-4 opacity-60 font-black">Soporte Técnico</p>
+            <p className="text-5xl font-black flex items-center justify-center gap-6">
               <Phone className="h-10 w-10" /> 939-630-0315
             </p>
           </div>
-          <div className="flex flex-wrap justify-center gap-16 text-2xl font-black opacity-60 uppercase tracking-[0.4em]">
+          <div className="flex flex-wrap justify-center gap-16 text-2xl font-black opacity-60 uppercase">
             <span className="hover:opacity-100 transition-opacity cursor-pointer">© 2024</span>
             <span className="hover:opacity-100 transition-opacity cursor-pointer">Privacidad</span>
             <span className="hover:opacity-100 transition-opacity cursor-pointer">Términos</span>
