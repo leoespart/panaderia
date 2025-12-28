@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Panadería La Francesa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Panadería La Francesa en Santurce. Pan fresco, café y sándwiches." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+ 
+  <!-- Intro overlay (name spoken + animated) -->
+  <div id="introOverlay" class="intro-overlay" aria-hidden="true">
+    <div class="intro-decor" aria-hidden="true">
+      <!-- decorative bread SVG behind the title -->
+      <svg viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg" class="bread-decor">
+        <g fill="none" stroke="none">
+          <path d="M10 50c0-9 7-18 18-18s18 9 26 9 20-9 32-9 24 9 32 9 18-9 26-9" fill="#ffefdf" opacity="0.9"/>
+          <g transform="translate(6,6)" fill="#ffd19a" opacity="0.5">
+            <ellipse cx="30" cy="36" rx="22" ry="12" />
+            <ellipse cx="90" cy="28" rx="22" ry="12" />
+            <ellipse cx="150" cy="36" rx="22" ry="12" />
+          </g>
+        </g>
+      </svg>
+    </div>
+    <div class="intro-box" role="status" aria-live="polite">
+      <h1>Panadería La Francesa</h1>
+    </div>
+  </div>
+
+  <!-- Language selector modal -->
+  <div id="langModal" class="lang-modal" aria-hidden="true">
+    <div class="lang-modal__box" role="dialog" aria-label="Choose language">
+      <h3 data-es="¿En qué idioma prefieres?" data-en="Which language do you prefer?">¿En qué idioma prefieres?</h3>
+      <p data-es="Selecciona Español o English" data-en="Select Español or English">Selecciona Español o English</p>
+      <div class="lang-modal__actions">
+        <button class="lang-btn" data-lang="es" data-es="Español" data-en="Spanish">Español</button>
+        <button class="lang-btn" data-lang="en" data-es="Inglés" data-en="English">Inglés</button>
+      </div>
+    </div>
+  </div>
+
+<!-- NAV -->
+<header class="nav">
+  <div class="nav-inner">
+    <div class="brand">
+      <a href="/" aria-label="Panadería La Francesa home">
+        <!-- logo will try images/logo.jpeg first, then fall back to parent logo.jpeg if needed -->
+        <img src="images/logo.jpeg" onerror="this.onerror=null;this.src='../logo.jpeg'" alt="Panadería La Francesa" class="logo" />
+      </a>
+      <div class="brand-text">
+        <strong data-es="Panadería La Francesa" data-en="La Francesa Bakery">Panadería La Francesa</strong>
+        <small data-es="Pan fresco & café" data-en="Fresh bread & coffee">Pan fresco & café</small>
+      </div>
+    </div>
+
+    <div class="nav-actions">
+      <button id="openMenuInline" class="nav-menu-btn" aria-controls="menuModal" aria-haspopup="dialog">📋 <span class="vis">Menu</span></button>
+      <select id="langSwitcher" aria-label="Language switcher">
+        <option value="es">ES</option>
+        <option value="en">EN</option>
+      </select>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <h1 data-es="Pan fresco todos los días"
+      data-en="Fresh bread every day">
+      Pan fresco todos los días
+  </h1>
+
+  <p data-es="Café, desayunos, sándwiches y dulces en Santurce"
+     data-en="Coffee, breakfast, sandwiches & pastries in Santurce">
+     Café, desayunos, sándwiches y dulces en Santurce
+  </p>
+
+  <div class="hero-buttons">
+     <a href="https://www.google.com/maps/dir/?api=1&destination=1963+Av+Borinquen,+San+Juan,+PR&travelmode=driving" target="_blank" rel="noopener" class="btn"
+       data-es="📍 Visítanos"
+       data-en="📍 Visit us">
+       📍 Visítanos
+     </a>
+
+     <button id="openMenu" class="btn outline"
+       data-es="📋 Menú"
+       data-en="📋 Menu">
+       📋 Menú
+     </button>
+  </div>
+</section>
+
+<!-- Menu Modal (separate tab/panel) -->
+<div id="menuModal" class="menu-modal" aria-hidden="true" role="dialog" aria-label="Menu">
+  <div class="menu-modal__box">
+    <button class="menu-modal__close" aria-label="Close menu">✕</button>
+    <h2 data-es="Nuestro Menú" data-en="Our Menu">Nuestro Menú</h2>
+    <div class="menu-grid">
+      <div class="menu-item">
+        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop&s=1" alt="Pan francés">
+        <h3>Pan francés</h3>
+        <p>$2</p>
+      </div>
+      <div class="menu-item">
+        <img src="https://images.unsplash.com/photo-1505691723518-41cbfd2b5f59?q=80&w=800&auto=format&fit=crop&s=1" alt="Croissant">
+        <h3>Croissant</h3>
+        <p>$3</p>
+      </div>
+      <div class="menu-item">
+        <img src="https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?q=80&w=800&auto=format&fit=crop&s=1" alt="Café">
+        <h3>Café</h3>
+        <p>$2</p>
+      </div>
+    </div>
+
+    <section class="menu-hours">
+      <h3>Horarios</h3>
+      <ul>
+        <li>Lunes – Sábado: 6:00 AM – 7:00 PM</li>
+        <li>Domingo: 6:00 AM – 3:00 PM</li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<main class="content">
+
+  <section class="card">
+    <h2 data-es="🥖 Sobre Nosotros" data-en="🥖 About Us">🥖 Sobre Nosotros</h2>
+    <p data-es="Somos una panadería y cafetería en Santurce, reconocida por nuestro pan fresco, postres artesanales y un servicio familiar."
+       data-en="We are a bakery and café in Santurce, known for fresh bread, handmade pastries, and friendly service.">
+      Somos una panadería y cafetería en Santurce, reconocida por nuestro pan fresco, postres artesanales y un servicio familiar.
+    </p>
+  </section>
+
+  <!-- MENU -->
+  <section id="menu" class="card">
+    <h2 data-es="📋 Nuestro Menú" data-en="📋 Our Menu">📋 Nuestro Menú</h2>
+    <ul>
+      <li data-es="Pan francés - $2" data-en="French bread - $2">Pan francés - $2</li>
+      <li data-es="Croissant - $3" data-en="Croissant - $3">Croissant - $3</li>
+      <li data-es="Café - $2" data-en="Coffee - $2">Café - $2</li>
+    </ul>
+  </section>
+
+  <section class="grid">
+    <div class="card">
+      <h3 data-es="🕒 Horarios" data-en="🕒 Hours">🕒 Horarios</h3>
+      <ul>
+        <li>Lun – Mar: 6:00 AM – 7:00 PM</li>
+        <li>Mié: 6:00 AM – 3:00 PM</li>
+        <li>Jue: Cerrado</li>
+        <li>Vie – Sáb: 6:00 AM – 7:00 PM</li>
+        <li>Dom: 6:00 AM – 3:00 PM</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3 data-es="📞 Contacto" data-en="📞 Contact">📞 Contacto</h3>
+      <p>(939) 337-4777</p>
+      <p data-es="Precio: $10 – $20" data-en="Price: $10 – $20">Precio: $10 – $20</p>
+
+      <a class="call" href="tel:9393374777"
+         data-es="Llamar ahora"
+         data-en="Call now">
+         Llamar ahora
+      </a>
+    </div>
+  </section>
+
+  <!-- MAP -->
+  <section id="map" class="card map">
+    <h2 data-es="📍 Ubicación" data-en="📍 Location">📍 Ubicación</h2>
+    <p>1963 Av. Borinquen, San Juan, PR 00915</p>
+
+    <iframe
+      src="https://www.google.com/maps?q=1963+Av+Borinquen,+San+Juan,+PR&output=embed"
+      loading="lazy">
+    </iframe>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>© Panadería La Francesa · San Juan, PR</p>
+  <p>
+    Instagram:
+    <a href="https://www.instagram.com/panaderialafrancesapr" target="_blank">
+      @panaderialafrancesapr
+    </a>
+  </p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
