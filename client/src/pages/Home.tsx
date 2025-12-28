@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { Phone, MapPin, Clock, Croissant, ChefHat, ArrowRight, Menu as MenuIcon, Utensils, Globe, Sandwich, Settings, LogOut, Save, Plus, Trash2 } from "lucide-react";
+import { Phone, MapPin, Clock, Croissant, ChefHat, ArrowRight, Menu as MenuIcon, Utensils, Globe, Sandwich, Settings, LogOut, Save, Plus, Trash2, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -96,7 +96,6 @@ export default function Home() {
   });
 
   const { scrollY } = useScroll();
-  // Modified scroll transform to start fading later and more slowly
   const heroOpacity = useTransform(scrollY, [200, 600], [1, 0]);
   const heroScale = useTransform(scrollY, [200, 600], [1, 0.95]);
 
@@ -190,15 +189,15 @@ export default function Home() {
             <div className="mx-auto mb-4 bg-primary/10 p-3 rounded-full w-fit">
               <Globe className="h-8 w-8 text-primary" />
             </div>
-            <DialogTitle className="text-2xl font-bold">{t.langSelect}</DialogTitle>
-            <DialogDescription>{t.langDesc}</DialogDescription>
+            <DialogTitle className="text-2xl font-bold tracking-tight">{t.langSelect}</DialogTitle>
+            <DialogDescription className="tracking-wide">{t.langDesc}</DialogDescription>
           </DialogHeader>
           <div className="grid grid-cols-2 gap-4 pt-4">
-            <Button variant="outline" size="lg" onClick={() => selectLanguage("es")} className="h-24 flex flex-col gap-2 hover:border-primary hover:bg-primary/5">
+            <Button variant="outline" size="lg" onClick={() => selectLanguage("es")} className="h-24 flex flex-col gap-2 hover:border-primary hover:bg-primary/5 tracking-wider">
               <span className="text-2xl">🇪🇸</span>
               Español
             </Button>
-            <Button variant="outline" size="lg" onClick={() => selectLanguage("en")} className="h-24 flex flex-col gap-2 hover:border-primary hover:bg-primary/5">
+            <Button variant="outline" size="lg" onClick={() => selectLanguage("en")} className="h-24 flex flex-col gap-2 hover:border-primary hover:bg-primary/5 tracking-wider">
               <span className="text-2xl">🇺🇸</span>
               English
             </Button>
@@ -210,7 +209,7 @@ export default function Home() {
       <Dialog open={isAdminOpen} onOpenChange={setIsAdminOpen}>
         <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
+            <DialogTitle className="flex items-center gap-2 tracking-tight">
               <Settings className="h-5 w-5" /> Admin Panel
             </DialogTitle>
           </DialogHeader>
@@ -222,55 +221,55 @@ export default function Home() {
                 value={adminPass} 
                 onChange={(e) => setAdminPass(e.target.value)}
               />
-              <Button className="w-full" onClick={handleAdminLogin}>Login</Button>
+              <Button className="w-full tracking-widest uppercase font-bold" onClick={handleAdminLogin}>Login</Button>
             </div>
           ) : (
             <Tabs defaultValue="general">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="general">General</TabsTrigger>
-                <TabsTrigger value="menu">Menu</TabsTrigger>
+                <TabsTrigger value="general" className="tracking-widest uppercase font-bold">General</TabsTrigger>
+                <TabsTrigger value="menu" className="tracking-widest uppercase font-bold">Menu</TabsTrigger>
               </TabsList>
               <TabsContent value="general" className="space-y-4 py-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-bold">Hero Badge (ES)</label>
+                    <label className="text-sm font-bold tracking-wider">Hero Badge (ES)</label>
                     <Input value={siteData.heroBadgeEs} onChange={(e) => setSiteData({...siteData, heroBadgeEs: e.target.value})} />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-bold">Hero Badge (EN)</label>
+                    <label className="text-sm font-bold tracking-wider">Hero Badge (EN)</label>
                     <Input value={siteData.heroBadgeEn} onChange={(e) => setSiteData({...siteData, heroBadgeEn: e.target.value})} />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold">Hero Title</label>
+                  <label className="text-sm font-bold tracking-wider">Hero Title</label>
                   <Input value={siteData.heroTitle} onChange={(e) => setSiteData({...siteData, heroTitle: e.target.value})} />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold">Hero Description (ES)</label>
+                  <label className="text-sm font-bold tracking-wider">Hero Description (ES)</label>
                   <Textarea value={siteData.heroDescEs} onChange={(e) => setSiteData({...siteData, heroDescEs: e.target.value})} />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold">Hero Description (EN)</label>
+                  <label className="text-sm font-bold tracking-wider">Hero Description (EN)</label>
                   <Textarea value={siteData.heroDescEn} onChange={(e) => setSiteData({...siteData, heroDescEn: e.target.value})} />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-bold">Avg Price</label>
+                    <label className="text-sm font-bold tracking-wider">Avg Price</label>
                     <Input value={siteData.avgPrice} onChange={(e) => setSiteData({...siteData, avgPrice: e.target.value})} />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-bold">Phone</label>
+                    <label className="text-sm font-bold tracking-wider">Phone</label>
                     <Input value={siteData.phone} onChange={(e) => setSiteData({...siteData, phone: e.target.value})} />
                   </div>
                 </div>
-                <Button className="w-full gap-2" onClick={saveAdminData}><Save className="h-4 w-4"/> Save Changes</Button>
+                <Button className="w-full gap-2 tracking-widest uppercase font-bold" onClick={saveAdminData}><Save className="h-4 w-4"/> Save Changes</Button>
               </TabsContent>
               <TabsContent value="menu" className="space-y-6 py-4">
                 {siteData.categories.map((cat, catIdx) => (
                   <Card key={cat.id} className="p-4 border-2">
                     <div className="flex justify-between items-center mb-4">
                       <Input 
-                        className="font-bold w-1/2" 
+                        className="font-bold w-1/2 tracking-wider" 
                         value={cat.nameEs} 
                         onChange={(e) => {
                           const newCats = [...siteData.categories];
@@ -281,12 +280,12 @@ export default function Home() {
                     </div>
                     {cat.items.map((item, itemIdx) => (
                       <div key={item.id} className="grid grid-cols-4 gap-2 mb-2 p-2 border rounded">
-                        <Input value={item.nameEs} placeholder="Name ES" onChange={(e) => {
+                        <Input value={item.nameEs} placeholder="Name ES" className="tracking-wide" onChange={(e) => {
                           const newCats = [...siteData.categories];
                           newCats[catIdx].items[itemIdx].nameEs = e.target.value;
                           setSiteData({...siteData, categories: newCats});
                         }} />
-                        <Input value={item.price} placeholder="Price" onChange={(e) => {
+                        <Input value={item.price} placeholder="Price" className="tracking-wide" onChange={(e) => {
                           const newCats = [...siteData.categories];
                           newCats[catIdx].items[itemIdx].price = e.target.value;
                           setSiteData({...siteData, categories: newCats});
@@ -298,14 +297,14 @@ export default function Home() {
                         }}><Trash2 className="h-4 w-4 text-destructive"/></Button>
                       </div>
                     ))}
-                    <Button variant="outline" size="sm" className="w-full gap-2" onClick={() => {
+                    <Button variant="outline" size="sm" className="w-full gap-2 tracking-widest uppercase" onClick={() => {
                       const newCats = [...siteData.categories];
                       newCats[catIdx].items.push({ id: Date.now().toString(), nameEs: "Nuevo Item", nameEn: "New Item", price: "0.00", descEs: "", descEn: "" });
                       setSiteData({...siteData, categories: newCats});
                     }}><Plus className="h-4 w-4"/> Add Item</Button>
                   </Card>
                 ))}
-                <Button className="w-full gap-2" onClick={saveAdminData}><Save className="h-4 w-4"/> Save Changes</Button>
+                <Button className="w-full gap-2 tracking-widest uppercase font-bold" onClick={saveAdminData}><Save className="h-4 w-4"/> Save Changes</Button>
               </TabsContent>
             </Tabs>
           )}
@@ -323,19 +322,19 @@ export default function Home() {
               alt="Logo" 
               className="h-48 w-48 rounded-full border-4 border-white shadow-2xl -mb-16 z-50 transform hover:scale-110 transition-transform duration-500 origin-top" 
             />
-            <div className="hidden md:flex items-center gap-2 pl-20">
+            <div className="hidden md:flex items-center gap-2 pl-24">
               <ChefHat className="h-6 w-6" />
-              <span className="text-xl font-bold tracking-tight">Panaderia La Francesa</span>
+              <span className="text-xl font-bold tracking-widest uppercase">Panaderia La Francesa</span>
             </div>
           </div>
           <div className="flex items-center gap-8">
-            <div className="hidden lg:flex gap-6 text-sm font-medium">
+            <div className="hidden lg:flex gap-8 text-sm font-bold tracking-widest uppercase">
               <button onClick={() => scrollTo("about")} className="hover:text-white/80 transition-colors cursor-pointer">{t.aboutTitle}</button>
               <button onClick={() => scrollTo("menu")} className="hover:text-white/80 transition-colors cursor-pointer">Menu</button>
               <button onClick={() => scrollTo("location")} className="hover:text-white/80 transition-colors cursor-pointer">{t.locationTitle}</button>
             </div>
-            <div className="flex items-center gap-2">
-              <Button variant="secondary" size="sm" onClick={() => setIsLangOpen(true)} className="gap-2 font-bold shadow-lg">
+            <div className="flex items-center gap-4">
+              <Button variant="secondary" size="sm" onClick={() => setIsLangOpen(true)} className="gap-2 font-black tracking-widest shadow-lg">
                 <Globe className="h-4 w-4" />
                 {lang?.toUpperCase()}
               </Button>
@@ -355,25 +354,30 @@ export default function Home() {
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=2072&auto=format&fit=crop')] bg-cover bg-center opacity-10 mix-blend-overlay"></div>
         <div className="absolute inset-0 bg-gradient-to-b from-primary/40 to-primary"></div>
         
-        <div className="container mx-auto relative z-10 text-center max-w-4xl pt-4 md:pt-0">
+        <div className="container mx-auto relative z-10 text-center max-w-5xl pt-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <Badge variant="secondary" className="mb-8 px-6 py-2 text-md rounded-full shadow-lg border-2 border-white/20 uppercase tracking-widest">{t.heroBadge}</Badge>
-            <h1 className="text-6xl md:text-9xl lg:text-[10rem] font-bold mb-8 leading-none tracking-tighter drop-shadow-2xl">
-              {t.heroTitle}
-            </h1>
-            <p className="text-xl md:text-2xl text-primary-foreground/90 mb-12 max-w-2xl mx-auto font-light leading-relaxed">
+            <Badge variant="secondary" className="mb-10 px-8 py-3 text-lg rounded-full shadow-lg border-2 border-white/20 uppercase tracking-[0.3em] font-black">{t.heroBadge}</Badge>
+            <div className="flex flex-col items-center gap-2 mb-10">
+              <h1 className="text-6xl md:text-8xl lg:text-[9rem] font-black leading-none tracking-tighter drop-shadow-2xl uppercase">
+                Panaderia
+              </h1>
+              <h1 className="text-5xl md:text-7xl lg:text-[8rem] font-black leading-none tracking-tighter drop-shadow-2xl uppercase opacity-90">
+                La Francesa
+              </h1>
+            </div>
+            <p className="text-xl md:text-2xl text-primary-foreground/90 mb-12 max-w-3xl mx-auto font-medium tracking-wide leading-relaxed">
               {t.heroDesc}
             </p>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <Button size="lg" variant="secondary" onClick={() => scrollTo("location")} className="gap-3 text-xl h-14 px-10 shadow-2xl hover:scale-105 transition-transform font-bold group">
-                <MapPin className="h-6 w-6 group-hover:animate-bounce" /> {t.visitBtn}
+            <div className="flex flex-col sm:flex-row gap-8 justify-center">
+              <Button size="lg" variant="secondary" onClick={() => scrollTo("location")} className="gap-4 text-xl h-16 px-12 shadow-2xl hover:scale-105 transition-transform font-black tracking-widest uppercase group rounded-2xl">
+                <MapPin className="h-7 w-7 group-hover:animate-bounce" /> {t.visitBtn}
               </Button>
-              <Button size="lg" variant="outline" onClick={() => scrollTo("menu")} className="gap-3 text-xl h-14 px-10 bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary shadow-2xl hover:scale-105 transition-transform font-bold group">
-                <MenuIcon className="h-6 w-6 group-hover:rotate-12 transition-transform" /> {t.menuBtn}
+              <Button size="lg" variant="outline" onClick={() => scrollTo("menu")} className="gap-4 text-xl h-16 px-12 bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary shadow-2xl hover:scale-105 transition-transform font-black tracking-widest uppercase group rounded-2xl">
+                <MenuIcon className="h-7 w-7 group-hover:rotate-12 transition-transform" /> {t.menuBtn}
               </Button>
             </div>
           </motion.div>
@@ -387,15 +391,15 @@ export default function Home() {
           <Card className="shadow-2xl border-none overflow-hidden max-w-4xl mx-auto transform hover:-translate-y-2 transition-transform duration-500">
             <div className="absolute top-0 left-0 w-3 h-full bg-primary"></div>
             <CardHeader className="pb-4">
-              <div className="flex items-center gap-4 mb-2">
-                <div className="p-3 bg-primary/10 rounded-xl">
-                  <Croissant className="h-8 w-8 text-primary" />
+              <div className="flex items-center gap-5 mb-2">
+                <div className="p-4 bg-primary/10 rounded-2xl">
+                  <Croissant className="h-10 w-10 text-primary" />
                 </div>
-                <h2 className="text-3xl font-bold text-primary">{t.aboutTitle}</h2>
+                <h2 className="text-4xl font-black text-primary tracking-tighter uppercase">{t.aboutTitle}</h2>
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-xl text-muted-foreground leading-relaxed font-light">
+              <p className="text-2xl text-muted-foreground leading-relaxed font-medium tracking-wide">
                 {t.aboutDesc}
               </p>
             </CardContent>
@@ -404,28 +408,28 @@ export default function Home() {
 
         {/* Menu Section */}
         <motion.div id="menu" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-4xl mx-auto">
-          <div className="flex flex-col items-center mb-12 text-center">
-            <div className="p-3 bg-primary/10 rounded-full mb-4">
-              <Utensils className="h-8 w-8 text-primary" />
+          <div className="flex flex-col items-center mb-16 text-center">
+            <div className="p-4 bg-primary/10 rounded-full mb-6">
+              <Utensils className="h-10 w-10 text-primary" />
             </div>
-            <h2 className="text-5xl font-bold text-foreground mb-4">{t.menuTitle}</h2>
-            <div className="w-24 h-1 bg-primary rounded-full"></div>
+            <h2 className="text-6xl font-black text-foreground mb-6 tracking-tighter uppercase">{t.menuTitle}</h2>
+            <div className="w-32 h-2 bg-primary rounded-full"></div>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-10">
             {siteData.categories.map((cat) => (
               <React.Fragment key={cat.id}>
                 {cat.items.map((item) => (
                   <motion.div key={item.id} variants={fadeInUp}>
-                    <Card className="h-full hover:shadow-2xl transition-all border-l-8 border-l-transparent hover:border-l-primary group bg-white">
+                    <Card className="h-full hover:shadow-2xl transition-all border-l-[12px] border-l-transparent hover:border-l-primary group bg-white p-2">
                       <CardHeader>
-                        <CardTitle className="flex justify-between items-center group-hover:text-primary transition-colors text-2xl">
+                        <CardTitle className="flex justify-between items-center group-hover:text-primary transition-colors text-3xl font-black tracking-tighter uppercase">
                           <span>{lang === "es" ? item.nameEs : item.nameEn}</span>
-                          <Badge variant="secondary" className="text-lg px-3">${item.price}</Badge>
+                          <Badge variant="secondary" className="text-xl px-4 py-1 font-black">${item.price}</Badge>
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <p className="text-lg text-muted-foreground">
+                        <p className="text-xl text-muted-foreground tracking-wide font-medium">
                           {lang === "es" ? item.descEs : item.descEn}
                         </p>
                       </CardContent>
@@ -435,10 +439,10 @@ export default function Home() {
               </React.Fragment>
             ))}
             <motion.div variants={fadeInUp} className="md:col-span-2">
-               <Card className="bg-primary text-primary-foreground border-none flex items-center justify-center p-10 cursor-pointer hover:bg-primary/90 transition-all shadow-xl group overflow-hidden relative">
+               <Card className="bg-primary text-primary-foreground border-none flex items-center justify-center p-14 cursor-pointer hover:bg-primary/90 transition-all shadow-xl group overflow-hidden relative rounded-3xl">
                 <div className="text-center relative z-10">
-                  <p className="text-3xl font-bold mb-4 uppercase tracking-tighter">{t.viewFullMenu}</p>
-                  <ArrowRight className="h-8 w-8 mx-auto group-hover:translate-x-4 transition-transform" />
+                  <p className="text-4xl font-black mb-6 uppercase tracking-[0.2em]">{t.viewFullMenu}</p>
+                  <ArrowRight className="h-12 w-12 mx-auto group-hover:translate-x-6 transition-transform" />
                 </div>
               </Card>
             </motion.div>
@@ -449,23 +453,23 @@ export default function Home() {
         <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
           {/* Hours */}
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
-            <Card className="h-full border-t-8 border-t-primary shadow-2xl bg-white">
+            <Card className="h-full border-t-[12px] border-t-primary shadow-2xl bg-white">
               <CardHeader>
-                <div className="flex items-center gap-4">
-                  <div className="p-3 bg-primary/10 rounded-full">
-                    <Clock className="h-8 w-8 text-primary" />
+                <div className="flex items-center gap-5">
+                  <div className="p-4 bg-primary/10 rounded-full">
+                    <Clock className="h-10 w-10 text-primary" />
                   </div>
-                  <CardTitle className="text-3xl font-bold">{t.hoursTitle}</CardTitle>
+                  <CardTitle className="text-4xl font-black tracking-tighter uppercase">{t.hoursTitle}</CardTitle>
                 </div>
               </CardHeader>
-              <CardContent className="space-y-6 pt-6">
-                <div className="flex justify-between items-center border-b border-border pb-3">
-                  <span className="text-xl font-medium">Lun - Sáb</span>
-                  <span className="text-xl text-muted-foreground">6:00 AM - 7:00 PM</span>
+              <CardContent className="space-y-8 pt-8 px-8">
+                <div className="flex justify-between items-center border-b-2 border-border pb-4">
+                  <span className="text-2xl font-bold tracking-tight">Lun - Sáb</span>
+                  <span className="text-2xl text-muted-foreground font-medium tracking-wide">6:00 AM - 7:00 PM</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-xl font-medium">Dom</span>
-                  <span className="text-xl text-muted-foreground">6:00 AM - 3:00 PM</span>
+                  <span className="text-2xl font-bold tracking-tight">Dom</span>
+                  <span className="text-2xl text-muted-foreground font-medium tracking-wide">6:00 AM - 3:00 PM</span>
                 </div>
               </CardContent>
             </Card>
@@ -473,24 +477,24 @@ export default function Home() {
 
           {/* Contact */}
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
-            <Card className="h-full border-t-8 border-t-primary shadow-2xl flex flex-col bg-white">
+            <Card className="h-full border-t-[12px] border-t-primary shadow-2xl flex flex-col bg-white">
               <CardHeader>
-                <div className="flex items-center gap-4">
-                  <div className="p-3 bg-primary/10 rounded-full">
-                    <Phone className="h-8 w-8 text-primary" />
+                <div className="flex items-center gap-5">
+                  <div className="p-4 bg-primary/10 rounded-full">
+                    <Phone className="h-10 w-10 text-primary" />
                   </div>
-                  <CardTitle className="text-3xl font-bold">{t.contactTitle}</CardTitle>
+                  <CardTitle className="text-4xl font-black tracking-tighter uppercase">{t.contactTitle}</CardTitle>
                 </div>
               </CardHeader>
-              <CardContent className="flex-1 flex flex-col justify-between gap-10 pt-6">
+              <CardContent className="flex-1 flex flex-col justify-between gap-12 pt-8 px-8">
                 <div className="text-center md:text-left">
-                  <p className="text-5xl font-black text-primary mb-6 tracking-tighter">{siteData.phone}</p>
-                  <Badge variant="secondary" className="text-xl px-6 py-2 rounded-full font-bold">
+                  <p className="text-6xl font-black text-primary mb-8 tracking-tighter drop-shadow-sm">{siteData.phone}</p>
+                  <Badge variant="secondary" className="text-2xl px-8 py-3 rounded-full font-black tracking-widest">
                     {t.avgPriceLabel}
                   </Badge>
                 </div>
-                <Button size="lg" className="w-full text-2xl h-20 shadow-2xl group rounded-2xl font-black uppercase tracking-tighter hover:scale-[1.02] transition-transform">
-                  <Phone className="mr-3 h-8 w-8 group-hover:animate-pulse" /> {t.callNow}
+                <Button size="lg" className="w-full text-3xl h-24 shadow-2xl group rounded-3xl font-black uppercase tracking-[0.1em] hover:scale-[1.02] transition-transform">
+                  <Phone className="mr-4 h-10 w-10 group-hover:animate-pulse" /> {t.callNow}
                 </Button>
               </CardContent>
             </Card>
@@ -499,26 +503,26 @@ export default function Home() {
 
         {/* Location */}
         <motion.div id="location" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="max-w-5xl mx-auto">
-          <div className="flex flex-col items-center mb-10 text-center">
-            <div className="p-3 bg-primary/10 rounded-full mb-4">
-              <MapPin className="h-8 w-8 text-primary" />
+          <div className="flex flex-col items-center mb-12 text-center">
+            <div className="p-4 bg-primary/10 rounded-full mb-6">
+              <MapPin className="h-10 w-10 text-primary" />
             </div>
-            <h2 className="text-5xl font-bold text-foreground mb-4">{t.locationTitle}</h2>
+            <h2 className="text-6xl font-black text-foreground mb-6 tracking-tighter uppercase">{t.locationTitle}</h2>
           </div>
-          <Card className="overflow-hidden shadow-2xl border-none rounded-3xl group">
+          <Card className="overflow-hidden shadow-2xl border-none rounded-[3rem] group">
             <div className="grid md:grid-cols-3">
-              <div className="p-10 md:col-span-1 bg-primary text-primary-foreground flex flex-col justify-center relative overflow-hidden">
+              <div className="p-12 md:col-span-1 bg-primary text-primary-foreground flex flex-col justify-center relative overflow-hidden">
                 <div className="relative z-10">
-                  <h3 className="font-black text-4xl mb-6 tracking-tighter uppercase">{t.visitBtn}</h3>
-                  <p className="text-2xl text-primary-foreground/90 mb-10 font-light leading-tight">
+                  <h3 className="font-black text-5xl mb-8 tracking-tighter uppercase leading-none">{t.visitBtn}</h3>
+                  <p className="text-3xl text-primary-foreground/90 mb-12 font-medium tracking-wide leading-tight">
                     {siteData.address}
                   </p>
-                  <Button variant="secondary" className="w-full text-xl h-14 font-black rounded-xl shadow-xl hover:scale-105 transition-transform" size="lg">
+                  <Button variant="secondary" className="w-full text-2xl h-20 font-black rounded-2xl shadow-xl hover:scale-105 transition-transform uppercase tracking-widest" size="lg">
                     CÓMO LLEGAR
                   </Button>
                 </div>
               </div>
-              <div className="h-[450px] md:h-auto md:col-span-2 relative overflow-hidden">
+              <div className="h-[550px] md:h-auto md:col-span-2 relative overflow-hidden">
                 <iframe 
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3786.1311026046416!2d-66.0592!3d18.4411!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c03666f2f2c8f61%3A0x6a0c0e0c0c0c0c0c!2s1963%20Av.%20Borinquen%2C%20San%20Juan%2C%2000915%2C%20Puerto%20Rico!5e0!3m2!1sen!2sus!4v1710000000000!5m2!1sen!2sus" 
                   width="100%" height="100%" style={{ border: 0 }} allowFullScreen={true} loading="lazy" referrerPolicy="no-referrer-when-downgrade"
@@ -532,13 +536,27 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-primary text-primary-foreground py-20 mt-auto relative overflow-hidden">
+      <footer className="bg-primary text-primary-foreground py-24 mt-auto relative overflow-hidden">
         <div className="container mx-auto px-4 text-center relative z-10">
-          <img src={logoImg} alt="Logo" className="h-24 w-24 mx-auto mb-8 rounded-full border-4 border-white shadow-2xl" />
-          <h3 className="text-4xl font-black mb-6 tracking-tighter uppercase">{siteData.heroTitle}</h3>
-          <p className="text-xl text-primary-foreground/70 mb-12 max-w-xl mx-auto font-light leading-relaxed">
+          <img src={logoImg} alt="Logo" className="h-32 w-32 mx-auto mb-10 rounded-full border-4 border-white shadow-2xl" />
+          <div className="mb-12">
+            <h3 className="text-5xl font-black mb-4 tracking-tighter uppercase">Panaderia</h3>
+            <h3 className="text-4xl font-black mb-4 tracking-tighter uppercase opacity-80">La Francesa</h3>
+          </div>
+          <p className="text-2xl text-primary-foreground/70 mb-16 max-w-2xl mx-auto font-medium tracking-wide leading-relaxed">
             {t.footerDesc}
           </p>
+          <div className="bg-white/10 p-8 rounded-3xl inline-block mb-16">
+            <p className="text-sm uppercase tracking-[0.3em] mb-3 opacity-60">Soporte Técnico</p>
+            <p className="text-3xl font-black tracking-widest flex items-center gap-3">
+              <Phone className="h-6 w-6" /> 939-630-0315
+            </p>
+          </div>
+          <div className="flex flex-wrap justify-center gap-12 text-xl font-black opacity-60 uppercase tracking-[0.2em]">
+            <span className="hover:opacity-100 transition-opacity cursor-pointer">© 2024</span>
+            <span className="hover:opacity-100 transition-opacity cursor-pointer">Privacidad</span>
+            <span className="hover:opacity-100 transition-opacity cursor-pointer">Términos</span>
+          </div>
         </div>
       </footer>
     </div>
