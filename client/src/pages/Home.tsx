@@ -136,6 +136,7 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
   const [collapsedCats, setCollapsedCats] = useState<Record<string, boolean>>({});
+  const [loginError, setLoginError] = useState("");
 
   const toggleCat = (catId: string) => {
     setCollapsedCats(prev => ({ ...prev, [catId]: !prev[catId] }));
@@ -316,7 +317,10 @@ export default function Home() {
   const handleAdminLogin = async () => {
     if (adminPass === "Yadiel132") {
       setIsLoggedIn(true);
+      setLoginError("");
       await fetch("/api/login", { method: "POST" });
+    } else {
+      setLoginError("Contraseña incorrecta");
     }
   };
 
@@ -436,13 +440,23 @@ export default function Home() {
           </DialogHeader>
           {!isLoggedIn ? (
             <div className="space-y-6 py-6">
-              <Input
-                type="password"
-                placeholder="Contraseña de administrador"
-                value={adminPass}
-                onChange={(e) => setAdminPass(e.target.value)}
-                className="text-lg py-6"
-              />
+              <div className="space-y-2">
+                <Input
+                  type="password"
+                  placeholder="Contraseña de administrador"
+                  value={adminPass}
+                  onChange={(e) => {
+                    setAdminPass(e.target.value);
+                    if (loginError) setLoginError("");
+                  }}
+                  className={`text-lg py-6 ${loginError ? "border-destructive ring-destructive" : ""}`}
+                />
+                {loginError && (
+                  <p className="text-destructive font-bold text-sm uppercase animate-shake px-2">
+                    {loginError}
+                  </p>
+                )}
+              </div>
               <Button className="w-full uppercase font-black text-xl py-6" onClick={handleAdminLogin}>Acceder</Button>
             </div>
           ) : (
