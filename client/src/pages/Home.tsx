@@ -310,12 +310,16 @@ export default function Home() {
 
 
 
-  const saveAdminData = async () => {
+  const saveAdminData = async (actionDesc = "Actualizó configuraciones") => {
     try {
       await fetch("/api/settings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(siteData)
+        body: JSON.stringify({
+          settings: siteData,
+          username: currentUser,
+          action: actionDesc
+        })
       });
       setIsAdminOpen(false);
     } catch (e) {
@@ -328,7 +332,11 @@ export default function Home() {
       setCurrentUser(user);
       setLoginError("");
       setShowGreeting(true);
-      await fetch("/api/login", { method: "POST" });
+      await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: user })
+      });
       setTimeout(() => {
         setIsLoggedIn(true);
         setShowGreeting(false);
@@ -694,7 +702,7 @@ export default function Home() {
                       </Card>
                     </div>
 
-                    <Button className="w-full gap-2 uppercase font-black py-8 text-2xl shadow-xl hover:scale-[1.01] transition-transform" onClick={saveAdminData}>
+                    <Button className="w-full gap-2 uppercase font-black py-8 text-2xl shadow-xl hover:scale-[1.01] transition-transform" onClick={() => saveAdminData("Cambió textos/info general")}>
                       <Save className="h-8 w-8" /> Guardar Cambios
                     </Button>
                   </TabsContent>
@@ -822,7 +830,7 @@ export default function Home() {
                       </Card>
                     ))}
 
-                    <Button className="w-full gap-2 uppercase font-black py-8 text-2xl" onClick={saveAdminData}>
+                    <Button className="w-full gap-2 uppercase font-black py-8 text-2xl" onClick={() => saveAdminData("Editó el Menú (Precios/Platos)")}>
                       <Save className="h-6 w-6" /> Guardar Cambios
                     </Button>
                   </TabsContent>
@@ -848,7 +856,7 @@ export default function Home() {
                         </div>
                       </div>
                     </Card>
-                    <Button className="w-full gap-2 uppercase font-black py-8 text-2xl" onClick={saveAdminData}>
+                    <Button className="w-full gap-2 uppercase font-black py-8 text-2xl" onClick={() => saveAdminData("Cambió Diseño/Logo")}>
                       <Save className="h-6 w-6" /> Guardar Cambios
                     </Button>
                   </TabsContent>
@@ -890,7 +898,7 @@ export default function Home() {
                         </div>
                       </div>
                     </Card>
-                    <Button className="w-full gap-2 uppercase font-black py-8 text-2xl" onClick={saveAdminData}>
+                    <Button className="w-full gap-2 uppercase font-black py-8 text-2xl" onClick={() => saveAdminData("Cambió Promociones")}>
                       <Save className="h-6 w-6" /> Guardar Cambios
                     </Button>
                   </TabsContent>
@@ -898,24 +906,26 @@ export default function Home() {
                   <TabsContent value="logs" className="space-y-6 py-4">
                     <Card className="p-6">
                       <div className="flex justify-between items-center mb-6">
-                        <h3 className="text-xl font-black uppercase">Registros de Acceso</h3>
+                        <h3 className="text-xl font-black uppercase">Registros de Acceso y Cambios</h3>
                         <Button variant="outline" size="sm" onClick={fetchLogs}>Refrescar Logs</Button>
                       </div>
                       <div className="rounded-md border">
                         <Table>
                           <TableHeader>
                             <TableRow>
-                              <TableHead className="font-bold uppercase">Hora</TableHead>
-                              <TableHead className="font-bold uppercase">Dispositivo</TableHead>
-                              <TableHead className="font-bold uppercase">Acción</TableHead>
+                              <TableHead className="font-bold uppercase w-[180px]">Fecha/Hora</TableHead>
+                              <TableHead className="font-bold uppercase w-[150px]">Dispositivo</TableHead>
+                              <TableHead className="font-bold uppercase">Actividad</TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody>
                             {logs.map((log, i) => (
-                              <TableRow key={i}>
-                                <TableCell className="font-mono text-xs">{new Date(log.timestamp).toLocaleString()}</TableCell>
-                                <TableCell className="text-xs truncate max-w-[200px]" title={log.device}>{log.device}</TableCell>
-                                <TableCell className="font-bold text-primary">{log.action}</TableCell>
+                              <TableRow key={i} className="hover:bg-muted/50">
+                                <TableCell className="font-mono text-xs font-bold">{new Date(log.timestamp).toLocaleString('es-ES', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</TableCell>
+                                <TableCell className="text-xs">
+                                  <Badge variant="outline" className="font-bold uppercase border-primary/20 text-[10px]">{log.device}</Badge>
+                                </TableCell>
+                                <TableCell className="font-black text-sm text-primary uppercase">{log.action}</TableCell>
                               </TableRow>
                             ))}
                             {logs.length === 0 && (
@@ -926,7 +936,7 @@ export default function Home() {
                           </TableBody>
                         </Table>
                       </div>
-                      <p className="text-xs text-muted-foreground mt-4 text-center">Mostrando últimos 50 accesos. Registrado por el servidor.</p>
+                      <p className="text-xs text-muted-foreground mt-4 text-center font-bold italic">Los registros se conservan por 7 días. Los cambios de precio y menú se detallan por usuario.</p>
                     </Card>
                   </TabsContent>
                 </Tabs>

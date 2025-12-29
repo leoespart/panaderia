@@ -56,8 +56,14 @@ export class MemStorage implements IStorage {
   }
 
   async logAccess(entry: { timestamp: string, device: string, action: string }): Promise<void> {
-    this.accessLogs.unshift(entry); // Add to beginning
-    if (this.accessLogs.length > 50) this.accessLogs.pop(); // Limit to 50 logs
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+    // Add new log
+    this.accessLogs.unshift(entry);
+
+    // Filter out logs older than 1 week
+    this.accessLogs = this.accessLogs.filter(log => new Date(log.timestamp) > oneWeekAgo);
   }
 
   async getAccessLogs(): Promise<{ timestamp: string, device: string, action: string }[]> {
