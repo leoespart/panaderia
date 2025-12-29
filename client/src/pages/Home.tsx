@@ -225,12 +225,7 @@ export default function Home() {
           { id: "de6", nameEs: "Empanadilla", nameEn: "Turnover", price: "2.00", descEs: "Empanadilla rellena.", descEn: "Filled turnover." },
           { id: "f1", nameEs: "Farina 6oz", nameEn: "Cream of Wheat 6oz", price: "1.50", descEs: "Farina caliente 6oz.", descEn: "Hot cream of wheat 6oz." },
           { id: "f2", nameEs: "Farina 8oz", nameEn: "Cream of Wheat 8oz", price: "2.50", descEs: "Farina caliente 8oz.", descEn: "Hot cream of wheat 8oz." },
-          { id: "f3", nameEs: "Farina 16oz", nameEn: "Cream of Wheat 16oz", price: "4.50", descEs: "Farina caliente 16oz.", descEn: "Hot cream of wheat 16oz." },
-          { id: "e1", nameEs: "Extra: Queso", nameEn: "Extra: Cheese", price: "1.00", descEs: "Queso extra.", descEn: "Extra cheese." },
-          { id: "e2", nameEs: "Extra: Vegetales", nameEn: "Extra: Vegetables", price: "1.00", descEs: "Vegetales extra.", descEn: "Extra vegetables." },
-          { id: "e3", nameEs: "Extra: Bacon", nameEn: "Extra: Bacon", price: "1.50", descEs: "Bacon extra.", descEn: "Extra bacon." },
-          { id: "e4", nameEs: "Extra: Salami", nameEn: "Extra: Salami", price: "1.00", descEs: "Salami extra.", descEn: "Extra salami." },
-          { id: "e5", nameEs: "Extra: Ensalada", nameEn: "Extra: Salad", price: "1.00", descEs: "Ensalada extra.", descEn: "Extra salad." }
+          { id: "f3", nameEs: "Farina 16oz", nameEn: "Cream of Wheat 16oz", price: "4.50", descEs: "Farina caliente 16oz.", descEn: "Hot cream of wheat 16oz." }
         ]
       },
       {
@@ -603,83 +598,86 @@ export default function Home() {
                       <span className="text-sm font-mono text-muted-foreground px-3 py-1 bg-muted rounded">EN: {cat.nameEn}</span>
                     </div>
 
+
                     <div className="p-6 space-y-6">
                       {cat.items.map((item, itemIdx) => (
-                        <div key={item.id} className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 rounded-xl border-2 hover:border-primary/20 transition-colors">
-                          <div className="space-y-4">
-                            <div className="aspect-square rounded-lg overflow-hidden bg-muted relative group">
-                              {item.image ? (
-                                <img src={item.image} alt={item.nameEs} className="w-full h-full object-cover" />
-                              ) : (
-                                <div className="w-full h-full flex items-center justify-center text-muted-foreground">No img</div>
-                              )}
-                            </div>
-                            <Input
-                              placeholder="URL Imagen"
-                              value={item.image || ""}
-                              onChange={(e) => {
-                                const newCats = [...siteData.categories];
-                                newCats[catIdx].items[itemIdx].image = e.target.value;
-                                setSiteData({ ...siteData, categories: newCats });
-                              }}
-                              className="text-xs"
-                            />
-                          </div>
-
-                          <div className="space-y-4">
-                            <div className="grid md:grid-cols-2 gap-4">
-                              <div className="space-y-1">
-                                <label className="text-xs font-bold uppercase opacity-50">Nombre</label>
-                                <Input
-                                  value={item.nameEs}
-                                  className="font-black text-lg"
-                                  onChange={(e) => {
-                                    const newCats = [...siteData.categories];
-                                    newCats[catIdx].items[itemIdx].nameEs = e.target.value;
-                                    newCats[catIdx].items[itemIdx].nameEn = `[EN: ${e.target.value}]`;
-                                    setSiteData({ ...siteData, categories: newCats });
-                                  }}
-                                />
+                        <Card key={item.id} className="p-4">
+                          <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6">
+                            <div className="space-y-4">
+                              <div className="aspect-square rounded-lg overflow-hidden bg-muted relative group">
+                                {item.image ? (
+                                  <img src={item.image} alt={item.nameEs} className="w-full h-full object-cover" />
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center text-muted-foreground">No img</div>
+                                )}
                               </div>
-                              <div className="space-y-1">
-                                <label className="text-xs font-bold uppercase opacity-50">Precio</label>
-                                <Input
-                                  value={item.price}
-                                  className="font-black text-lg text-primary"
-                                  onChange={(e) => {
-                                    const newCats = [...siteData.categories];
-                                    newCats[catIdx].items[itemIdx].price = e.target.value;
-                                    setSiteData({ ...siteData, categories: newCats });
-                                  }}
-                                />
-                              </div>
-                            </div>
-
-                            <div className="space-y-1">
-                              <label className="text-xs font-bold uppercase opacity-50">Descripción</label>
-                              <Textarea
-                                value={item.descEs}
-                                className="min-h-[80px]"
+                              <Input
+                                placeholder="URL Imagen"
+                                value={item.image || ""}
                                 onChange={(e) => {
                                   const newCats = [...siteData.categories];
-                                  newCats[catIdx].items[itemIdx].descEs = e.target.value;
-                                  newCats[catIdx].items[itemIdx].descEn = `[EN: ${e.target.value}]`;
+                                  newCats[catIdx].items[itemIdx].image = e.target.value;
                                   setSiteData({ ...siteData, categories: newCats });
                                 }}
+                                className="text-xs"
                               />
                             </div>
 
-                            <div className="flex justify-end">
-                              <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive hover:bg-destructive/10 uppercase font-bold" onClick={() => {
-                                const newCats = [...siteData.categories];
-                                newCats[catIdx].items.splice(itemIdx, 1);
-                                setSiteData({ ...siteData, categories: newCats });
-                              }}>
-                                <Trash2 className="h-4 w-4 mr-2" /> Eliminar
-                              </Button>
+                            <div className="space-y-4">
+                              <div className="grid md:grid-cols-2 gap-4">
+                                <div className="space-y-1">
+                                  <label className="text-xs font-bold uppercase opacity-50">Nombre</label>
+                                  <Input
+                                    value={item.nameEs}
+                                    className="font-black text-lg"
+                                    onChange={(e) => {
+                                      const newCats = [...siteData.categories];
+                                      newCats[catIdx].items[itemIdx].nameEs = e.target.value;
+                                      newCats[catIdx].items[itemIdx].nameEn = `[EN: ${e.target.value}]`;
+                                      setSiteData({ ...siteData, categories: newCats });
+                                    }}
+                                  />
+                                </div>
+                                <div className="space-y-1">
+                                  <label className="text-xs font-bold uppercase opacity-50">Precio</label>
+                                  <Input
+                                    value={item.price}
+                                    className="font-black text-lg text-primary"
+                                    onChange={(e) => {
+                                      const newCats = [...siteData.categories];
+                                      newCats[catIdx].items[itemIdx].price = e.target.value;
+                                      setSiteData({ ...siteData, categories: newCats });
+                                    }}
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="space-y-1">
+                                <label className="text-xs font-bold uppercase opacity-50">Descripción</label>
+                                <Textarea
+                                  value={item.descEs}
+                                  className="min-h-[80px]"
+                                  onChange={(e) => {
+                                    const newCats = [...siteData.categories];
+                                    newCats[catIdx].items[itemIdx].descEs = e.target.value;
+                                    newCats[catIdx].items[itemIdx].descEn = `[EN: ${e.target.value}]`;
+                                    setSiteData({ ...siteData, categories: newCats });
+                                  }}
+                                />
+                              </div>
+
+                              <div className="flex justify-end">
+                                <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive hover:bg-destructive/10 uppercase font-bold" onClick={() => {
+                                  const newCats = [...siteData.categories];
+                                  newCats[catIdx].items.splice(itemIdx, 1);
+                                  setSiteData({ ...siteData, categories: newCats });
+                                }}>
+                                  <Trash2 className="h-4 w-4 mr-2" /> Eliminar
+                                </Button>
+                              </div>
                             </div>
                           </div>
-                        </div>
+                        </Card>
                       ))}
 
                       <Button variant="outline" className="w-full border-dashed border-2 py-8 uppercase font-bold text-muted-foreground hover:text-primary hover:border-primary" onClick={() => {
