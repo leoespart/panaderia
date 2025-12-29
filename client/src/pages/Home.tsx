@@ -343,7 +343,7 @@ export default function Home() {
       }, 3000);
     };
 
-    if (adminPass === "Yadiel132") {
+    if (adminPass === "Rodriguez11") {
       await processLogin("Yadiel");
     } else if (adminPass === "Alexi1976") {
       await processLogin("Alex");
@@ -574,16 +574,18 @@ export default function Home() {
               >
                 <Tabs defaultValue="general" className="w-full">
                   <TabsList className="flex flex-wrap h-auto gap-2 mb-6 bg-muted/50 p-2 rounded-2xl">
-                    {["general", "menu", "design", "promo", "logs"].map((tab) => (
-                      <TabsTrigger
-                        key={tab}
-                        value={tab}
-                        onClick={tab === 'logs' ? fetchLogs : undefined}
-                        className="uppercase font-black text-lg py-3 flex-1 data-[state=active]:bg-primary data-[state=active]:text-white transition-all rounded-xl hover:scale-105 active:scale-95 hover:bg-muted duration-200"
-                      >
-                        {tab === 'menu' ? 'Menú' : tab === 'design' ? 'Diseño' : tab === 'promo' ? 'Promociones' : tab}
-                      </TabsTrigger>
-                    ))}
+                    {["general", "menu", "design", "promo", "logs"]
+                      .filter(tab => tab !== 'logs' || currentUser === 'Yadiel')
+                      .map((tab) => (
+                        <TabsTrigger
+                          key={tab}
+                          value={tab}
+                          onClick={tab === 'logs' ? fetchLogs : undefined}
+                          className="uppercase font-black text-lg py-3 flex-1 data-[state=active]:bg-primary data-[state=active]:text-white transition-all rounded-xl hover:scale-105 active:scale-95 hover:bg-muted duration-200"
+                        >
+                          {tab === 'menu' ? 'Menú' : tab === 'design' ? 'Diseño' : tab === 'promo' ? 'Promociones' : tab}
+                        </TabsTrigger>
+                      ))}
                   </TabsList>
 
                   <TabsContent value="general" className="space-y-8">
