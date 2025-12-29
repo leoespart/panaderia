@@ -8,14 +8,43 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Switch } from "@/components/ui/switch";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import logoImg from "@assets/logo_1766883612871.png";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     y: 0,
-    transition: { duration: 0.6 }
+    transition: { duration: 1.2, ease: "easeOut" as const }
+  }
+};
+
+const scrollTo = (id: string) => {
+  const element = document.getElementById(id);
+  if (element) {
+    const elementPosition = element.getBoundingClientRect().top;
+    const startPosition = window.pageYOffset;
+    const distance = elementPosition - 100; // Offset for header
+    let startTime: number | null = null;
+
+    const easeInOutQuad = (t: number, b: number, c: number, d: number) => {
+      t /= d / 2;
+      if (t < 1) return c / 2 * t * t + b;
+      t--;
+      return -c / 2 * (t * (t - 2) - 1) + b;
+    };
+
+    const animation = (currentTime: number) => {
+      if (startTime === null) startTime = currentTime;
+      const timeElapsed = currentTime - startTime;
+      const run = easeInOutQuad(timeElapsed, startPosition, distance, 2000); // 2000ms duration
+      window.scrollTo(0, run);
+      if (timeElapsed < 2000) requestAnimationFrame(animation);
+    };
+
+    requestAnimationFrame(animation);
   }
 };
 
@@ -68,14 +97,42 @@ const DEFAULT_CATEGORIES: MenuCategory[] = [
   // ... rest of categories with images
 ];
 
+const PromoPopup = ({ siteData, isOpen, onClose }: { siteData: any, isOpen: boolean, onClose: () => void }) => {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.5 }}
+          transition={{ type: "spring", duration: 0.8 }}
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+        >
+          <div className="relative bg-white text-center p-10 rounded-[3rem] max-w-lg w-full shadow-2xl border-[8px] border-primary">
+            <button onClick={onClose} className="absolute top-4 right-4 bg-gray-100 p-2 rounded-full hover:bg-gray-200 transition-colors">
+              <LogOut className="h-6 w-6" />
+            </button>
+            <Badge className="bg-primary text-white text-xl px-6 py-2 mb-6 uppercase font-black tracking-widest animate-pulse">¡Aviso Especial!</Badge>
+            <h2 className="text-5xl font-black text-primary mb-4 uppercase leading-none">{siteData.promoDiscount}</h2>
+            <p className="text-2xl font-bold text-gray-700 mb-8">{siteData.promoMessage}</p>
+            <Button size="lg" className="w-full text-2xl py-8 font-black uppercase rounded-2xl animate-bounce" onClick={onClose}>
+              ¡Entendido!
+            </Button>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
 export default function Home() {
   const [lang, setLang] = useState<Language | null>(null);
   const [isLangOpen, setIsLangOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [adminPass, setAdminPass] = useState("");
-  const [newReview, setNewReview] = useState({ name: "", comment: "" });
-  
+  const [newReview, setNewReview] = useState<{ name: string, comment: string, rating: number }>({ name: "", comment: "", rating: 5 });
+
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
 
@@ -99,6 +156,11 @@ export default function Home() {
     specialEventsDescEs: "¡Únete a nosotros para nuestras noches de música en vivo y degustaciones!",
     specialEventsDescEn: "Join us for our live music nights and tastings!",
     specialEventsImage: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069&auto=format&fit=crop",
+    // New Fields
+    logoUrl: "", // Empty defaults to asset import
+    promoActive: false,
+    promoMessage: "🎉 ¡Gran Descuento de Temporada!",
+    promoDiscount: "50% OFF",
     reviews: [
       { id: "r1", name: "Juan Pérez", comment: "El mejor pan de Barrio Obrero. El café siempre está en su punto.", rating: 5 },
       { id: "r2", name: "Maria Rodriguez", comment: "Los quesitos son adictivos. Servicio excelente.", rating: 5 }
@@ -142,6 +204,9 @@ export default function Home() {
     ]
   });
 
+  const [logs, setLogs] = useState<{ timestamp: string, device: string, action: string }[]>([]);
+  const [showPromo, setShowPromo] = useState(false);
+
   const { scrollY } = useScroll();
   const heroOpacity = useTransform(scrollY, [200, 600], [1, 0]);
   const heroScale = useTransform(scrollY, [200, 600], [1, 0.95]);
@@ -157,10 +222,18 @@ export default function Home() {
       return () => clearTimeout(timer);
     }
 
-    const savedData = localStorage.getItem("bakery_site_data");
-    if (savedData) {
-      setSiteData(JSON.parse(savedData));
-    }
+    // Fetch settings from server
+    fetch("/api/settings")
+      .then(res => res.json())
+      .then(data => {
+        if (Object.keys(data).length > 0) {
+          setSiteData(prev => ({ ...prev, ...data })); // Merge with defaults
+          // Check promo
+          if (data.promoActive) {
+            setTimeout(() => setShowPromo(true), 2000); // Popup delay
+          }
+        }
+      });
   }, []);
 
   const selectLanguage = (l: Language) => {
@@ -169,22 +242,32 @@ export default function Home() {
     setIsLangOpen(false);
   };
 
-  const scrollTo = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+
+
+  const saveAdminData = async () => {
+    try {
+      await fetch("/api/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(siteData)
+      });
+      setIsAdminOpen(false);
+    } catch (e) {
+      console.error("Failed to save", e);
     }
   };
 
-  const saveAdminData = () => {
-    localStorage.setItem("bakery_site_data", JSON.stringify(siteData));
-    setIsAdminOpen(false);
-  };
-
-  const handleAdminLogin = () => {
+  const handleAdminLogin = async () => {
     if (adminPass === "Yadiel132") {
       setIsLoggedIn(true);
+      await fetch("/api/login", { method: "POST" });
     }
+  };
+
+  const fetchLogs = async () => {
+    const res = await fetch("/api/logs");
+    const data = await res.json();
+    setLogs(data);
   };
 
   const t = {
@@ -210,7 +293,15 @@ export default function Home() {
       closed: "Cerrado",
       langSelect: "Selecciona tu idioma",
       langDesc: "Bienvenido a Panadería La Francesa",
-      footerDesc: "Llevando el mejor pan, desayunos y almuerzos a tu mesa desde Barrio Obrero."
+      footerDesc: "Llevando el mejor pan, desayunos y almuerzos a tu mesa desde Barrio Obrero.",
+      reviewsTitle: "Opiniones de Clientes",
+      leaveReviewTitle: "Déjanos tu opinión",
+      submitReviewBtn: "Enviar Reseña",
+      support: "Soporte Técnico",
+      privacy: "Privacidad",
+      terms: "Términos",
+      daysMonSat: "Lun - Sáb",
+      daySun: "Dom"
     },
     en: {
       heroBadge: siteData.heroBadgeEn,
@@ -234,7 +325,15 @@ export default function Home() {
       closed: "Closed",
       langSelect: "Select your language",
       langDesc: "Welcome to Panadería La Francesa",
-      footerDesc: "Bringing the best bread, breakfast and lunch to your table from Barrio Obrero."
+      footerDesc: "Bringing the best bread, breakfast and lunch to your table from Barrio Obrero.",
+      reviewsTitle: "Customer Reviews",
+      leaveReviewTitle: "Write a Review",
+      submitReviewBtn: "Submit Review",
+      support: "Technical Support",
+      privacy: "Privacy",
+      terms: "Terms",
+      daysMonSat: "Mon - Sat",
+      daySun: "Sun"
     }
   }[lang || "es"];
 
@@ -267,197 +366,395 @@ export default function Home() {
       <Dialog open={isAdminOpen} onOpenChange={setIsAdminOpen}>
         <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto z-[90]">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 font-black uppercase">
-              <Settings className="h-5 w-5" /> Admin Panel
+            <DialogTitle className="flex items-center gap-2 font-black uppercase text-2xl">
+              <Settings className="h-6 w-6" /> Admin Panel
             </DialogTitle>
           </DialogHeader>
           {!isLoggedIn ? (
-            <div className="space-y-4 py-4">
-              <Input 
-                type="password" 
-                placeholder="Contraseña de administrador" 
-                value={adminPass} 
+            <div className="space-y-6 py-6">
+              <Input
+                type="password"
+                placeholder="Contraseña de administrador"
+                value={adminPass}
                 onChange={(e) => setAdminPass(e.target.value)}
+                className="text-lg py-6"
               />
-              <Button className="w-full uppercase font-black" onClick={handleAdminLogin}>Acceder</Button>
+              <Button className="w-full uppercase font-black text-xl py-6" onClick={handleAdminLogin}>Acceder</Button>
             </div>
           ) : (
-            <Tabs defaultValue="general">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="general" className="uppercase font-black">General</TabsTrigger>
-                <TabsTrigger value="menu" className="uppercase font-black">Menu</TabsTrigger>
+            <Tabs defaultValue="general" className="w-full">
+              <TabsList className="flex flex-wrap h-auto gap-2 mb-6">
+                <TabsTrigger value="general" className="uppercase font-black text-lg py-3 flex-1">General</TabsTrigger>
+                <TabsTrigger value="menu" className="uppercase font-black text-lg py-3 flex-1">Menu</TabsTrigger>
+                <TabsTrigger value="design" className="uppercase font-black text-lg py-3 flex-1">Diseño</TabsTrigger>
+                <TabsTrigger value="promo" className="uppercase font-black text-lg py-3 flex-1">Promociones</TabsTrigger>
+                <TabsTrigger value="logs" className="uppercase font-black text-lg py-3 flex-1" onClick={fetchLogs}>Logs</TabsTrigger>
               </TabsList>
-          <TabsContent value="general" className="space-y-6 py-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <label className="text-lg font-black uppercase opacity-70">Hero Badge (ES)</label>
-                    <Input className="text-lg py-6" value={siteData.heroBadgeEs} onChange={(e) => setSiteData({...siteData, heroBadgeEs: e.target.value})} />
-                  </div>
-                  <div className="space-y-3">
-                    <label className="text-lg font-black uppercase opacity-70">Hero Badge (EN)</label>
-                    <Input className="text-lg py-6" value={siteData.heroBadgeEn} onChange={(e) => setSiteData({...siteData, heroBadgeEn: e.target.value})} />
-                  </div>
-                </div>
-                <div className="space-y-3">
-                  <label className="text-lg font-black uppercase opacity-70">Hero Title</label>
-                  <Input className="text-lg py-6 uppercase font-black" value={siteData.heroTitle} onChange={(e) => setSiteData({...siteData, heroTitle: e.target.value})} />
-                </div>
-                <div className="space-y-3">
-                  <label className="text-lg font-black uppercase opacity-70">Hero Description (ES)</label>
-                  <Textarea className="text-lg min-h-[100px]" value={siteData.heroDescEs} onChange={(e) => setSiteData({...siteData, heroDescEs: e.target.value})} />
-                </div>
-                <div className="space-y-3">
-                  <label className="text-lg font-black uppercase opacity-70">Hero Description (EN)</label>
-                  <Textarea className="text-lg min-h-[100px]" value={siteData.heroDescEn} onChange={(e) => setSiteData({...siteData, heroDescEn: e.target.value})} />
-                </div>
-                <div className="space-y-3">
-                  <label className="text-lg font-black uppercase opacity-70">Sobre Nosotros (ES)</label>
-                  <Textarea className="text-lg min-h-[120px]" value={siteData.aboutDescEs} onChange={(e) => setSiteData({...siteData, aboutDescEs: e.target.value})} />
-                </div>
-                <div className="space-y-3">
-                  <label className="text-lg font-black uppercase opacity-70">About Us (EN)</label>
-                  <Textarea className="text-lg min-h-[120px]" value={siteData.aboutDescEn} onChange={(e) => setSiteData({...siteData, aboutDescEn: e.target.value})} />
-                </div>
-                <div className="space-y-3">
-                  <label className="text-lg font-black uppercase opacity-70">Dirección</label>
-                  <Input className="text-lg py-6" value={siteData.address} onChange={(e) => setSiteData({...siteData, address: e.target.value})} />
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <label className="text-lg font-black uppercase opacity-70">Texto Botón Llegar (ES)</label>
-                    <Input className="text-lg py-6" value={siteData.directionsBtnEs} onChange={(e) => setSiteData({...siteData, directionsBtnEs: e.target.value})} />
-                  </div>
-                  <div className="space-y-3">
-                    <label className="text-lg font-black uppercase opacity-70">Texto Botón Directions (EN)</label>
-                    <Input className="text-lg py-6" value={siteData.directionsBtnEn} onChange={(e) => setSiteData({...siteData, directionsBtnEn: e.target.value})} />
-                  </div>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <label className="text-lg font-black uppercase opacity-70">Avg Price</label>
-                    <Input className="text-lg py-6" value={siteData.avgPrice} onChange={(e) => setSiteData({...siteData, avgPrice: e.target.value})} />
-                  </div>
-                  <div className="space-y-3">
-                    <label className="text-lg font-black uppercase opacity-70">Phone</label>
-                    <Input className="text-lg py-6 font-black" value={siteData.phone} onChange={(e) => setSiteData({...siteData, phone: e.target.value})} />
-                  </div>
-                </div>
-                <div className="space-y-6 pt-6 border-t-4 border-accent/20 bg-accent/5 p-6 rounded-3xl">
-                  <h3 className="text-2xl font-black uppercase tracking-widest text-accent">Eventos Especiales</h3>
-                  <div className="flex items-center gap-4 bg-white p-4 rounded-xl shadow-sm">
-                    <input type="checkbox" className="w-6 h-6 accent-accent" checked={siteData.showSpecialEvents} onChange={(e) => setSiteData({...siteData, showSpecialEvents: e.target.checked})} id="showEvents" />
-                    <label htmlFor="showEvents" className="text-lg font-black uppercase cursor-pointer">Mostrar Sección de Eventos</label>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-3">
-                      <label className="text-sm font-black uppercase opacity-70">Título Eventos (ES)</label>
-                      <Input className="text-lg py-6" value={siteData.specialEventsTitleEs} onChange={(e) => setSiteData({...siteData, specialEventsTitleEs: e.target.value})} />
+
+              <TabsContent value="general" className="space-y-8">
+                <div className="grid gap-6">
+                  {/* Hero Badge */}
+                  <Card className="p-6">
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="text-sm font-black uppercase text-muted-foreground">Hero Badge (ES)</label>
+                        <Input
+                          className="font-bold text-lg"
+                          value={siteData.heroBadgeEs}
+                          onChange={(e) => setSiteData({
+                            ...siteData,
+                            heroBadgeEs: e.target.value,
+                            heroBadgeEn: `[EN: ${e.target.value}]` // Simple auto-fill mock
+                          })}
+                        />
+                      </div>
+                      <div className="space-y-2 opacity-70">
+                        <label className="text-sm font-black uppercase text-muted-foreground">Hero Badge (EN)</label>
+                        <Input
+                          className="font-bold text-lg bg-muted"
+                          value={siteData.heroBadgeEn}
+                          readOnly
+                        />
+                        <p className="text-xs text-muted-foreground">*Traducido automáticamente</p>
+                      </div>
                     </div>
-                    <div className="space-y-3">
-                      <label className="text-sm font-black uppercase opacity-70">Title Events (EN)</label>
-                      <Input className="text-lg py-6" value={siteData.specialEventsTitleEn} onChange={(e) => setSiteData({...siteData, specialEventsTitleEn: e.target.value})} />
+                  </Card>
+
+                  {/* Hero Title */}
+                  <Card className="p-6">
+                    <div className="space-y-2">
+                      <label className="text-sm font-black uppercase text-muted-foreground">Hero Title</label>
+                      <Input
+                        className="font-black text-xl uppercase"
+                        value={siteData.heroTitle}
+                        onChange={(e) => setSiteData({ ...siteData, heroTitle: e.target.value })}
+                      />
                     </div>
-                  </div>
-                  <div className="space-y-3">
-                    <label className="text-sm font-black uppercase opacity-70">Descripción Eventos (ES)</label>
-                    <Textarea className="text-lg" value={siteData.specialEventsDescEs} onChange={(e) => setSiteData({...siteData, specialEventsDescEs: e.target.value})} />
-                  </div>
-                  <div className="space-y-3">
-                    <label className="text-sm font-black uppercase opacity-70">Description Events (EN)</label>
-                    <Textarea className="text-lg" value={siteData.specialEventsDescEn} onChange={(e) => setSiteData({...siteData, specialEventsDescEn: e.target.value})} />
-                  </div>
-                  <div className="space-y-3">
-                    <label className="text-sm font-black uppercase opacity-70">URL Imagen Evento</label>
-                    <Input className="text-lg py-6" value={siteData.specialEventsImage} onChange={(e) => setSiteData({...siteData, specialEventsImage: e.target.value})} />
-                  </div>
+                  </Card>
+
+                  {/* Hero Description */}
+                  <Card className="p-6">
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="text-sm font-black uppercase text-muted-foreground">Hero Description (ES)</label>
+                        <Textarea
+                          className="text-lg min-h-[100px]"
+                          value={siteData.heroDescEs}
+                          onChange={(e) => setSiteData({
+                            ...siteData,
+                            heroDescEs: e.target.value,
+                            heroDescEn: `[EN: ${e.target.value}]` // Simple auto-fill mock
+                          })}
+                        />
+                      </div>
+                      <div className="space-y-2 opacity-70">
+                        <label className="text-sm font-black uppercase text-muted-foreground">Hero Description (EN)</label>
+                        <Textarea
+                          className="text-lg min-h-[100px] bg-muted"
+                          value={siteData.heroDescEn}
+                          readOnly
+                        />
+                      </div>
+                    </div>
+                  </Card>
+
+                  {/* Address & Buttons */}
+                  <Card className="p-6">
+                    <div className="space-y-6">
+                      <div className="space-y-2">
+                        <label className="text-sm font-black uppercase text-muted-foreground">Dirección</label>
+                        <Input
+                          className="text-lg"
+                          value={siteData.address}
+                          onChange={(e) => setSiteData({ ...siteData, address: e.target.value })}
+                        />
+                      </div>
+                      <div className="grid md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <label className="text-sm font-black uppercase text-muted-foreground">Texto Botón Llegar (ES)</label>
+                          <Input
+                            className="text-lg"
+                            value={siteData.directionsBtnEs}
+                            onChange={(e) => setSiteData({
+                              ...siteData,
+                              directionsBtnEs: e.target.value,
+                              directionsBtnEn: e.target.value === "CÓMO LLEGAR" ? "DIRECTIONS" : `[EN: ${e.target.value}]`
+                            })}
+                          />
+                        </div>
+                        <div className="space-y-2 opacity-70">
+                          <label className="text-sm font-black uppercase text-muted-foreground">Texto Botón Directions (EN)</label>
+                          <Input
+                            className="text-lg bg-muted"
+                            value={siteData.directionsBtnEn}
+                            readOnly
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+
+                  {/* Phone & Price */}
+                  <Card className="p-6">
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="text-sm font-black uppercase text-muted-foreground">Teléfono</label>
+                        <Input
+                          className="text-lg font-bold"
+                          value={siteData.phone}
+                          onChange={(e) => setSiteData({ ...siteData, phone: e.target.value })}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-black uppercase text-muted-foreground">Precio Promedio</label>
+                        <Input
+                          className="text-lg"
+                          value={siteData.avgPrice}
+                          onChange={(e) => setSiteData({ ...siteData, avgPrice: e.target.value })}
+                        />
+                      </div>
+                    </div>
+                  </Card>
                 </div>
-                <Button className="w-full gap-2 uppercase font-black py-8 text-2xl shadow-xl hover:scale-[1.01] transition-transform" onClick={saveAdminData}><Save className="h-8 w-8"/> Guardar Cambios</Button>
+
+                <Button className="w-full gap-2 uppercase font-black py-8 text-2xl shadow-xl hover:scale-[1.01] transition-transform" onClick={saveAdminData}>
+                  <Save className="h-8 w-8" /> Guardar Cambios
+                </Button>
               </TabsContent>
-              <TabsContent value="menu" className="space-y-6 py-4">
+
+              <TabsContent value="menu" className="space-y-6">
                 {siteData.categories.map((cat, catIdx) => (
-                  <Card key={cat.id} className="p-6 border-2">
-                    <div className="flex justify-between items-center mb-6">
-                      <Input 
-                        className="font-black w-1/2 uppercase text-xl" 
-                        value={cat.nameEs} 
+                  <Card key={cat.id} className="overflow-hidden border-2">
+                    <div className="p-6 bg-muted/30 border-b-2 flex items-center gap-4">
+                      <Input
+                        className="font-black uppercase text-xl flex-1 border-none bg-transparent shadow-none px-0 focus-visible:ring-0"
+                        value={cat.nameEs}
                         onChange={(e) => {
                           const newCats = [...siteData.categories];
                           newCats[catIdx].nameEs = e.target.value;
-                          setSiteData({...siteData, categories: newCats});
-                        }} 
+                          newCats[catIdx].nameEn = `[EN: ${e.target.value}]`;
+                          setSiteData({ ...siteData, categories: newCats });
+                        }}
                       />
+                      <span className="text-sm font-mono text-muted-foreground px-3 py-1 bg-muted rounded">EN: {cat.nameEn}</span>
                     </div>
-                      <div className="space-y-6">
-                        {cat.items.map((item, itemIdx) => (
-                          <div key={item.id} className="grid grid-cols-1 gap-4 mb-6 p-6 border-2 rounded-3xl bg-muted/20 shadow-sm">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <div className="space-y-2">
-                                <label className="text-xs font-bold uppercase opacity-50">Nombre (ES)</label>
-                                <Input value={item.nameEs} placeholder="Nombre ES" className="font-black text-xl py-6" onChange={(e) => {
-                                  const newCats = [...siteData.categories];
-                                  newCats[catIdx].items[itemIdx].nameEs = e.target.value;
-                                  setSiteData({...siteData, categories: newCats});
-                                }} />
-                              </div>
-                              <div className="space-y-2">
-                                <label className="text-xs font-bold uppercase opacity-50">Precio</label>
-                                <Input value={item.price} placeholder="Precio" className="font-black text-xl py-6 text-primary" onChange={(e) => {
-                                  const newCats = [...siteData.categories];
-                                  newCats[catIdx].items[itemIdx].price = e.target.value;
-                                  setSiteData({...siteData, categories: newCats});
-                                }} />
-                              </div>
+
+                    <div className="p-6 space-y-6">
+                      {cat.items.map((item, itemIdx) => (
+                        <div key={item.id} className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 rounded-xl border-2 hover:border-primary/20 transition-colors">
+                          <div className="space-y-4">
+                            <div className="aspect-square rounded-lg overflow-hidden bg-muted relative group">
+                              {item.image ? (
+                                <img src={item.image} alt={item.nameEs} className="w-full h-full object-cover" />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-muted-foreground">No img</div>
+                              )}
                             </div>
-                            <div className="space-y-2">
-                              <label className="text-xs font-bold uppercase opacity-50">Descripción (ES)</label>
-                              <Textarea value={item.descEs} placeholder="Descripción ES" className="text-lg min-h-[80px]" onChange={(e) => {
-                                const newCats = [...siteData.categories];
-                                newCats[catIdx].items[itemIdx].descEs = e.target.value;
-                                setSiteData({...siteData, categories: newCats});
-                              }} />
-                            </div>
-                            <div className="space-y-2">
-                              <label className="text-xs font-bold uppercase opacity-50">URL Imagen Producto</label>
-                              <Input value={item.image} placeholder="https://..." className="text-sm font-mono py-4" onChange={(e) => {
+                            <Input
+                              placeholder="URL Imagen"
+                              value={item.image || ""}
+                              onChange={(e) => {
                                 const newCats = [...siteData.categories];
                                 newCats[catIdx].items[itemIdx].image = e.target.value;
-                                setSiteData({...siteData, categories: newCats});
-                              }} />
+                                setSiteData({ ...siteData, categories: newCats });
+                              }}
+                              className="text-xs"
+                            />
+                          </div>
+
+                          <div className="space-y-4">
+                            <div className="grid md:grid-cols-2 gap-4">
+                              <div className="space-y-1">
+                                <label className="text-xs font-bold uppercase opacity-50">Nombre</label>
+                                <Input
+                                  value={item.nameEs}
+                                  className="font-black text-lg"
+                                  onChange={(e) => {
+                                    const newCats = [...siteData.categories];
+                                    newCats[catIdx].items[itemIdx].nameEs = e.target.value;
+                                    newCats[catIdx].items[itemIdx].nameEn = `[EN: ${e.target.value}]`;
+                                    setSiteData({ ...siteData, categories: newCats });
+                                  }}
+                                />
+                              </div>
+                              <div className="space-y-1">
+                                <label className="text-xs font-bold uppercase opacity-50">Precio</label>
+                                <Input
+                                  value={item.price}
+                                  className="font-black text-lg text-primary"
+                                  onChange={(e) => {
+                                    const newCats = [...siteData.categories];
+                                    newCats[catIdx].items[itemIdx].price = e.target.value;
+                                    setSiteData({ ...siteData, categories: newCats });
+                                  }}
+                                />
+                              </div>
                             </div>
-                            <div className="flex justify-end pt-2">
-                              <Button variant="destructive" size="lg" className="gap-2 px-8 uppercase font-black" onClick={() => {
+
+                            <div className="space-y-1">
+                              <label className="text-xs font-bold uppercase opacity-50">Descripción</label>
+                              <Textarea
+                                value={item.descEs}
+                                className="min-h-[80px]"
+                                onChange={(e) => {
+                                  const newCats = [...siteData.categories];
+                                  newCats[catIdx].items[itemIdx].descEs = e.target.value;
+                                  newCats[catIdx].items[itemIdx].descEn = `[EN: ${e.target.value}]`;
+                                  setSiteData({ ...siteData, categories: newCats });
+                                }}
+                              />
+                            </div>
+
+                            <div className="flex justify-end">
+                              <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive hover:bg-destructive/10 uppercase font-bold" onClick={() => {
                                 const newCats = [...siteData.categories];
                                 newCats[catIdx].items.splice(itemIdx, 1);
-                                setSiteData({...siteData, categories: newCats});
-                              }}><Trash2 className="h-5 w-5"/> Eliminar Item</Button>
+                                setSiteData({ ...siteData, categories: newCats });
+                              }}>
+                                <Trash2 className="h-4 w-4 mr-2" /> Eliminar
+                              </Button>
                             </div>
                           </div>
-                        ))}
-                      </div>
-                    <Button variant="outline" size="sm" className="w-full gap-2 uppercase font-bold mt-4 py-6" onClick={() => {
-                      const newCats = [...siteData.categories];
-                      newCats[catIdx].items.push({ id: Date.now().toString(), nameEs: "Nuevo Item", nameEn: "New Item", price: "0.00", descEs: "", descEn: "" });
-                      setSiteData({...siteData, categories: newCats});
-                    }}><Plus className="h-5 w-5"/> Add Item</Button>
+                        </div>
+                      ))}
+
+                      <Button variant="outline" className="w-full border-dashed border-2 py-8 uppercase font-bold text-muted-foreground hover:text-primary hover:border-primary" onClick={() => {
+                        const newCats = [...siteData.categories];
+                        newCats[catIdx].items.push({ id: Date.now().toString(), nameEs: "Nuevo Plato", nameEn: "New Dish", price: "0.00", descEs: "", descEn: "", image: "" });
+                        setSiteData({ ...siteData, categories: newCats });
+                      }}>
+                        <Plus className="h-5 w-5 mr-2" /> Agregar Plato a {cat.nameEs}
+                      </Button>
+                    </div>
                   </Card>
                 ))}
-                <Button className="w-full gap-2 uppercase font-black py-6 mt-6" onClick={saveAdminData}><Save className="h-5 w-5"/> Save Changes</Button>
+
+                <Button className="w-full gap-2 uppercase font-black py-8 text-2xl" onClick={saveAdminData}>
+                  <Save className="h-6 w-6" /> Guardar Cambios
+                </Button>
+              </TabsContent>
+
+              <TabsContent value="design" className="space-y-6 py-4">
+                <Card className="p-6">
+                  <div className="space-y-4">
+                    <h3 className="text-xl font-black uppercase">Logo del Sitio</h3>
+                    <div className="flex gap-6 items-center">
+                      <div className="h-32 w-32 rounded-full bg-muted border-4 border-primary overflow-hidden flex-shrink-0">
+                        <img src={siteData.logoUrl || logoImg} alt="Preview" className="h-full w-full object-cover" />
+                      </div>
+                      <div className="flex-1 space-y-2">
+                        <label className="text-sm font-bold uppercase opacity-70">URL del Logo (Imagen)</label>
+                        <Input
+                          placeholder="https://..."
+                          className="text-lg py-6"
+                          value={siteData.logoUrl}
+                          onChange={(e) => setSiteData({ ...siteData, logoUrl: e.target.value })}
+                        />
+                        <p className="text-xs text-muted-foreground">Deja vacío para usar el logo por defecto.</p>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+                <Button className="w-full gap-2 uppercase font-black py-8 text-2xl" onClick={saveAdminData}>
+                  <Save className="h-6 w-6" /> Guardar Cambios
+                </Button>
+              </TabsContent>
+
+              <TabsContent value="promo" className="space-y-6 py-4">
+                <Card className="p-6 bg-accent/5 border-accent/20 border-2">
+                  <h3 className="text-2xl font-black uppercase text-accent mb-6 flex items-center gap-2">
+                    <Heart className="fill-accent h-8 w-8" /> Configuración de Promociones
+                  </h3>
+
+                  <div className="flex items-center gap-4 mb-8 bg-white p-4 rounded-xl shadow-sm border">
+                    <Switch
+                      checked={siteData.promoActive}
+                      onCheckedChange={(checked) => setSiteData({ ...siteData, promoActive: checked })}
+                      className="scale-150 ml-2"
+                    />
+                    <div className="flex flex-col ml-4">
+                      <span className="text-xl font-black uppercase">Activar Popup de Promoción</span>
+                      <span className="text-sm text-muted-foreground font-bold">Si se activa, todos los usuarios verán el anuncio al entrar.</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-6">
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold uppercase opacity-70">Mensaje de Promoción</label>
+                      <Input
+                        className="text-xl py-6 font-bold"
+                        value={siteData.promoMessage}
+                        onChange={(e) => setSiteData({ ...siteData, promoMessage: e.target.value })}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold uppercase opacity-70">Texto del Descuento (Grande)</label>
+                      <Input
+                        className="text-xl py-6 font-black text-accent"
+                        value={siteData.promoDiscount}
+                        onChange={(e) => setSiteData({ ...siteData, promoDiscount: e.target.value })}
+                      />
+                    </div>
+                  </div>
+                </Card>
+                <Button className="w-full gap-2 uppercase font-black py-8 text-2xl" onClick={saveAdminData}>
+                  <Save className="h-6 w-6" /> Guardar Cambios
+                </Button>
+              </TabsContent>
+
+              <TabsContent value="logs" className="space-y-6 py-4">
+                <Card className="p-6">
+                  <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-xl font-black uppercase">Registros de Acceso</h3>
+                    <Button variant="outline" size="sm" onClick={fetchLogs}>Refrescar Logs</Button>
+                  </div>
+                  <div className="rounded-md border">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="font-bold uppercase">Hora</TableHead>
+                          <TableHead className="font-bold uppercase">Dispositivo</TableHead>
+                          <TableHead className="font-bold uppercase">Acción</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {logs.map((log, i) => (
+                          <TableRow key={i}>
+                            <TableCell className="font-mono text-xs">{new Date(log.timestamp).toLocaleString()}</TableCell>
+                            <TableCell className="text-xs truncate max-w-[200px]" title={log.device}>{log.device}</TableCell>
+                            <TableCell className="font-bold text-primary">{log.action}</TableCell>
+                          </TableRow>
+                        ))}
+                        {logs.length === 0 && (
+                          <TableRow>
+                            <TableCell colSpan={3} className="text-center py-8 text-muted-foreground">No hay registros recientes.</TableCell>
+                          </TableRow>
+                        )}
+                      </TableBody>
+                    </Table>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-4 text-center">Mostrando últimos 50 accesos. Registrado por el servidor.</p>
+                </Card>
               </TabsContent>
             </Tabs>
           )}
         </DialogContent>
       </Dialog>
 
+      {/* Promo Popup */}
+      {/* Promo Popup */}
+      <PromoPopup siteData={siteData} isOpen={showPromo} onClose={() => setShowPromo(false)} />
+
       {/* Navigation */}
       <nav className="sticky top-0 z-50 w-full bg-primary text-primary-foreground shadow-md">
         <div className="container mx-auto px-4 h-24 flex items-center justify-between">
           <div className="flex items-center gap-6">
-            <motion.img 
+            <motion.img
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1.1, opacity: 1 }}
-              src={logoImg} 
-              alt="Logo" 
-              className="h-48 w-48 rounded-full border-4 border-white shadow-2xl -mb-16 z-50 transform hover:scale-110 transition-transform duration-500 origin-top" 
+              src={siteData.logoUrl || logoImg}
+              alt="Logo"
+              className="h-48 w-48 rounded-full border-4 border-white shadow-2xl -mb-16 z-50 transform hover:scale-110 transition-transform duration-500 origin-top bg-white object-cover"
             />
             <div className="hidden md:flex items-center gap-2 pl-28">
               <ChefHat className="h-6 w-6" />
@@ -471,8 +768,8 @@ export default function Home() {
               <button onClick={() => scrollTo("location")} className="hover:text-white/80 transition-colors cursor-pointer">{t.locationTitle}</button>
             </div>
             <div className="flex items-center gap-4">
-              <Button variant="secondary" size="sm" onClick={() => setIsLangOpen(true)} className="gap-2 font-black shadow-lg px-6">
-                <Globe className="h-4 w-4" />
+              <Button variant="secondary" size="sm" onClick={() => setIsLangOpen(true)} className="gap-2 font-black shadow-lg px-8 h-14 text-xl hover:scale-110 active:scale-95 transition-transform duration-200">
+                <Globe className="h-6 w-6" />
                 {lang?.toUpperCase() || "..."}
               </Button>
               <Button variant="ghost" size="icon" onClick={() => setIsAdminOpen(true)} className="text-white hover:bg-white/10">
@@ -484,13 +781,13 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <motion.section 
+      <motion.section
         className="relative bg-primary text-primary-foreground py-16 md:py-24 px-4 overflow-hidden"
         style={{ opacity: heroOpacity, scale: heroScale }}
       >
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=2072&auto=format&fit=crop')] bg-cover bg-center opacity-10 mix-blend-overlay"></div>
         <div className="absolute inset-0 bg-gradient-to-b from-primary/40 to-primary"></div>
-        
+
         <div className="container mx-auto relative z-10 text-center max-w-5xl pt-4">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -499,10 +796,10 @@ export default function Home() {
           >
             <Badge variant="secondary" className="mb-6 px-6 md:px-10 py-3 md:py-4 text-sm md:text-xl rounded-full shadow-lg border-2 border-white/20 uppercase font-black">{t.heroBadge}</Badge>
             <div className="flex flex-col items-center gap-2 md:gap-4 mb-8">
-              <h1 className="text-5xl md:text-9xl lg:text-[11rem] font-black leading-none tracking-tight drop-shadow-2xl uppercase">
+              <h1 className="text-6xl md:text-9xl lg:text-[13rem] font-black leading-none tracking-tighter drop-shadow-2xl uppercase hover:text-white transition-colors duration-300 transform hover:scale-105 inline-block cursor-default select-none">
                 Panaderia
               </h1>
-              <h1 className="text-4xl md:text-8xl lg:text-[9rem] font-black leading-none tracking-tight drop-shadow-2xl uppercase opacity-90 -mt-2 md:-mt-4">
+              <h1 className="text-5xl md:text-8xl lg:text-[10rem] font-black leading-none tracking-tighter drop-shadow-2xl uppercase opacity-90 -mt-2 md:-mt-8 hover:text-accent transition-colors duration-300 transform hover:scale-105 inline-block cursor-default select-none">
                 La Francesa
               </h1>
             </div>
@@ -510,7 +807,7 @@ export default function Home() {
               {t.heroDesc}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 md:gap-8 justify-center items-center">
-              <Button size="lg" variant="secondary" onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(siteData.address)}`, '_blank')} className="w-full sm:w-auto gap-3 md:gap-5 text-lg md:text-2xl h-16 md:h-20 px-8 md:px-16 shadow-2xl hover:scale-105 transition-transform font-black uppercase group rounded-2xl md:rounded-3xl">
+              <Button size="lg" variant="secondary" onClick={() => scrollTo("location")} className="w-full sm:w-auto gap-3 md:gap-5 text-lg md:text-2xl h-16 md:h-20 px-8 md:px-16 shadow-2xl hover:scale-105 transition-transform font-black uppercase group rounded-2xl md:rounded-3xl">
                 <MapPin className="h-6 w-6 md:h-8 md:w-8 group-hover:animate-bounce" /> {t.visitBtn}
               </Button>
               <Button size="lg" variant="outline" onClick={() => scrollTo("menu")} className="w-full sm:w-auto gap-3 md:gap-5 text-lg md:text-2xl h-16 md:h-20 px-8 md:px-16 bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary shadow-2xl hover:scale-105 transition-transform font-black uppercase group rounded-2xl md:rounded-3xl">
@@ -537,7 +834,7 @@ export default function Home() {
                 <div className="p-3 md:p-5 bg-primary/10 rounded-2xl md:rounded-3xl">
                   <Croissant className="h-8 w-8 md:h-12 md:w-12 text-primary" />
                 </div>
-                <h2 className="text-3xl md:text-5xl font-black text-primary uppercase">{t.aboutTitle}</h2>
+                <h2 className="text-5xl md:text-8xl font-black text-primary uppercase hover:scale-105 transition-transform cursor-default">{t.aboutTitle}</h2>
               </div>
             </CardHeader>
             <CardContent className="px-6 md:px-10 pb-6 md:pb-10">
@@ -554,10 +851,10 @@ export default function Home() {
             <div className="p-3 md:p-5 bg-primary/10 rounded-full mb-4 md:mb-8">
               <Utensils className="h-8 w-8 md:h-12 md:w-12 text-primary" />
             </div>
-            <h2 className="text-4xl md:text-7xl font-black text-foreground mb-4 md:mb-8 uppercase">{t.menuTitle}</h2>
+            <h2 className="text-5xl md:text-8xl font-black text-foreground mb-4 md:mb-8 uppercase hover:text-primary transition-colors cursor-default">{t.menuTitle}</h2>
             <div className="w-20 md:w-40 h-2 md:h-3 bg-primary rounded-full"></div>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
             {siteData.categories.map((cat) => (
               <React.Fragment key={cat.id}>
@@ -581,7 +878,7 @@ export default function Home() {
               </React.Fragment>
             ))}
             <motion.div variants={fadeInUp} className="md:col-span-2">
-               <Card 
+              <Card
                 onClick={() => setIsMenuModalOpen(true)}
                 className="bg-primary text-primary-foreground border-none flex items-center justify-center p-12 md:p-20 cursor-pointer hover:bg-primary/90 transition-all shadow-xl group overflow-hidden relative rounded-2xl md:rounded-[2rem]">
                 <div className="text-center relative z-10">
@@ -603,7 +900,7 @@ export default function Home() {
 
             <div className="p-6 md:p-12">
               <div className="flex flex-wrap justify-center gap-4 mb-12">
-                <Button 
+                <Button
                   variant={selectedCategory === "all" ? "default" : "outline"}
                   onClick={() => setSelectedCategory("all")}
                   className="px-8 py-6 text-xl font-black uppercase rounded-2xl h-auto"
@@ -611,7 +908,7 @@ export default function Home() {
                   TODOS
                 </Button>
                 {siteData.categories.map(cat => (
-                  <Button 
+                  <Button
                     key={cat.id}
                     variant={selectedCategory === cat.id ? "default" : "outline"}
                     onClick={() => setSelectedCategory(cat.id)}
@@ -670,11 +967,11 @@ export default function Home() {
               </CardHeader>
               <CardContent className="space-y-6 md:space-y-10 pt-4 md:pt-8 px-6 md:px-10 pb-8 md:pb-12">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b-2 md:border-b-4 border-border pb-4 md:pb-6 gap-2 sm:gap-4">
-                  <span className="text-xl md:text-3xl font-black uppercase whitespace-nowrap">Lun - Sáb</span>
+                  <span className="text-xl md:text-3xl font-black uppercase whitespace-nowrap">{t.daysMonSat}</span>
                   <span className="text-xl md:text-3xl text-muted-foreground font-bold whitespace-nowrap">6:00 AM - 7:00 PM</span>
                 </div>
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4">
-                  <span className="text-xl md:text-3xl font-black uppercase whitespace-nowrap">Dom</span>
+                  <span className="text-xl md:text-3xl font-black uppercase whitespace-nowrap">{t.daySun}</span>
                   <span className="text-xl md:text-3xl text-muted-foreground font-bold whitespace-nowrap">6:00 AM - 3:00 PM</span>
                 </div>
               </CardContent>
@@ -700,7 +997,7 @@ export default function Home() {
                   </Badge>
                 </div>
                 <Button size="lg" asChild className="w-full text-2xl md:text-4xl h-20 md:h-28 shadow-2xl group rounded-2xl md:rounded-[2rem] font-black uppercase hover:scale-[1.02] transition-transform">
-                  <a href={`tel:${(siteData.phone || "").replace(/\D/g,'')}`}>
+                  <a href={`tel:${(siteData.phone || "").replace(/\D/g, '')}`}>
                     <Phone className="mr-4 md:mr-6 h-8 w-8 md:h-12 md:w-12 group-hover:animate-pulse" /> {t.callNow}
                   </a>
                 </Button>
@@ -735,7 +1032,7 @@ export default function Home() {
             <div className="p-3 md:p-5 bg-primary/10 rounded-full mb-4 md:mb-8">
               <MapPin className="h-8 w-8 md:h-12 md:w-12 text-primary" />
             </div>
-            <h2 className="text-4xl md:text-7xl font-black text-foreground mb-4 md:mb-8 uppercase">{t.locationTitle}</h2>
+            <h2 className="text-5xl md:text-8xl font-black text-foreground mb-4 md:mb-8 uppercase hover:text-primary transition-colors cursor-default">{t.locationTitle}</h2>
           </div>
           <Card className="overflow-hidden shadow-2xl border-none rounded-3xl md:rounded-[4rem] group">
             <div className="grid grid-cols-1 md:grid-cols-3">
@@ -751,8 +1048,8 @@ export default function Home() {
                 </div>
               </div>
               <div className="h-[400px] md:h-auto md:col-span-2 relative overflow-hidden">
-                <iframe 
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3786.1311026046416!2d-66.0592!3d18.4411!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c03666f2f2c8f61%3A0x6a0c0e0c0c0c0c0c!2s1963%20Av.%20Borinquen%2C%20San%20Juan%2C%2000915%2C%20Puerto%20Rico!5e0!3m2!1sen!2sus!4v1710000000000!5m2!1sen!2sus" 
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3786.1311026046416!2d-66.0592!3d18.4411!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c03666f2f2c8f61%3A0x6a0c0e0c0c0c0c0c!2s1963%20Av.%20Borinquen%2C%20San%20Juan%2C%2000915%2C%20Puerto%20Rico!5e0!3m2!1sen!2sus!4v1710000000000!5m2!1sen!2sus"
                   width="100%" height="100%" style={{ border: 0 }} allowFullScreen={true} loading="lazy" referrerPolicy="no-referrer-when-downgrade"
                   className="absolute inset-0 grayscale contrast-125 hover:grayscale-0 transition-all duration-1000"
                 ></iframe>
@@ -763,61 +1060,68 @@ export default function Home() {
         </motion.div>
       </main>
 
-        {/* Reviews Section */}
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="max-w-6xl mx-auto py-20 px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl md:text-7xl font-black uppercase mb-6">Opiniones de Clientes</h2>
-            <div className="w-40 h-3 bg-primary mx-auto rounded-full"></div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-            {siteData.reviews.map((rev) => (
-              <Card key={rev.id} className="p-8 rounded-[2.5rem] shadow-xl border-none bg-white relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-20 h-20 bg-primary/5 rounded-bl-[4rem] group-hover:bg-primary/10 transition-colors"></div>
-                <div className="flex gap-1 mb-6 text-primary">
-                  {[...Array(5)].map((_, i) => (
-                    <Heart key={i} className="h-6 w-6 fill-current" />
-                  ))}
-                </div>
-                <p className="text-2xl font-bold italic mb-8 text-muted-foreground">"{rev.comment}"</p>
-                <p className="text-xl font-black uppercase tracking-widest text-primary">— {rev.name}</p>
-              </Card>
-            ))}
-          </div>
-          <Card className="max-w-2xl mx-auto p-10 rounded-[3rem] shadow-2xl border-none">
-            <h3 className="text-3xl font-black uppercase mb-8 text-center">Déjanos tu opinión</h3>
-            <div className="space-y-6">
-              <Input 
-                placeholder="Tu nombre" 
-                className="text-lg py-6 px-6 rounded-2xl" 
-                value={newReview.name}
-                onChange={(e) => setNewReview({...newReview, name: e.target.value})}
-              />
-              <Textarea 
-                placeholder="¿Qué te pareció nuestro sabor?" 
-                className="text-lg min-h-[120px] px-6 py-4 rounded-2xl" 
-                value={newReview.comment}
-                onChange={(e) => setNewReview({...newReview, comment: e.target.value})}
-              />
-              <Button 
-                className="w-full py-8 text-2xl font-black uppercase rounded-3xl shadow-lg hover:scale-[1.02] transition-transform"
-                onClick={() => {
-                  if (newReview.name && newReview.comment) {
-                    const rev: Review = {
-                      id: Date.now().toString(),
-                      name: newReview.name,
-                      comment: newReview.comment,
-                      rating: 5
-                    };
-                    setSiteData({...siteData, reviews: [rev, ...siteData.reviews]});
-                    setNewReview({ name: "", comment: "" });
-                  }
-                }}
-              >
-                Enviar Reseña
-              </Button>
+      {/* Reviews Section */}
+      <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="max-w-6xl mx-auto py-20 px-4">
+        <div className="text-center mb-16">
+          <h2 className="text-5xl md:text-7xl font-black uppercase mb-6">{t.reviewsTitle}</h2>
+          <div className="w-40 h-3 bg-primary mx-auto rounded-full"></div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+          {siteData.reviews.map((rev) => (
+            <Card key={rev.id} className="p-8 rounded-[2.5rem] shadow-xl border-none bg-white relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-20 h-20 bg-primary/5 rounded-bl-[4rem] group-hover:bg-primary/10 transition-colors"></div>
+              <div className="flex gap-1 mb-6 text-primary">
+                {[...Array(rev.rating)].map((_, i) => (
+                  <Heart key={i} className="h-6 w-6 fill-current" />
+                ))}
+              </div>
+              <p className="text-2xl font-bold italic mb-8 text-muted-foreground">"{rev.comment}"</p>
+              <p className="text-xl font-black uppercase tracking-widest text-primary">— {rev.name}</p>
+            </Card>
+          ))}
+        </div>
+        <Card className="max-w-2xl mx-auto p-10 rounded-[3rem] shadow-2xl border-none">
+          <h3 className="text-3xl font-black uppercase mb-8 text-center">{t.leaveReviewTitle}</h3>
+          <div className="space-y-6">
+            <Input
+              placeholder="Tu nombre"
+              className="text-lg py-6 px-6 rounded-2xl"
+              value={newReview.name}
+              onChange={(e) => setNewReview({ ...newReview, name: e.target.value })}
+            />
+            <div className="flex gap-2 justify-center py-2">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button key={star} onClick={() => setNewReview({ ...newReview, rating: star })} type="button" className="focus:outline-none transform transition-transform hover:scale-125">
+                  <Heart className={`h-10 w-10 ${star <= (newReview.rating || 5) ? "fill-primary text-primary" : "text-muted-foreground"}`} />
+                </button>
+              ))}
             </div>
-          </Card>
-        </motion.div>
+            <Textarea
+              placeholder="¿Qué te pareció nuestro sabor?"
+              className="text-lg min-h-[120px] px-6 py-4 rounded-2xl"
+              value={newReview.comment}
+              onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
+            />
+            <Button
+              className="w-full py-8 text-2xl font-black uppercase rounded-3xl shadow-lg hover:scale-[1.02] transition-transform"
+              onClick={() => {
+                if (newReview.name && newReview.comment) {
+                  const rev: Review = {
+                    id: Date.now().toString(),
+                    name: newReview.name,
+                    comment: newReview.comment,
+                    rating: newReview.rating
+                  };
+                  setSiteData({ ...siteData, reviews: [rev, ...siteData.reviews] });
+                  setNewReview({ name: "", comment: "", rating: 5 });
+                }
+              }}
+            >
+              {t.submitReviewBtn}
+            </Button>
+          </div>
+        </Card>
+      </motion.div>
 
       {/* Footer */}
       <footer className="bg-primary text-primary-foreground py-16 md:py-32 mt-auto relative overflow-hidden">
@@ -831,18 +1135,18 @@ export default function Home() {
             {t.footerDesc}
           </p>
           <div className="bg-white/10 p-8 md:p-12 rounded-2xl md:rounded-[3rem] inline-block mb-16 md:mb-24 border-2 border-white/5">
-            <p className="text-sm md:text-lg uppercase tracking-widest mb-2 md:mb-4 opacity-60 font-black">Soporte Técnico</p>
+            <p className="text-sm md:text-lg uppercase tracking-widest mb-2 md:mb-4 opacity-60 font-black">{t.support}</p>
             <p className="text-3xl md:text-5xl font-black flex items-center justify-center gap-4 md:gap-6">
               <Phone className="h-8 w-8 md:h-10 md:w-10" /> 939-630-0315
             </p>
           </div>
           <div className="flex flex-wrap justify-center gap-8 md:gap-16 text-lg md:text-2xl font-black opacity-60 uppercase">
             <span className="hover:opacity-100 transition-opacity cursor-pointer">© 2024</span>
-            <span className="hover:opacity-100 transition-opacity cursor-pointer">Privacidad</span>
-            <span className="hover:opacity-100 transition-opacity cursor-pointer">Términos</span>
+            <span className="hover:opacity-100 transition-opacity cursor-pointer">{t.privacy}</span>
+            <span className="hover:opacity-100 transition-opacity cursor-pointer">{t.terms}</span>
           </div>
         </div>
       </footer>
-    </div>
+    </div >
   );
 }
