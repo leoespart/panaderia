@@ -1034,34 +1034,32 @@ export default function Home() {
                 ))}
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {siteData.categories
-                  .filter(cat => selectedCategory === "all" || selectedCategory === cat.id)
-                  .map(cat => (
-                    <div key={cat.id} className="space-y-4">
-                      <h3 className="text-4xl font-black text-primary uppercase border-b-4 border-primary/20 pb-2 mb-8">
-                        {lang === "es" ? cat.nameEs : cat.nameEn}
-                      </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                        {cat.items.map(item => (
-                          <div key={item.id} className="flex flex-col sm:flex-row gap-4 p-4 rounded-2xl hover:bg-primary/5 transition-all border-2 border-transparent hover:border-primary/10 bg-white/50">
-                            {item.image && (
-                              <div className="w-full sm:w-40 h-40 rounded-2xl overflow-hidden flex-shrink-0 shadow-lg">
-                                <img src={item.image} alt={item.nameEs} className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" />
-                              </div>
-                            )}
-                            <div className="flex-1 flex flex-col justify-center">
-                              <div className="flex justify-between items-start mb-2">
-                                <h4 className="text-3xl font-black uppercase leading-tight">{lang === "es" ? item.nameEs : item.nameEn}</h4>
-                                <span className="text-3xl font-black text-primary ml-4">${item.price}</span>
-                              </div>
-                              <p className="text-xl text-muted-foreground font-bold leading-relaxed">{lang === "es" ? item.descEs : item.descEn}</p>
+              <div className="space-y-12">
+                {siteData.categories.map(cat => (
+                  <div key={cat.id} className="space-y-4">
+                    <h3 className="text-4xl font-black text-primary uppercase border-b-4 border-primary/20 pb-2 mb-8">
+                      {lang === "es" ? cat.nameEs : cat.nameEn}
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                      {cat.items.map(item => (
+                        <div key={item.id} className="flex flex-col sm:flex-row gap-4 p-4 rounded-2xl hover:bg-primary/5 transition-all border-2 border-transparent hover:border-primary/10 bg-white/50">
+                          {item.image && (
+                            <div className="w-full sm:w-40 h-40 rounded-2xl overflow-hidden flex-shrink-0 shadow-lg">
+                              <img src={item.image} alt={item.nameEs} className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" />
                             </div>
+                          )}
+                          <div className="flex-1 flex flex-col justify-center">
+                            <div className="flex justify-between items-start mb-2">
+                              <h4 className="text-3xl font-black uppercase leading-tight">{lang === "es" ? item.nameEs : item.nameEn}</h4>
+                              <span className="text-3xl font-black text-primary ml-4">${item.price}</span>
+                            </div>
+                            <p className="text-xl text-muted-foreground font-bold leading-relaxed">{lang === "es" ? item.descEs : item.descEn}</p>
                           </div>
-                        ))}
-                      </div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  </div>
+                ))}
               </div>
             </div>
           </DialogContent>
