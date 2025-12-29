@@ -137,6 +137,14 @@ export default function Home() {
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
   const [collapsedCats, setCollapsedCats] = useState<Record<string, boolean>>({});
   const [loginError, setLoginError] = useState("");
+  const [currentUser, setCurrentUser] = useState<string | null>(null);
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Buenos días";
+    if (hour < 18) return "Buenas tardes";
+    return "Buenas noches";
+  };
 
   const toggleCat = (catId: string) => {
     setCollapsedCats(prev => ({ ...prev, [catId]: !prev[catId] }));
@@ -317,6 +325,12 @@ export default function Home() {
   const handleAdminLogin = async () => {
     if (adminPass === "Yadiel132") {
       setIsLoggedIn(true);
+      setCurrentUser("Yadiel");
+      setLoginError("");
+      await fetch("/api/login", { method: "POST" });
+    } else if (adminPass === "Alexi1976") {
+      setIsLoggedIn(true);
+      setCurrentUser("Alex");
       setLoginError("");
       await fetch("/api/login", { method: "POST" });
     } else {
@@ -434,404 +448,433 @@ export default function Home() {
       <Dialog open={isAdminOpen} onOpenChange={setIsAdminOpen}>
         <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto z-[90]">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 font-black uppercase text-2xl">
-              <Settings className="h-6 w-6" /> Admin Panel
+            <DialogTitle className="flex flex-col gap-1 font-black uppercase text-2xl">
+              <div className="flex items-center gap-2">
+                <Settings className="h-6 w-6" /> Panel de Administración
+              </div>
+              {isLoggedIn && currentUser && (
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="text-primary text-sm font-bold normal-case mt-1"
+                >
+                  {getGreeting()}, {currentUser}
+                </motion.div>
+              )}
             </DialogTitle>
           </DialogHeader>
-          {!isLoggedIn ? (
-            <div className="space-y-6 py-6">
-              <div className="space-y-2">
-                <Input
-                  type="password"
-                  placeholder="Contraseña de administrador"
-                  value={adminPass}
-                  onChange={(e) => {
-                    setAdminPass(e.target.value);
-                    if (loginError) setLoginError("");
-                  }}
-                  className={`text-lg py-6 ${loginError ? "border-destructive ring-destructive" : ""}`}
-                />
-                {loginError && (
-                  <p className="text-destructive font-bold text-sm uppercase animate-shake px-2">
-                    {loginError}
-                  </p>
-                )}
-              </div>
-              <Button className="w-full uppercase font-black text-xl py-6" onClick={handleAdminLogin}>Acceder</Button>
-            </div>
-          ) : (
-            <Tabs defaultValue="general" className="w-full">
-              <TabsList className="flex flex-wrap h-auto gap-2 mb-6">
-                <TabsTrigger value="general" className="uppercase font-black text-lg py-3 flex-1">General</TabsTrigger>
-                <TabsTrigger value="menu" className="uppercase font-black text-lg py-3 flex-1">Menu</TabsTrigger>
-                <TabsTrigger value="design" className="uppercase font-black text-lg py-3 flex-1">Diseño</TabsTrigger>
-                <TabsTrigger value="promo" className="uppercase font-black text-lg py-3 flex-1">Promociones</TabsTrigger>
-                <TabsTrigger value="logs" className="uppercase font-black text-lg py-3 flex-1" onClick={fetchLogs}>Logs</TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="general" className="space-y-8">
-                <div className="grid gap-6">
-                  {/* Hero Badge */}
-                  <Card className="p-6">
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="text-sm font-black uppercase text-muted-foreground">Hero Badge (ES)</label>
-                        <Input
-                          className="font-bold text-lg"
-                          value={siteData.heroBadgeEs}
-                          onChange={(e) => setSiteData({
-                            ...siteData,
-                            heroBadgeEs: e.target.value,
-                            heroBadgeEn: `[EN: ${e.target.value}]` // Simple auto-fill mock
-                          })}
-                        />
-                      </div>
-                      <div className="space-y-2 opacity-70">
-                        <label className="text-sm font-black uppercase text-muted-foreground">Hero Badge (EN)</label>
-                        <Input
-                          className="font-bold text-lg bg-muted"
-                          value={siteData.heroBadgeEn}
-                          readOnly
-                        />
-                        <p className="text-xs text-muted-foreground">*Traducido automáticamente</p>
-                      </div>
-                    </div>
-                  </Card>
-
-                  {/* Hero Title */}
-                  <Card className="p-6">
-                    <div className="space-y-2">
-                      <label className="text-sm font-black uppercase text-muted-foreground">Hero Title</label>
-                      <Input
-                        className="font-black text-xl uppercase"
-                        value={siteData.heroTitle}
-                        onChange={(e) => setSiteData({ ...siteData, heroTitle: e.target.value })}
-                      />
-                    </div>
-                  </Card>
-
-                  {/* Hero Description */}
-                  <Card className="p-6">
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="text-sm font-black uppercase text-muted-foreground">Hero Description (ES)</label>
-                        <Textarea
-                          className="text-lg min-h-[100px]"
-                          value={siteData.heroDescEs}
-                          onChange={(e) => setSiteData({
-                            ...siteData,
-                            heroDescEs: e.target.value,
-                            heroDescEn: `[EN: ${e.target.value}]` // Simple auto-fill mock
-                          })}
-                        />
-                      </div>
-                      <div className="space-y-2 opacity-70">
-                        <label className="text-sm font-black uppercase text-muted-foreground">Hero Description (EN)</label>
-                        <Textarea
-                          className="text-lg min-h-[100px] bg-muted"
-                          value={siteData.heroDescEn}
-                          readOnly
-                        />
-                      </div>
-                    </div>
-                  </Card>
-
-                  {/* Address & Buttons */}
-                  <Card className="p-6">
-                    <div className="space-y-6">
-                      <div className="space-y-2">
-                        <label className="text-sm font-black uppercase text-muted-foreground">Dirección</label>
-                        <Input
-                          className="text-lg"
-                          value={siteData.address}
-                          onChange={(e) => setSiteData({ ...siteData, address: e.target.value })}
-                        />
-                      </div>
-                      <div className="grid md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                          <label className="text-sm font-black uppercase text-muted-foreground">Texto Botón Llegar (ES)</label>
-                          <Input
-                            className="text-lg"
-                            value={siteData.directionsBtnEs}
-                            onChange={(e) => setSiteData({
-                              ...siteData,
-                              directionsBtnEs: e.target.value,
-                              directionsBtnEn: e.target.value === "CÓMO LLEGAR" ? "DIRECTIONS" : `[EN: ${e.target.value}]`
-                            })}
-                          />
-                        </div>
-                        <div className="space-y-2 opacity-70">
-                          <label className="text-sm font-black uppercase text-muted-foreground">Texto Botón Directions (EN)</label>
-                          <Input
-                            className="text-lg bg-muted"
-                            value={siteData.directionsBtnEn}
-                            readOnly
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </Card>
-
-                  {/* Phone & Price */}
-                  <Card className="p-6">
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="text-sm font-black uppercase text-muted-foreground">Teléfono</label>
-                        <Input
-                          className="text-lg font-bold"
-                          value={siteData.phone}
-                          onChange={(e) => setSiteData({ ...siteData, phone: e.target.value })}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-sm font-black uppercase text-muted-foreground">Precio Promedio</label>
-                        <Input
-                          className="text-lg"
-                          value={siteData.avgPrice}
-                          onChange={(e) => setSiteData({ ...siteData, avgPrice: e.target.value })}
-                        />
-                      </div>
-                    </div>
-                  </Card>
+          <AnimatePresence mode="wait">
+            {!isLoggedIn ? (
+              <motion.div
+                key="login"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95, y: -20 }}
+                className="space-y-6 py-6"
+              >
+                <div className="space-y-2">
+                  <Input
+                    type="password"
+                    placeholder="Contraseña de administrador"
+                    value={adminPass}
+                    onChange={(e) => {
+                      setAdminPass(e.target.value);
+                      if (loginError) setLoginError("");
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleAdminLogin();
+                    }}
+                    className={`text-lg py-6 ${loginError ? "border-destructive ring-destructive" : ""}`}
+                  />
+                  {loginError && (
+                    <p className="text-destructive font-bold text-sm uppercase animate-shake px-2">
+                      {loginError}
+                    </p>
+                  )}
                 </div>
+                <Button className="w-full uppercase font-black text-xl py-6" onClick={handleAdminLogin}>Acceder</Button>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="admin-tabs"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="space-y-6"
+              >
+                <Tabs defaultValue="general" className="w-full">
+                  <TabsList className="flex flex-wrap h-auto gap-2 mb-6">
+                    <TabsTrigger value="general" className="uppercase font-black text-lg py-3 flex-1">General</TabsTrigger>
+                    <TabsTrigger value="menu" className="uppercase font-black text-lg py-3 flex-1">Menú</TabsTrigger>
+                    <TabsTrigger value="design" className="uppercase font-black text-lg py-3 flex-1">Diseño</TabsTrigger>
+                    <TabsTrigger value="promo" className="uppercase font-black text-lg py-3 flex-1">Promociones</TabsTrigger>
+                    <TabsTrigger value="logs" className="uppercase font-black text-lg py-3 flex-1" onClick={fetchLogs}>Logs</TabsTrigger>
+                  </TabsList>
 
-                <Button className="w-full gap-2 uppercase font-black py-8 text-2xl shadow-xl hover:scale-[1.01] transition-transform" onClick={saveAdminData}>
-                  <Save className="h-8 w-8" /> Guardar Cambios
-                </Button>
-              </TabsContent>
+                  <TabsContent value="general" className="space-y-8">
+                    <div className="grid gap-6">
+                      {/* Hero Badge */}
+                      <Card className="p-6">
+                        <div className="grid md:grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                            <label className="text-sm font-black uppercase text-muted-foreground">Hero Badge (ES)</label>
+                            <Input
+                              className="font-bold text-lg"
+                              value={siteData.heroBadgeEs}
+                              onChange={(e) => setSiteData({
+                                ...siteData,
+                                heroBadgeEs: e.target.value,
+                                heroBadgeEn: `[EN: ${e.target.value}]` // Simple auto-fill mock
+                              })}
+                            />
+                          </div>
+                          <div className="space-y-2 opacity-70">
+                            <label className="text-sm font-black uppercase text-muted-foreground">Hero Badge (EN)</label>
+                            <Input
+                              className="font-bold text-lg bg-muted"
+                              value={siteData.heroBadgeEn}
+                              readOnly
+                            />
+                            <p className="text-xs text-muted-foreground">*Traducido automáticamente</p>
+                          </div>
+                        </div>
+                      </Card>
 
-              <TabsContent value="menu" className="space-y-6">
-                {siteData.categories.map((cat, catIdx) => (
-                  <Card key={cat.id} className="overflow-hidden border-2">
-                    <div className="p-6 bg-muted/30 border-b-2 flex items-center gap-4">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="p-1 h-auto hover:bg-muted"
-                        onClick={() => toggleCat(cat.id)}
-                      >
-                        {collapsedCats[cat.id] ? (
-                          <Plus className="h-6 w-6 text-primary" />
-                        ) : (
-                          <Minus className="h-6 w-6 text-primary" />
-                        )}
-                      </Button>
-                      <Input
-                        className="font-black uppercase text-xl flex-1 border-none bg-transparent shadow-none px-0 focus-visible:ring-0"
-                        value={cat.nameEs}
-                        onChange={(e) => {
-                          const newCats = [...siteData.categories];
-                          newCats[catIdx].nameEs = e.target.value;
-                          newCats[catIdx].nameEn = `[EN: ${e.target.value}]`;
-                          setSiteData({ ...siteData, categories: newCats });
-                        }}
-                      />
-                      <span className="text-sm font-mono text-muted-foreground px-3 py-1 bg-muted rounded">EN: {cat.nameEn}</span>
-                    </div>
+                      {/* Hero Title */}
+                      <Card className="p-6">
+                        <div className="space-y-2">
+                          <label className="text-sm font-black uppercase text-muted-foreground">Hero Title</label>
+                          <Input
+                            className="font-black text-xl uppercase"
+                            value={siteData.heroTitle}
+                            onChange={(e) => setSiteData({ ...siteData, heroTitle: e.target.value })}
+                          />
+                        </div>
+                      </Card>
 
-                    {!collapsedCats[cat.id] && (
-                      <div className="p-6 space-y-6">
-                        {cat.items.map((item, itemIdx) => (
-                          <Card key={item.id} className="p-4">
-                            <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6">
-                              <div className="space-y-4">
-                                <div className="aspect-square rounded-lg overflow-hidden bg-muted relative group">
-                                  {item.image ? (
-                                    <img src={item.image} alt={item.nameEs} className="w-full h-full object-cover" />
-                                  ) : (
-                                    <div className="w-full h-full flex items-center justify-center text-muted-foreground">No img</div>
-                                  )}
-                                </div>
-                                <Input
-                                  placeholder="URL Imagen"
-                                  value={item.image || ""}
-                                  onChange={(e) => {
-                                    const newCats = [...siteData.categories];
-                                    newCats[catIdx].items[itemIdx].image = e.target.value;
-                                    setSiteData({ ...siteData, categories: newCats });
-                                  }}
-                                  className="text-xs"
-                                />
-                              </div>
+                      {/* Hero Description */}
+                      <Card className="p-6">
+                        <div className="grid md:grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                            <label className="text-sm font-black uppercase text-muted-foreground">Hero Description (ES)</label>
+                            <Textarea
+                              className="text-lg min-h-[100px]"
+                              value={siteData.heroDescEs}
+                              onChange={(e) => setSiteData({
+                                ...siteData,
+                                heroDescEs: e.target.value,
+                                heroDescEn: `[EN: ${e.target.value}]` // Simple auto-fill mock
+                              })}
+                            />
+                          </div>
+                          <div className="space-y-2 opacity-70">
+                            <label className="text-sm font-black uppercase text-muted-foreground">Hero Description (EN)</label>
+                            <Textarea
+                              className="text-lg min-h-[100px] bg-muted"
+                              value={siteData.heroDescEn}
+                              readOnly
+                            />
+                          </div>
+                        </div>
+                      </Card>
 
-                              <div className="space-y-4">
-                                <div className="grid md:grid-cols-2 gap-4">
-                                  <div className="space-y-1">
-                                    <label className="text-xs font-bold uppercase opacity-50">Nombre</label>
-                                    <Input
-                                      value={item.nameEs}
-                                      className="font-black text-lg"
-                                      onChange={(e) => {
-                                        const newCats = [...siteData.categories];
-                                        newCats[catIdx].items[itemIdx].nameEs = e.target.value;
-                                        newCats[catIdx].items[itemIdx].nameEn = `[EN: ${e.target.value}]`;
-                                        setSiteData({ ...siteData, categories: newCats });
-                                      }}
-                                    />
-                                  </div>
-                                  <div className="space-y-1">
-                                    <label className="text-xs font-bold uppercase opacity-50">Precio</label>
-                                    <Input
-                                      value={item.price}
-                                      className="font-black text-lg text-primary"
-                                      onChange={(e) => {
-                                        const newCats = [...siteData.categories];
-                                        newCats[catIdx].items[itemIdx].price = e.target.value;
-                                        setSiteData({ ...siteData, categories: newCats });
-                                      }}
-                                    />
-                                  </div>
-                                </div>
-
-                                <div className="space-y-1">
-                                  <label className="text-xs font-bold uppercase opacity-50">Descripción</label>
-                                  <Textarea
-                                    value={item.descEs}
-                                    className="min-h-[80px]"
-                                    onChange={(e) => {
-                                      const newCats = [...siteData.categories];
-                                      newCats[catIdx].items[itemIdx].descEs = e.target.value;
-                                      newCats[catIdx].items[itemIdx].descEn = `[EN: ${e.target.value}]`;
-                                      setSiteData({ ...siteData, categories: newCats });
-                                    }}
-                                  />
-                                </div>
-
-                                <div className="flex justify-end">
-                                  <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive hover:bg-destructive/10 uppercase font-bold" onClick={() => {
-                                    const newCats = [...siteData.categories];
-                                    newCats[catIdx].items.splice(itemIdx, 1);
-                                    setSiteData({ ...siteData, categories: newCats });
-                                  }}>
-                                    <Trash2 className="h-4 w-4 mr-2" /> Eliminar
-                                  </Button>
-                                </div>
-                              </div>
+                      {/* Address & Buttons */}
+                      <Card className="p-6">
+                        <div className="space-y-6">
+                          <div className="space-y-2">
+                            <label className="text-sm font-black uppercase text-muted-foreground">Dirección</label>
+                            <Input
+                              className="text-lg"
+                              value={siteData.address}
+                              onChange={(e) => setSiteData({ ...siteData, address: e.target.value })}
+                            />
+                          </div>
+                          <div className="grid md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                              <label className="text-sm font-black uppercase text-muted-foreground">Texto Botón Llegar (ES)</label>
+                              <Input
+                                className="text-lg"
+                                value={siteData.directionsBtnEs}
+                                onChange={(e) => setSiteData({
+                                  ...siteData,
+                                  directionsBtnEs: e.target.value,
+                                  directionsBtnEn: e.target.value === "CÓMO LLEGAR" ? "DIRECTIONS" : `[EN: ${e.target.value}]`
+                                })}
+                              />
                             </div>
-                          </Card>
-                        ))}
+                            <div className="space-y-2 opacity-70">
+                              <label className="text-sm font-black uppercase text-muted-foreground">Texto Botón Directions (EN)</label>
+                              <Input
+                                className="text-lg bg-muted"
+                                value={siteData.directionsBtnEn}
+                                readOnly
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </Card>
 
-                        <Button variant="outline" className="w-full border-dashed border-2 py-8 uppercase font-bold text-muted-foreground hover:text-primary hover:border-primary" onClick={() => {
-                          const newCats = [...siteData.categories];
-                          newCats[catIdx].items.push({ id: Date.now().toString(), nameEs: "Nuevo Plato", nameEn: "New Dish", price: "0.00", descEs: "", descEn: "", image: "" });
-                          setSiteData({ ...siteData, categories: newCats });
-                        }}>
-                          <Plus className="h-5 w-5 mr-2" /> Agregar Plato a {cat.nameEs}
-                        </Button>
-                      </div>
-                    )}
-                  </Card>
-                ))}
-
-                <Button className="w-full gap-2 uppercase font-black py-8 text-2xl" onClick={saveAdminData}>
-                  <Save className="h-6 w-6" /> Guardar Cambios
-                </Button>
-              </TabsContent>
-
-              <TabsContent value="design" className="space-y-6 py-4">
-                <Card className="p-6">
-                  <div className="space-y-4">
-                    <h3 className="text-xl font-black uppercase">Logo del Sitio</h3>
-                    <div className="flex gap-6 items-center">
-                      <div className="h-32 w-32 rounded-full bg-muted border-4 border-primary overflow-hidden flex-shrink-0">
-                        <img src={siteData.logoUrl || logoImg} alt="Preview" className="h-full w-full object-cover" />
-                      </div>
-                      <div className="flex-1 space-y-2">
-                        <label className="text-sm font-bold uppercase opacity-70">URL del Logo (Imagen)</label>
-                        <Input
-                          placeholder="https://..."
-                          className="text-lg py-6"
-                          value={siteData.logoUrl}
-                          onChange={(e) => setSiteData({ ...siteData, logoUrl: e.target.value })}
-                        />
-                        <p className="text-xs text-muted-foreground">Deja vacío para usar el logo por defecto.</p>
-                      </div>
+                      {/* Phone & Price */}
+                      <Card className="p-6">
+                        <div className="grid md:grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                            <label className="text-sm font-black uppercase text-muted-foreground">Teléfono</label>
+                            <Input
+                              className="text-lg font-bold"
+                              value={siteData.phone}
+                              onChange={(e) => setSiteData({ ...siteData, phone: e.target.value })}
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-sm font-black uppercase text-muted-foreground">Precio Promedio</label>
+                            <Input
+                              className="text-lg"
+                              value={siteData.avgPrice}
+                              onChange={(e) => setSiteData({ ...siteData, avgPrice: e.target.value })}
+                            />
+                          </div>
+                        </div>
+                      </Card>
                     </div>
-                  </div>
-                </Card>
-                <Button className="w-full gap-2 uppercase font-black py-8 text-2xl" onClick={saveAdminData}>
-                  <Save className="h-6 w-6" /> Guardar Cambios
-                </Button>
-              </TabsContent>
 
-              <TabsContent value="promo" className="space-y-6 py-4">
-                <Card className="p-6 bg-accent/5 border-accent/20 border-2">
-                  <h3 className="text-2xl font-black uppercase text-accent mb-6 flex items-center gap-2">
-                    <Heart className="fill-accent h-8 w-8" /> Configuración de Promociones
-                  </h3>
+                    <Button className="w-full gap-2 uppercase font-black py-8 text-2xl shadow-xl hover:scale-[1.01] transition-transform" onClick={saveAdminData}>
+                      <Save className="h-8 w-8" /> Guardar Cambios
+                    </Button>
+                  </TabsContent>
 
-                  <div className="flex items-center gap-4 mb-8 bg-white p-4 rounded-xl shadow-sm border">
-                    <Switch
-                      checked={siteData.promoActive}
-                      onCheckedChange={(checked) => setSiteData({ ...siteData, promoActive: checked })}
-                      className="scale-150 ml-2"
-                    />
-                    <div className="flex flex-col ml-4">
-                      <span className="text-xl font-black uppercase">Activar Popup de Promoción</span>
-                      <span className="text-sm text-muted-foreground font-bold">Si se activa, todos los usuarios verán el anuncio al entrar.</span>
-                    </div>
-                  </div>
+                  <TabsContent value="menu" className="space-y-6">
+                    {siteData.categories.map((cat, catIdx) => (
+                      <Card key={cat.id} className="overflow-hidden border-2">
+                        <div className="p-6 bg-muted/30 border-b-2 flex items-center gap-4">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="p-1 h-auto hover:bg-muted"
+                            onClick={() => toggleCat(cat.id)}
+                          >
+                            {collapsedCats[cat.id] ? (
+                              <Plus className="h-6 w-6 text-primary" />
+                            ) : (
+                              <Minus className="h-6 w-6 text-primary" />
+                            )}
+                          </Button>
+                          <Input
+                            className="font-black uppercase text-xl flex-1 border-none bg-transparent shadow-none px-0 focus-visible:ring-0"
+                            value={cat.nameEs}
+                            onChange={(e) => {
+                              const newCats = [...siteData.categories];
+                              newCats[catIdx].nameEs = e.target.value;
+                              newCats[catIdx].nameEn = `[EN: ${e.target.value}]`;
+                              setSiteData({ ...siteData, categories: newCats });
+                            }}
+                          />
+                          <span className="text-sm font-mono text-muted-foreground px-3 py-1 bg-muted rounded">EN: {cat.nameEn}</span>
+                        </div>
 
-                  <div className="space-y-6">
-                    <div className="space-y-2">
-                      <label className="text-sm font-bold uppercase opacity-70">Mensaje de Promoción</label>
-                      <Input
-                        className="text-xl py-6 font-bold"
-                        value={siteData.promoMessage}
-                        onChange={(e) => setSiteData({ ...siteData, promoMessage: e.target.value })}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-bold uppercase opacity-70">Texto del Descuento (Grande)</label>
-                      <Input
-                        className="text-xl py-6 font-black text-accent"
-                        value={siteData.promoDiscount}
-                        onChange={(e) => setSiteData({ ...siteData, promoDiscount: e.target.value })}
-                      />
-                    </div>
-                  </div>
-                </Card>
-                <Button className="w-full gap-2 uppercase font-black py-8 text-2xl" onClick={saveAdminData}>
-                  <Save className="h-6 w-6" /> Guardar Cambios
-                </Button>
-              </TabsContent>
+                        {!collapsedCats[cat.id] && (
+                          <div className="p-6 space-y-6">
+                            {cat.items.map((item, itemIdx) => (
+                              <Card key={item.id} className="p-4">
+                                <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6">
+                                  <div className="space-y-4">
+                                    <div className="aspect-square rounded-lg overflow-hidden bg-muted relative group">
+                                      {item.image ? (
+                                        <img src={item.image} alt={item.nameEs} className="w-full h-full object-cover" />
+                                      ) : (
+                                        <div className="w-full h-full flex items-center justify-center text-muted-foreground">No img</div>
+                                      )}
+                                    </div>
+                                    <Input
+                                      placeholder="URL Imagen"
+                                      value={item.image || ""}
+                                      onChange={(e) => {
+                                        const newCats = [...siteData.categories];
+                                        newCats[catIdx].items[itemIdx].image = e.target.value;
+                                        setSiteData({ ...siteData, categories: newCats });
+                                      }}
+                                      className="text-xs"
+                                    />
+                                  </div>
 
-              <TabsContent value="logs" className="space-y-6 py-4">
-                <Card className="p-6">
-                  <div className="flex justify-between items-center mb-6">
-                    <h3 className="text-xl font-black uppercase">Registros de Acceso</h3>
-                    <Button variant="outline" size="sm" onClick={fetchLogs}>Refrescar Logs</Button>
-                  </div>
-                  <div className="rounded-md border">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead className="font-bold uppercase">Hora</TableHead>
-                          <TableHead className="font-bold uppercase">Dispositivo</TableHead>
-                          <TableHead className="font-bold uppercase">Acción</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {logs.map((log, i) => (
-                          <TableRow key={i}>
-                            <TableCell className="font-mono text-xs">{new Date(log.timestamp).toLocaleString()}</TableCell>
-                            <TableCell className="text-xs truncate max-w-[200px]" title={log.device}>{log.device}</TableCell>
-                            <TableCell className="font-bold text-primary">{log.action}</TableCell>
-                          </TableRow>
-                        ))}
-                        {logs.length === 0 && (
-                          <TableRow>
-                            <TableCell colSpan={3} className="text-center py-8 text-muted-foreground">No hay registros recientes.</TableCell>
-                          </TableRow>
+                                  <div className="space-y-4">
+                                    <div className="grid md:grid-cols-2 gap-4">
+                                      <div className="space-y-1">
+                                        <label className="text-xs font-bold uppercase opacity-50">Nombre</label>
+                                        <Input
+                                          value={item.nameEs}
+                                          className="font-black text-lg"
+                                          onChange={(e) => {
+                                            const newCats = [...siteData.categories];
+                                            newCats[catIdx].items[itemIdx].nameEs = e.target.value;
+                                            newCats[catIdx].items[itemIdx].nameEn = `[EN: ${e.target.value}]`;
+                                            setSiteData({ ...siteData, categories: newCats });
+                                          }}
+                                        />
+                                      </div>
+                                      <div className="space-y-1">
+                                        <label className="text-xs font-bold uppercase opacity-50">Precio</label>
+                                        <Input
+                                          value={item.price}
+                                          className="font-black text-lg text-primary"
+                                          onChange={(e) => {
+                                            const newCats = [...siteData.categories];
+                                            newCats[catIdx].items[itemIdx].price = e.target.value;
+                                            setSiteData({ ...siteData, categories: newCats });
+                                          }}
+                                        />
+                                      </div>
+                                    </div>
+
+                                    <div className="space-y-1">
+                                      <label className="text-xs font-bold uppercase opacity-50">Descripción</label>
+                                      <Textarea
+                                        value={item.descEs}
+                                        className="min-h-[80px]"
+                                        onChange={(e) => {
+                                          const newCats = [...siteData.categories];
+                                          newCats[catIdx].items[itemIdx].descEs = e.target.value;
+                                          newCats[catIdx].items[itemIdx].descEn = `[EN: ${e.target.value}]`;
+                                          setSiteData({ ...siteData, categories: newCats });
+                                        }}
+                                      />
+                                    </div>
+
+                                    <div className="flex justify-end">
+                                      <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive hover:bg-destructive/10 uppercase font-bold" onClick={() => {
+                                        const newCats = [...siteData.categories];
+                                        newCats[catIdx].items.splice(itemIdx, 1);
+                                        setSiteData({ ...siteData, categories: newCats });
+                                      }}>
+                                        <Trash2 className="h-4 w-4 mr-2" /> Eliminar
+                                      </Button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </Card>
+                            ))}
+
+                            <Button variant="outline" className="w-full border-dashed border-2 py-8 uppercase font-bold text-muted-foreground hover:text-primary hover:border-primary" onClick={() => {
+                              const newCats = [...siteData.categories];
+                              newCats[catIdx].items.push({ id: Date.now().toString(), nameEs: "Nuevo Plato", nameEn: "New Dish", price: "0.00", descEs: "", descEn: "", image: "" });
+                              setSiteData({ ...siteData, categories: newCats });
+                            }}>
+                              <Plus className="h-5 w-5 mr-2" /> Agregar Plato a {cat.nameEs}
+                            </Button>
+                          </div>
                         )}
-                      </TableBody>
-                    </Table>
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-4 text-center">Mostrando últimos 50 accesos. Registrado por el servidor.</p>
-                </Card>
-              </TabsContent>
-            </Tabs>
-          )}
+                      </Card>
+                    ))}
+
+                    <Button className="w-full gap-2 uppercase font-black py-8 text-2xl" onClick={saveAdminData}>
+                      <Save className="h-6 w-6" /> Guardar Cambios
+                    </Button>
+                  </TabsContent>
+
+                  <TabsContent value="design" className="space-y-6 py-4">
+                    <Card className="p-6">
+                      <div className="space-y-4">
+                        <h3 className="text-xl font-black uppercase">Logo del Sitio</h3>
+                        <div className="flex gap-6 items-center">
+                          <div className="h-32 w-32 rounded-full bg-muted border-4 border-primary overflow-hidden flex-shrink-0">
+                            <img src={siteData.logoUrl || logoImg} alt="Preview" className="h-full w-full object-cover" />
+                          </div>
+                          <div className="flex-1 space-y-2">
+                            <label className="text-sm font-bold uppercase opacity-70">URL del Logo (Imagen)</label>
+                            <Input
+                              placeholder="https://..."
+                              className="text-lg py-6"
+                              value={siteData.logoUrl}
+                              onChange={(e) => setSiteData({ ...siteData, logoUrl: e.target.value })}
+                            />
+                            <p className="text-xs text-muted-foreground">Deja vacío para usar el logo por defecto.</p>
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
+                    <Button className="w-full gap-2 uppercase font-black py-8 text-2xl" onClick={saveAdminData}>
+                      <Save className="h-6 w-6" /> Guardar Cambios
+                    </Button>
+                  </TabsContent>
+
+                  <TabsContent value="promo" className="space-y-6 py-4">
+                    <Card className="p-6 bg-accent/5 border-accent/20 border-2">
+                      <h3 className="text-2xl font-black uppercase text-accent mb-6 flex items-center gap-2">
+                        <Heart className="fill-accent h-8 w-8" /> Configuración de Promociones
+                      </h3>
+
+                      <div className="flex items-center gap-4 mb-8 bg-white p-4 rounded-xl shadow-sm border">
+                        <Switch
+                          checked={siteData.promoActive}
+                          onCheckedChange={(checked) => setSiteData({ ...siteData, promoActive: checked })}
+                          className="scale-150 ml-2"
+                        />
+                        <div className="flex flex-col ml-4">
+                          <span className="text-xl font-black uppercase">Activar Popup de Promoción</span>
+                          <span className="text-sm text-muted-foreground font-bold">Si se activa, todos los usuarios verán el anuncio al entrar.</span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-6">
+                        <div className="space-y-2">
+                          <label className="text-sm font-bold uppercase opacity-70">Mensaje de Promoción</label>
+                          <Input
+                            className="text-xl py-6 font-bold"
+                            value={siteData.promoMessage}
+                            onChange={(e) => setSiteData({ ...siteData, promoMessage: e.target.value })}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-sm font-bold uppercase opacity-70">Texto del Descuento (Grande)</label>
+                          <Input
+                            className="text-xl py-6 font-black text-accent"
+                            value={siteData.promoDiscount}
+                            onChange={(e) => setSiteData({ ...siteData, promoDiscount: e.target.value })}
+                          />
+                        </div>
+                      </div>
+                    </Card>
+                    <Button className="w-full gap-2 uppercase font-black py-8 text-2xl" onClick={saveAdminData}>
+                      <Save className="h-6 w-6" /> Guardar Cambios
+                    </Button>
+                  </TabsContent>
+
+                  <TabsContent value="logs" className="space-y-6 py-4">
+                    <Card className="p-6">
+                      <div className="flex justify-between items-center mb-6">
+                        <h3 className="text-xl font-black uppercase">Registros de Acceso</h3>
+                        <Button variant="outline" size="sm" onClick={fetchLogs}>Refrescar Logs</Button>
+                      </div>
+                      <div className="rounded-md border">
+                        <Table>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead className="font-bold uppercase">Hora</TableHead>
+                              <TableHead className="font-bold uppercase">Dispositivo</TableHead>
+                              <TableHead className="font-bold uppercase">Acción</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {logs.map((log, i) => (
+                              <TableRow key={i}>
+                                <TableCell className="font-mono text-xs">{new Date(log.timestamp).toLocaleString()}</TableCell>
+                                <TableCell className="text-xs truncate max-w-[200px]" title={log.device}>{log.device}</TableCell>
+                                <TableCell className="font-bold text-primary">{log.action}</TableCell>
+                              </TableRow>
+                            ))}
+                            {logs.length === 0 && (
+                              <TableRow>
+                                <TableCell colSpan={3} className="text-center py-8 text-muted-foreground">No hay registros recientes.</TableCell>
+                              </TableRow>
+                            )}
+                          </TableBody>
+                        </Table>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-4 text-center">Mostrando últimos 50 accesos. Registrado por el servidor.</p>
+                    </Card>
+                  </TabsContent>
+                </Tabs>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </DialogContent>
       </Dialog>
 
