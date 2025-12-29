@@ -890,8 +890,8 @@ export default function Home() {
                       <div className="space-y-4">
                         <h3 className="text-xl font-black uppercase">Logo del Sitio</h3>
                         <div className="flex gap-6 items-center">
-                          <div className="h-32 w-32 rounded-full bg-muted border-4 border-primary overflow-hidden flex-shrink-0">
-                            <img src={siteData.logoUrl || logoImg} alt="Preview" className="h-full w-full object-cover" />
+                          <div className="h-40 w-40 overflow-hidden flex-shrink-0 flex items-center justify-center p-2 rounded-xl transition-all hover:scale-110">
+                            <img src={siteData.logoUrl || logoImg} alt="Preview" className="max-h-full max-w-full object-contain filter drop-shadow-md" />
                           </div>
                           <div className="flex-1 space-y-2">
                             <label className="text-sm font-bold uppercase opacity-70">URL del Logo (Imagen)</label>
@@ -1015,10 +1015,12 @@ export default function Home() {
           <div className="flex items-center gap-6">
             <motion.img
               initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1.1, opacity: 1 }}
+              animate={{ scale: 1, opacity: 1 }}
+              whileHover={{ scale: 1.05, rotate: 2 }}
               src={siteData.logoUrl || logoImg}
               alt="Logo"
-              className="h-32 w-32 md:h-48 md:w-48 rounded-full border-4 border-white shadow-2xl -mb-16 z-50 transform hover:scale-110 transition-transform duration-500 origin-top bg-white object-cover"
+              className="h-28 md:h-40 w-auto object-contain filter drop-shadow-xl cursor-pointer z-50 py-2"
+              onClick={() => scrollTo("top")}
             />
             <div className="hidden md:flex items-center gap-2 pl-28">
               <ChefHat className="h-6 w-6" />
