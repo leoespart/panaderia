@@ -552,7 +552,17 @@ export default function Home() {
                     </motion.p>
                   )}
                 </div>
-                <Button className="w-full uppercase font-black text-xl py-6 shadow-lg active:scale-95 transition-transform" onClick={handleAdminLogin}>Acceder</Button>
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Button
+                    className="w-full uppercase font-black text-xl py-6 shadow-lg transition-all hover:bg-primary/90 hover:shadow-primary/20"
+                    onClick={handleAdminLogin}
+                  >
+                    Acceder
+                  </Button>
+                </motion.div>
               </motion.div>
             ) : (
               <motion.div
@@ -569,7 +579,7 @@ export default function Home() {
                         key={tab}
                         value={tab}
                         onClick={tab === 'logs' ? fetchLogs : undefined}
-                        className="uppercase font-black text-lg py-3 flex-1 data-[state=active]:bg-primary data-[state=active]:text-white transition-all rounded-xl"
+                        className="uppercase font-black text-lg py-3 flex-1 data-[state=active]:bg-primary data-[state=active]:text-white transition-all rounded-xl hover:scale-105 active:scale-95 hover:bg-muted duration-200"
                       >
                         {tab === 'menu' ? 'Menú' : tab === 'design' ? 'Diseño' : tab === 'promo' ? 'Promociones' : tab}
                       </TabsTrigger>
@@ -579,150 +589,170 @@ export default function Home() {
                   <TabsContent value="general" className="space-y-8">
                     <div className="grid gap-6">
                       {/* Hero Badge */}
-                      <Card className="p-6">
-                        <div className="grid md:grid-cols-2 gap-6">
-                          <div className="space-y-2">
-                            <label className="text-sm font-black uppercase text-muted-foreground">Hero Badge (ES)</label>
-                            <Input
-                              className="font-bold text-lg"
-                              value={siteData.heroBadgeEs}
-                              onChange={(e) => setSiteData({
-                                ...siteData,
-                                heroBadgeEs: e.target.value,
-                                heroBadgeEn: `[EN: ${e.target.value}]` // Simple auto-fill mock
-                              })}
-                            />
-                          </div>
-                          <div className="space-y-2 opacity-70">
-                            <label className="text-sm font-black uppercase text-muted-foreground">Hero Badge (EN)</label>
-                            <Input
-                              className="font-bold text-lg bg-muted"
-                              value={siteData.heroBadgeEn}
-                              readOnly
-                            />
-                            <p className="text-xs text-muted-foreground">*Traducido automáticamente</p>
-                          </div>
-                        </div>
-                      </Card>
-
-                      {/* Hero Title */}
-                      <Card className="p-6">
-                        <div className="space-y-2">
-                          <label className="text-sm font-black uppercase text-muted-foreground">Hero Title</label>
-                          <Input
-                            className="font-black text-xl uppercase"
-                            value={siteData.heroTitle}
-                            onChange={(e) => setSiteData({ ...siteData, heroTitle: e.target.value })}
-                          />
-                        </div>
-                      </Card>
-
-                      {/* Hero Description */}
-                      <Card className="p-6">
-                        <div className="grid md:grid-cols-2 gap-6">
-                          <div className="space-y-2">
-                            <label className="text-sm font-black uppercase text-muted-foreground">Hero Description (ES)</label>
-                            <Textarea
-                              className="text-lg min-h-[100px]"
-                              value={siteData.heroDescEs}
-                              onChange={(e) => setSiteData({
-                                ...siteData,
-                                heroDescEs: e.target.value,
-                                heroDescEn: `[EN: ${e.target.value}]` // Simple auto-fill mock
-                              })}
-                            />
-                          </div>
-                          <div className="space-y-2 opacity-70">
-                            <label className="text-sm font-black uppercase text-muted-foreground">Hero Description (EN)</label>
-                            <Textarea
-                              className="text-lg min-h-[100px] bg-muted"
-                              value={siteData.heroDescEn}
-                              readOnly
-                            />
-                          </div>
-                        </div>
-                      </Card>
-
-                      {/* Address & Buttons */}
-                      <Card className="p-6">
-                        <div className="space-y-6">
-                          <div className="space-y-2">
-                            <label className="text-sm font-black uppercase text-muted-foreground">Dirección</label>
-                            <Input
-                              className="text-lg"
-                              value={siteData.address}
-                              onChange={(e) => setSiteData({ ...siteData, address: e.target.value })}
-                            />
-                          </div>
+                      <motion.div whileHover={{ scale: 1.01, translateY: -2 }} transition={{ type: "spring", stiffness: 300 }}>
+                        <Card className="p-6 transition-shadow hover:shadow-lg">
                           <div className="grid md:grid-cols-2 gap-6">
                             <div className="space-y-2">
-                              <label className="text-sm font-black uppercase text-muted-foreground">Texto Botón Llegar (ES)</label>
+                              <label className="text-sm font-black uppercase text-muted-foreground">Hero Badge (ES)</label>
                               <Input
-                                className="text-lg"
-                                value={siteData.directionsBtnEs}
+                                className="font-bold text-lg hover:border-primary transition-colors"
+                                value={siteData.heroBadgeEs}
                                 onChange={(e) => setSiteData({
                                   ...siteData,
-                                  directionsBtnEs: e.target.value,
-                                  directionsBtnEn: e.target.value === "CÓMO LLEGAR" ? "DIRECTIONS" : `[EN: ${e.target.value}]`
+                                  heroBadgeEs: e.target.value,
+                                  heroBadgeEn: `[EN: ${e.target.value}]` // Simple auto-fill mock
                                 })}
                               />
                             </div>
                             <div className="space-y-2 opacity-70">
-                              <label className="text-sm font-black uppercase text-muted-foreground">Texto Botón Directions (EN)</label>
+                              <label className="text-sm font-black uppercase text-muted-foreground">Hero Badge (EN)</label>
                               <Input
-                                className="text-lg bg-muted"
-                                value={siteData.directionsBtnEn}
+                                className="font-bold text-lg bg-muted"
+                                value={siteData.heroBadgeEn}
+                                readOnly
+                              />
+                              <p className="text-xs text-muted-foreground">*Traducido automáticamente</p>
+                            </div>
+                          </div>
+                        </Card>
+                      </motion.div>
+
+                      {/* Hero Title */}
+                      <motion.div whileHover={{ scale: 1.01, translateY: -2 }} transition={{ type: "spring", stiffness: 300 }}>
+                        <Card className="p-6 transition-shadow hover:shadow-lg">
+                          <div className="space-y-2">
+                            <label className="text-sm font-black uppercase text-muted-foreground">Hero Title</label>
+                            <Input
+                              className="font-black text-xl uppercase hover:border-primary transition-colors"
+                              value={siteData.heroTitle}
+                              onChange={(e) => setSiteData({ ...siteData, heroTitle: e.target.value })}
+                            />
+                          </div>
+                        </Card>
+                      </motion.div>
+
+                      {/* Hero Description */}
+                      <motion.div whileHover={{ scale: 1.01, translateY: -2 }} transition={{ type: "spring", stiffness: 300 }}>
+                        <Card className="p-6 transition-shadow hover:shadow-lg">
+                          <div className="grid md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                              <label className="text-sm font-black uppercase text-muted-foreground">Hero Description (ES)</label>
+                              <Textarea
+                                className="text-lg min-h-[100px] hover:border-primary transition-colors"
+                                value={siteData.heroDescEs}
+                                onChange={(e) => setSiteData({
+                                  ...siteData,
+                                  heroDescEs: e.target.value,
+                                  heroDescEn: `[EN: ${e.target.value}]` // Simple auto-fill mock
+                                })}
+                              />
+                            </div>
+                            <div className="space-y-2 opacity-70">
+                              <label className="text-sm font-black uppercase text-muted-foreground">Hero Description (EN)</label>
+                              <Textarea
+                                className="text-lg min-h-[100px] bg-muted"
+                                value={siteData.heroDescEn}
                                 readOnly
                               />
                             </div>
                           </div>
-                        </div>
-                      </Card>
+                        </Card>
+                      </motion.div>
+
+                      {/* Address & Buttons */}
+                      <motion.div whileHover={{ scale: 1.01, translateY: -2 }} transition={{ type: "spring", stiffness: 300 }}>
+                        <Card className="p-6 transition-shadow hover:shadow-lg">
+                          <div className="space-y-6">
+                            <div className="space-y-2">
+                              <label className="text-sm font-black uppercase text-muted-foreground">Dirección</label>
+                              <Input
+                                className="text-lg hover:border-primary transition-colors"
+                                value={siteData.address}
+                                onChange={(e) => setSiteData({ ...siteData, address: e.target.value })}
+                              />
+                            </div>
+                            <div className="grid md:grid-cols-2 gap-6">
+                              <div className="space-y-2">
+                                <label className="text-sm font-black uppercase text-muted-foreground">Texto Botón Llegar (ES)</label>
+                                <Input
+                                  className="text-lg hover:border-primary transition-colors"
+                                  value={siteData.directionsBtnEs}
+                                  onChange={(e) => setSiteData({
+                                    ...siteData,
+                                    directionsBtnEs: e.target.value,
+                                    directionsBtnEn: e.target.value === "CÓMO LLEGAR" ? "DIRECTIONS" : `[EN: ${e.target.value}]`
+                                  })}
+                                />
+                              </div>
+                              <div className="space-y-2 opacity-70">
+                                <label className="text-sm font-black uppercase text-muted-foreground">Texto Botón Directions (EN)</label>
+                                <Input
+                                  className="text-lg bg-muted"
+                                  value={siteData.directionsBtnEn}
+                                  readOnly
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </Card>
+                      </motion.div>
 
                       {/* Phone & Price */}
-                      <Card className="p-6">
-                        <div className="grid md:grid-cols-2 gap-6">
-                          <div className="space-y-2">
-                            <label className="text-sm font-black uppercase text-muted-foreground">Teléfono</label>
-                            <Input
-                              className="text-lg font-bold"
-                              value={siteData.phone}
-                              onChange={(e) => setSiteData({ ...siteData, phone: e.target.value })}
-                            />
+                      <motion.div whileHover={{ scale: 1.01, translateY: -2 }} transition={{ type: "spring", stiffness: 300 }}>
+                        <Card className="p-6 transition-shadow hover:shadow-lg">
+                          <div className="grid md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                              <label className="text-sm font-black uppercase text-muted-foreground">Teléfono</label>
+                              <Input
+                                className="text-lg font-bold hover:border-primary transition-colors"
+                                value={siteData.phone}
+                                onChange={(e) => setSiteData({ ...siteData, phone: e.target.value })}
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <label className="text-sm font-black uppercase text-muted-foreground">Precio Promedio</label>
+                              <Input
+                                className="text-lg hover:border-primary transition-colors"
+                                value={siteData.avgPrice}
+                                onChange={(e) => setSiteData({ ...siteData, avgPrice: e.target.value })}
+                              />
+                            </div>
                           </div>
-                          <div className="space-y-2">
-                            <label className="text-sm font-black uppercase text-muted-foreground">Precio Promedio</label>
-                            <Input
-                              className="text-lg"
-                              value={siteData.avgPrice}
-                              onChange={(e) => setSiteData({ ...siteData, avgPrice: e.target.value })}
-                            />
-                          </div>
-                        </div>
-                      </Card>
+                        </Card>
+                      </motion.div>
                     </div>
 
-                    <Button className="w-full gap-2 uppercase font-black py-8 text-2xl shadow-xl hover:scale-[1.01] transition-transform" onClick={() => saveAdminData("Cambió textos/info general")}>
-                      <Save className="h-8 w-8" /> Guardar Cambios
-                    </Button>
+                    <motion.div
+                      whileHover={{ scale: 1.01 }}
+                      whileTap={{ scale: 0.99 }}
+                    >
+                      <Button
+                        className="w-full gap-2 uppercase font-black py-8 text-2xl shadow-xl transition-all hover:bg-primary/90 hover:shadow-primary/30"
+                        onClick={() => saveAdminData("Cambió textos/info general")}
+                      >
+                        <Save className="h-8 w-8" /> Guardar Cambios
+                      </Button>
+                    </motion.div>
                   </TabsContent>
 
                   <TabsContent value="menu" className="space-y-6">
                     {siteData.categories.map((cat, catIdx) => (
                       <Card key={cat.id} className="overflow-hidden border-2">
                         <div className="p-6 bg-muted/30 border-b-2 flex items-center gap-4">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="p-1 h-auto hover:bg-muted"
-                            onClick={() => toggleCat(cat.id)}
-                          >
-                            {collapsedCats[cat.id] ? (
-                              <Plus className="h-6 w-6 text-primary" />
-                            ) : (
-                              <Minus className="h-6 w-6 text-primary" />
-                            )}
-                          </Button>
+                          <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="p-1 h-auto hover:bg-primary/10 transition-colors"
+                              onClick={() => toggleCat(cat.id)}
+                            >
+                              {collapsedCats[cat.id] ? (
+                                <Plus className="h-6 w-6 text-primary" />
+                              ) : (
+                                <Minus className="h-6 w-6 text-primary" />
+                              )}
+                            </Button>
+                          </motion.div>
                           <Input
                             className="font-black uppercase text-xl flex-1 border-none bg-transparent shadow-none px-0 focus-visible:ring-0"
                             value={cat.nameEs}
@@ -805,34 +835,52 @@ export default function Home() {
                                     </div>
 
                                     <div className="flex justify-end">
-                                      <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive hover:bg-destructive/10 uppercase font-bold" onClick={() => {
-                                        const newCats = [...siteData.categories];
-                                        newCats[catIdx].items.splice(itemIdx, 1);
-                                        setSiteData({ ...siteData, categories: newCats });
-                                      }}>
-                                        <Trash2 className="h-4 w-4 mr-2" /> Eliminar
-                                      </Button>
+                                      <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                                        <Button
+                                          variant="ghost"
+                                          size="sm"
+                                          className="text-destructive hover:text-white hover:bg-destructive uppercase font-bold transition-all px-4"
+                                          onClick={() => {
+                                            const newCats = [...siteData.categories];
+                                            newCats[catIdx].items.splice(itemIdx, 1);
+                                            setSiteData({ ...siteData, categories: newCats });
+                                          }}
+                                        >
+                                          <Trash2 className="h-4 w-4 mr-2" /> Eliminar
+                                        </Button>
+                                      </motion.div>
                                     </div>
                                   </div>
                                 </div>
                               </Card>
                             ))}
 
-                            <Button variant="outline" className="w-full border-dashed border-2 py-8 uppercase font-bold text-muted-foreground hover:text-primary hover:border-primary" onClick={() => {
-                              const newCats = [...siteData.categories];
-                              newCats[catIdx].items.push({ id: Date.now().toString(), nameEs: "Nuevo Plato", nameEn: "New Dish", price: "0.00", descEs: "", descEn: "", image: "" });
-                              setSiteData({ ...siteData, categories: newCats });
-                            }}>
-                              <Plus className="h-5 w-5 mr-2" /> Agregar Plato a {cat.nameEs}
-                            </Button>
+                            <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
+                              <Button
+                                variant="outline"
+                                className="w-full border-dashed border-2 py-8 uppercase font-bold text-muted-foreground hover:text-primary hover:border-primary hover:bg-primary/5 transition-all shadow-sm hover:shadow-md"
+                                onClick={() => {
+                                  const newCats = [...siteData.categories];
+                                  newCats[catIdx].items.push({ id: Date.now().toString(), nameEs: "Nuevo Plato", nameEn: "New Dish", price: "0.00", descEs: "", descEn: "", image: "" });
+                                  setSiteData({ ...siteData, categories: newCats });
+                                }}
+                              >
+                                <Plus className="h-5 w-5 mr-2" /> Agregar Plato a {cat.nameEs}
+                              </Button>
+                            </motion.div>
                           </div>
                         )}
                       </Card>
                     ))}
 
-                    <Button className="w-full gap-2 uppercase font-black py-8 text-2xl" onClick={() => saveAdminData("Editó el Menú (Precios/Platos)")}>
-                      <Save className="h-6 w-6" /> Guardar Cambios
-                    </Button>
+                    <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
+                      <Button
+                        className="w-full gap-2 uppercase font-black py-8 text-2xl shadow-xl transition-all hover:bg-primary/90"
+                        onClick={() => saveAdminData("Editó el Menú (Precios/Platos)")}
+                      >
+                        <Save className="h-6 w-6" /> Guardar Cambios
+                      </Button>
+                    </motion.div>
                   </TabsContent>
 
                   <TabsContent value="design" className="space-y-6 py-4">
@@ -856,9 +904,14 @@ export default function Home() {
                         </div>
                       </div>
                     </Card>
-                    <Button className="w-full gap-2 uppercase font-black py-8 text-2xl" onClick={() => saveAdminData("Cambió Diseño/Logo")}>
-                      <Save className="h-6 w-6" /> Guardar Cambios
-                    </Button>
+                    <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
+                      <Button
+                        className="w-full gap-2 uppercase font-black py-8 text-2xl shadow-xl transition-all hover:bg-primary/90"
+                        onClick={() => saveAdminData("Cambió Diseño/Logo")}
+                      >
+                        <Save className="h-6 w-6" /> Guardar Cambios
+                      </Button>
+                    </motion.div>
                   </TabsContent>
 
                   <TabsContent value="promo" className="space-y-6 py-4">
@@ -867,17 +920,21 @@ export default function Home() {
                         <Heart className="fill-accent h-8 w-8" /> Configuración de Promociones
                       </h3>
 
-                      <div className="flex items-center gap-4 mb-8 bg-white p-4 rounded-xl shadow-sm border">
+                      <motion.div
+                        whileHover={{ backgroundColor: "rgba(var(--primary), 0.05)" }}
+                        className="flex items-center gap-4 mb-8 bg-white p-6 rounded-2xl shadow-sm border transition-all cursor-pointer group"
+                        onClick={() => setSiteData({ ...siteData, promoActive: !siteData.promoActive })}
+                      >
                         <Switch
                           checked={siteData.promoActive}
                           onCheckedChange={(checked) => setSiteData({ ...siteData, promoActive: checked })}
-                          className="scale-150 ml-2"
+                          className="scale-150 ml-2 group-hover:ring-2 ring-primary/20 transition-all"
                         />
                         <div className="flex flex-col ml-4">
-                          <span className="text-xl font-black uppercase">Activar Popup de Promoción</span>
+                          <span className="text-xl font-black uppercase group-hover:text-primary transition-colors">Activar Popup de Promoción</span>
                           <span className="text-sm text-muted-foreground font-bold">Si se activa, todos los usuarios verán el anuncio al entrar.</span>
                         </div>
-                      </div>
+                      </motion.div>
 
                       <div className="space-y-6">
                         <div className="space-y-2">
