@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { Phone, MapPin, Clock, Croissant, ChefHat, ArrowRight, Menu as MenuIcon, Utensils, Globe, Sandwich, Settings, LogOut, Save, Plus, Trash2, Heart } from "lucide-react";
+import { Phone, MapPin, Clock, Croissant, ChefHat, ArrowRight, Menu as MenuIcon, Utensils, Globe, Sandwich, Settings, LogOut, Save, Plus, Trash2, Heart, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +11,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import logoImg from "@assets/logo_1766883612871.png";
+
+const BGM_URL = "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112762.mp3"; // Calm Lofi Background Music
+
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -135,6 +138,52 @@ export default function Home() {
 
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const bgmRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    bgmRef.current = new Audio(BGM_URL);
+    bgmRef.current.loop = true;
+    bgmRef.current.volume = 0.5;
+
+    const handleInteraction = () => {
+      if (!isMuted && bgmRef.current?.paused) {
+        bgmRef.current.play().catch(e => console.log("Audio play failed:", e));
+      }
+    };
+
+    window.addEventListener('click', handleInteraction);
+    return () => {
+      window.removeEventListener('click', handleInteraction);
+      bgmRef.current?.pause();
+      bgmRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (bgmRef.current) {
+      if (isMuted) {
+        bgmRef.current.pause();
+      } else {
+        bgmRef.current.play().catch(e => console.log("Play failed:", e));
+      }
+    }
+  }, [isMuted]);
+
+  const playClickSound = () => {
+    if (!isMuted) {
+      const audio = new Audio("https://cdn.pixabay.com/download/audio/2022/03/24/audio_c8c8a73467.mp3?filename=pop-39222.mp3"); // Short pop
+      audio.volume = 0.3;
+      audio.play().catch(e => console.log("SFX failed", e));
+    }
+  };
+
+  // Attach global click sound
+  useEffect(() => {
+    const clickHandler = () => playClickSound();
+    window.addEventListener("click", clickHandler);
+    return () => window.removeEventListener("click", clickHandler);
+  }, [isMuted]);
 
   // Editable State
   const [siteData, setSiteData] = useState({
@@ -762,7 +811,7 @@ export default function Home() {
               animate={{ scale: 1.1, opacity: 1 }}
               src={siteData.logoUrl || logoImg}
               alt="Logo"
-              className="h-48 w-48 rounded-full border-4 border-white shadow-2xl -mb-16 z-50 transform hover:scale-110 transition-transform duration-500 origin-top bg-white object-cover"
+              className="h-32 w-32 md:h-48 md:w-48 rounded-full border-4 border-white shadow-2xl -mb-16 z-50 transform hover:scale-110 transition-transform duration-500 origin-top bg-white object-cover"
             />
             <div className="hidden md:flex items-center gap-2 pl-28">
               <ChefHat className="h-6 w-6" />
@@ -776,6 +825,9 @@ export default function Home() {
               <button onClick={() => scrollTo("location")} className="hover:text-white/80 transition-colors cursor-pointer">{t.locationTitle}</button>
             </div>
             <div className="flex items-center gap-4">
+              <Button variant="ghost" size="icon" onClick={() => setIsMuted(!isMuted)} className="text-white hover:bg-white/10 rounded-full w-12 h-12">
+                {isMuted ? <VolumeX className="h-6 w-6" /> : <Volume2 className="h-6 w-6" />}
+              </Button>
               <Button variant="secondary" size="sm" onClick={() => setIsLangOpen(true)} className="gap-2 font-black shadow-lg px-8 h-14 text-xl hover:scale-110 active:scale-95 transition-transform duration-200">
                 <Globe className="h-6 w-6" />
                 {lang?.toUpperCase() || "..."}
@@ -796,7 +848,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=2072&auto=format&fit=crop')] bg-cover bg-center opacity-10 mix-blend-overlay"></div>
         <div className="absolute inset-0 bg-gradient-to-b from-primary/40 to-primary"></div>
 
-        <div className="container mx-auto relative z-10 text-center max-w-5xl pt-4">
+        <div className="container mx-auto relative z-10 text-center max-w-5xl pt-24 md:pt-4">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -914,7 +966,7 @@ export default function Home() {
             </div>
 
             <div className="p-4 md:p-12">
-              <div className="flex flex-wrap justify-center gap-3 md:gap-4 mb-8 md:mb-12 sticky top-0 bg-background/95 backdrop-blur py-4 z-20 -mt-4">
+              <div className="flex flex-wrap justify-center gap-3 md:gap-4 mb-8 md:mb-12">
                 <Button
                   variant={selectedCategory === "all" ? "default" : "outline"}
                   onClick={() => setSelectedCategory("all")}
