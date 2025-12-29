@@ -81,7 +81,24 @@ export default function Home() {
 
   // Editable State
   const [siteData, setSiteData] = useState({
-    // ... existing fields
+    heroBadgeEs: "Desayunos & Almuerzos",
+    heroBadgeEn: "Breakfast & Lunch",
+    heroTitle: "Panaderia La Francesa",
+    heroDescEs: "Café, sandwiches, dulces y comida en Barrio Obrero. El sabor de la tradición en cada bocado.",
+    heroDescEn: "Coffee, sandwiches, sweets and food in Barrio Obrero. The taste of tradition in every bite.",
+    avgPrice: "$5 - $10",
+    phone: "(939) 337-4777",
+    address: "1963 Av. Borinquen, San Juan, PR 00915",
+    directionsBtnEs: "CÓMO LLEGAR",
+    directionsBtnEn: "DIRECTIONS",
+    aboutDescEs: "Somos una panadería y cafetería en Barrio Obrero, reconocida por nuestro pan fresco, postres artesanales y un servicio familiar. Ofrecemos desayunos, almuerzos y una gran variedad de sandwiches.",
+    aboutDescEn: "We are a bakery and cafeteria in Barrio Obrero, recognized for our fresh bread, artisanal desserts and family service. We offer breakfast, lunch and a wide variety of sandwiches.",
+    showSpecialEvents: false,
+    specialEventsTitleEs: "Eventos Especiales",
+    specialEventsTitleEn: "Special Events",
+    specialEventsDescEs: "¡Únete a nosotros para nuestras noches de música en vivo y degustaciones!",
+    specialEventsDescEn: "Join us for our live music nights and tastings!",
+    specialEventsImage: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069&auto=format&fit=crop",
     reviews: [
       { id: "r1", name: "Juan Pérez", comment: "El mejor pan de Barrio Obrero. El café siempre está en su punto.", rating: 5 },
       { id: "r2", name: "Maria Rodriguez", comment: "Los quesitos son adictivos. Servicio excelente.", rating: 5 }
@@ -96,7 +113,32 @@ export default function Home() {
           { id: "b2", nameEs: "Jugo Natural", nameEn: "Natural Juice", price: "3.50", descEs: "Naranja o Acerola.", descEn: "Orange or Acerola.", image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?q=80&w=2000&auto=format&fit=crop" }
         ]
       },
-      // ... more with images
+      {
+        id: "almuerzos",
+        nameEs: "Almuerzo del Día",
+        nameEn: "Daily Lunch",
+        items: [
+          { id: "a1", nameEs: "Arroz con Habichuelas y Pollo", nameEn: "Rice with Beans and Chicken", price: "8.50", descEs: "Servido con ensalada y amarillos.", descEn: "Served with salad and sweet plantains.", image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=2000&auto=format&fit=crop" }
+        ]
+      },
+      {
+        id: "sandwiches",
+        nameEs: "Sandwiches",
+        nameEn: "Sandwiches",
+        items: [
+          { id: "s1", nameEs: "Sandwich de Mezcla", nameEn: "Mix Sandwich", price: "4.50", descEs: "El clásico de la casa.", descEn: "The house classic.", image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?q=80&w=2000&auto=format&fit=crop" },
+          { id: "s2", nameEs: "Cubano", nameEn: "Cuban Sandwich", price: "7.50", descEs: "Pernil, jamón, queso suizo, pepinillos y mostaza.", descEn: "Pork, ham, swiss cheese, pickles and mustard.", image: "https://images.unsplash.com/photo-1553909489-cd47e0907980?q=80&w=2000&auto=format&fit=crop" }
+        ]
+      },
+      {
+        id: "postres",
+        nameEs: "Postres",
+        nameEn: "Desserts",
+        items: [
+          { id: "p1", nameEs: "Quesito", nameEn: "Quesito", price: "1.75", descEs: "Hojaldre relleno de crema de queso.", descEn: "Puff pastry filled with cream cheese.", image: "https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=2000&auto=format&fit=crop" },
+          { id: "p2", nameEs: "Pastelillo de Guayaba", nameEn: "Guava Pastry", price: "1.75", descEs: "Dulce de guayaba en hojaldre crujiente.", descEn: "Guava paste in crispy puff pastry.", image: "https://images.unsplash.com/photo-1509365465985-25d11c17e812?q=80&w=2000&auto=format&fit=crop" }
+        ]
+      }
     ]
   });
 
@@ -658,7 +700,7 @@ export default function Home() {
                   </Badge>
                 </div>
                 <Button size="lg" asChild className="w-full text-2xl md:text-4xl h-20 md:h-28 shadow-2xl group rounded-2xl md:rounded-[2rem] font-black uppercase hover:scale-[1.02] transition-transform">
-                  <a href={`tel:${siteData.phone.replace(/\D/g,'')}`}>
+                  <a href={`tel:${(siteData.phone || "").replace(/\D/g,'')}`}>
                     <Phone className="mr-4 md:mr-6 h-8 w-8 md:h-12 md:w-12 group-hover:animate-pulse" /> {t.callNow}
                   </a>
                 </Button>
