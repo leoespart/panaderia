@@ -167,38 +167,119 @@ export default function Home() {
     ],
     categories: [
       {
-        id: "almuerzos",
-        nameEs: "Almuerzo",
-        nameEn: "Lunch",
+        id: "donas",
+        nameEs: "Donas",
+        nameEn: "Donuts",
         items: [
-          { id: "a1", nameEs: "Arroz con Habichuelas y Pollo", nameEn: "Rice with Beans and Chicken", price: "8.50", descEs: "Servido con ensalada y amarillos.", descEn: "Served with salad and sweet plantains.", image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=2000&auto=format&fit=crop" }
+          { id: "d1", nameEs: "Donas Azucaradas", nameEn: "Sugar Donuts", price: "1.50", descEs: "Donas esponjosas cubiertas de azúcar.", descEn: "Fluffy donuts coated with sugar." },
+          { id: "d2", nameEs: "Donas Glaseadas", nameEn: "Glazed Donuts", price: "1.50", descEs: "Donas con glaseado dulce.", descEn: "Donuts with sweet glaze." },
+          { id: "d3", nameEs: "Donas Rellenas", nameEn: "Filled Donuts", price: "2.00", descEs: "Donas rellenas de crema.", descEn: "Donuts filled with cream." }
+        ]
+      },
+      {
+        id: "muffins",
+        nameEs: "Muffins",
+        nameEn: "Muffins",
+        items: [
+          { id: "m1", nameEs: "Muffin de Zanahoria", nameEn: "Carrot Muffin", price: "2.00", descEs: "Muffin de zanahoria fresco.", descEn: "Fresh carrot muffin." },
+          { id: "m2", nameEs: "Muffin de Vainilla y Chocolate Chip", nameEn: "Vanilla Chocolate Chip Muffin", price: "2.00", descEs: "Muffin de vainilla con chispas de chocolate.", descEn: "Vanilla muffin with chocolate chips." },
+          { id: "m3", nameEs: "Muffin de Crema de Queso", nameEn: "Cream Cheese Muffin", price: "2.00", descEs: "Muffin con crema de queso.", descEn: "Muffin with cream cheese." },
+          { id: "m4", nameEs: "Muffin de Queso Crema y Guayaba", nameEn: "Cream Cheese & Guava Muffin", price: "2.00", descEs: "Muffin de queso crema con guayaba.", descEn: "Cream cheese muffin with guava." },
+          { id: "m5", nameEs: "Muffin de Maíz", nameEn: "Corn Muffin", price: "2.00", descEs: "Muffin de maíz tradicional.", descEn: "Traditional corn muffin." }
+        ]
+      },
+      {
+        id: "dulces",
+        nameEs: "Dulces / Repostería",
+        nameEn: "Sweets / Pastries",
+        items: [
+          { id: "du1", nameEs: "Tres Leches", nameEn: "Tres Leches Cake", price: "3.50", descEs: "Bizcocho empapado en tres leches.", descEn: "Cake soaked in three milks." },
+          { id: "du2", nameEs: "Flan", nameEn: "Flan", price: "3.50", descEs: "Flan de caramelo cremoso.", descEn: "Creamy caramel flan." },
+          { id: "du3", nameEs: "Cheesecake", nameEn: "Cheesecake", price: "3.50", descEs: "Cheesecake suave y cremoso.", descEn: "Smooth and creamy cheesecake." },
+          { id: "du4", nameEs: "Bizcocho de Chocolate", nameEn: "Chocolate Cake", price: "3.00", descEs: "Bizcocho de chocolate húmedo.", descEn: "Moist chocolate cake." },
+          { id: "du5", nameEs: "Bizcocho de Maíz", nameEn: "Corn Cake", price: "1.50", descEs: "Bizcocho de maíz tradicional.", descEn: "Traditional corn cake." },
+          { id: "du6", nameEs: "Galletas", nameEn: "Cookies", price: "0.50", descEs: "Galletas frescas.", descEn: "Fresh cookies." },
+          { id: "du7", nameEs: "Quesitos", nameEn: "Quesitos", price: "2.00", descEs: "Hojaldre relleno de crema de queso.", descEn: "Puff pastry filled with cream cheese." },
+          { id: "du8", nameEs: "Pastel Danés", nameEn: "Danish Pastry", price: "2.50", descEs: "Pastel danés con relleno.", descEn: "Danish pastry with filling." },
+          { id: "du9", nameEs: "Turnovers", nameEn: "Turnovers", price: "1.50", descEs: "Pastelitos de hojaldre.", descEn: "Puff pastry turnovers." }
+        ]
+      },
+      {
+        id: "cafe",
+        nameEs: "Café",
+        nameEn: "Coffee",
+        items: [
+          { id: "c1", nameEs: "Posillo", nameEn: "Espresso Shot", price: "1.25", descEs: "Café espresso pequeño.", descEn: "Small espresso shot." },
+          { id: "c2", nameEs: "Café 6oz", nameEn: "Coffee 6oz", price: "2.24", descEs: "Café colado 6oz.", descEn: "Brewed coffee 6oz." },
+          { id: "c3", nameEs: "Café 8oz", nameEn: "Coffee 8oz", price: "3.23", descEs: "Café colado 8oz.", descEn: "Brewed coffee 8oz." },
+          { id: "c4", nameEs: "Café 12oz", nameEn: "Coffee 12oz", price: "4.22", descEs: "Café colado 12oz.", descEn: "Brewed coffee 12oz." }
+        ]
+      },
+      {
+        id: "chocolate",
+        nameEs: "Chocolate",
+        nameEn: "Hot Chocolate",
+        items: [
+          { id: "ch1", nameEs: "Chocolate 6oz", nameEn: "Hot Chocolate 6oz", price: "2.00", descEs: "Chocolate caliente 6oz.", descEn: "Hot chocolate 6oz." },
+          { id: "ch2", nameEs: "Chocolate 8oz", nameEn: "Hot Chocolate 8oz", price: "2.75", descEs: "Chocolate caliente 8oz.", descEn: "Hot chocolate 8oz." },
+          { id: "ch3", nameEs: "Chocolate 12oz", nameEn: "Hot Chocolate 12oz", price: "3.75", descEs: "Chocolate caliente 12oz.", descEn: "Hot chocolate 12oz." }
         ]
       },
       {
         id: "bebidas",
         nameEs: "Bebidas",
-        nameEn: "Drinks",
+        nameEn: "Beverages",
         items: [
-          { id: "b1", nameEs: "Café con Leche", nameEn: "Coffee with Milk", price: "2.50", descEs: "Café colado al momento con leche espumosa.", descEn: "Freshly brewed coffee with frothy milk.", image: "https://images.unsplash.com/photo-1541167760496-1628856ab752?q=80&w=2000&auto=format&fit=crop" },
-          { id: "b2", nameEs: "Jugo Natural", nameEn: "Natural Juice", price: "3.50", descEs: "Naranja o Acerola.", descEn: "Orange or Acerola.", image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?q=80&w=2000&auto=format&fit=crop" }
+          { id: "b1", nameEs: "Agua", nameEn: "Water", price: "1.00", descEs: "Agua embotellada.", descEn: "Bottled water." },
+          { id: "b2", nameEs: "Agua Perrier", nameEn: "Perrier Water", price: "2.25", descEs: "Agua Perrier con gas.", descEn: "Perrier sparkling water." },
+          { id: "b3", nameEs: "Sparkling Water", nameEn: "Sparkling Water", price: "1.50", descEs: "Agua con gas.", descEn: "Sparkling water." },
+          { id: "b4", nameEs: "Malta Pequeña", nameEn: "Small Malta", price: "1.00", descEs: "Malta pequeña.", descEn: "Small malta." },
+          { id: "b5", nameEs: "Refrescos de Lata", nameEn: "Canned Soda", price: "1.35", descEs: "Refrescos en lata.", descEn: "Canned sodas." },
+          { id: "b6", nameEs: "Refrescos de Botella", nameEn: "Bottled Soda", price: "2.00", descEs: "Refrescos en botella.", descEn: "Bottled sodas." },
+          { id: "b7", nameEs: "Powerade", nameEn: "Powerade", price: "2.00", descEs: "Bebida deportiva Powerade.", descEn: "Powerade sports drink." },
+          { id: "b8", nameEs: "Gatorade", nameEn: "Gatorade", price: "2.00", descEs: "Bebida deportiva Gatorade.", descEn: "Gatorade sports drink." },
+          { id: "b9", nameEs: "Jugostia (cajita)", nameEn: "Juice Box", price: "2.00", descEs: "Jugo en cajita.", descEn: "Juice box." },
+          { id: "b10", nameEs: "Jugos Naturales 16oz", nameEn: "Natural Juice 16oz", price: "3.50", descEs: "Jugo natural fresco 16oz.", descEn: "Fresh natural juice 16oz." },
+          { id: "b11", nameEs: "Medio Galón de Jugo", nameEn: "Half Gallon Juice", price: "3.00", descEs: "Medio galón de jugo.", descEn: "Half gallon of juice." },
+          { id: "b12", nameEs: "1 Galón de Jugo", nameEn: "1 Gallon Juice", price: "5.00", descEs: "1 galón de jugo.", descEn: "1 gallon of juice." },
+          { id: "b13", nameEs: "Batidas", nameEn: "Smoothies", price: "5.00", descEs: "Batidas de frutas frescas.", descEn: "Fresh fruit smoothies." },
+          { id: "b14", nameEs: "Morir Soñando", nameEn: "Morir Soñando", price: "5.00", descEs: "Bebida de naranja y leche.", descEn: "Orange and milk drink." },
+          { id: "b15", nameEs: "Padrino", nameEn: "Padrino", price: "2.50", descEs: "Bebida especial Padrino.", descEn: "Special Padrino drink." }
         ]
       },
       {
-        id: "sandwiches",
-        nameEs: "Sandwiches",
-        nameEn: "Sandwiches",
+        id: "desayunos",
+        nameEs: "Desayunos / Revoltillos",
+        nameEn: "Breakfast / Scrambles",
         items: [
-          { id: "s1", nameEs: "Sandwich de Mezcla", nameEn: "Mix Sandwich", price: "4.50", descEs: "El clásico de la casa.", descEn: "The house classic.", image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?q=80&w=2000&auto=format&fit=crop" },
-          { id: "s2", nameEs: "Cubano", nameEn: "Cuban Sandwich", price: "7.50", descEs: "Pernil, jamón, queso suizo, pepinillos y mostaza.", descEn: "Pork, ham, swiss cheese, pickles and mustard.", image: "https://images.unsplash.com/photo-1553909489-cd47e0907980?q=80&w=2000&auto=format&fit=crop" }
+          { id: "de1", nameEs: "Revoltillo Ensalada", nameEn: "Salad Scramble", price: "6.25", descEs: "Revoltillo con ensalada.", descEn: "Scramble with salad." },
+          { id: "de2", nameEs: "Revoltillo con Todo", nameEn: "Everything Scramble", price: "7.25", descEs: "Revoltillo con todos los ingredientes.", descEn: "Scramble with all ingredients." },
+          { id: "de3", nameEs: "Revoltillo de Jamón", nameEn: "Ham Scramble", price: "5.25", descEs: "Revoltillo con jamón.", descEn: "Scramble with ham." },
+          { id: "de4", nameEs: "Revoltillo Suizo", nameEn: "Swiss Scramble", price: "6.25", descEs: "Revoltillo con queso suizo.", descEn: "Scramble with swiss cheese." },
+          { id: "de5", nameEs: "Revoltillo Solo Huevo", nameEn: "Egg Only Scramble", price: "4.25", descEs: "Revoltillo de huevo solo.", descEn: "Egg only scramble." },
+          { id: "de6", nameEs: "Empanadilla", nameEn: "Turnover", price: "2.00", descEs: "Empanadilla rellena.", descEn: "Filled turnover." }
         ]
       },
       {
-        id: "postres",
-        nameEs: "Postres",
-        nameEn: "Desserts",
+        id: "farina",
+        nameEs: "Farina",
+        nameEn: "Cream of Wheat",
         items: [
-          { id: "p1", nameEs: "Quesito", nameEn: "Quesito", price: "1.75", descEs: "Hojaldre relleno de crema de queso.", descEn: "Puff pastry filled with cream cheese.", image: "https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=2000&auto=format&fit=crop" },
-          { id: "p2", nameEs: "Pastelillo de Guayaba", nameEn: "Guava Pastry", price: "1.75", descEs: "Dulce de guayaba en hojaldre crujiente.", descEn: "Guava paste in crispy puff pastry.", image: "https://images.unsplash.com/photo-1509365465985-25d11c17e812?q=80&w=2000&auto=format&fit=crop" }
+          { id: "f1", nameEs: "Farina 6oz", nameEn: "Cream of Wheat 6oz", price: "1.50", descEs: "Farina caliente 6oz.", descEn: "Hot cream of wheat 6oz." },
+          { id: "f2", nameEs: "Farina 8oz", nameEn: "Cream of Wheat 8oz", price: "2.50", descEs: "Farina caliente 8oz.", descEn: "Hot cream of wheat 8oz." },
+          { id: "f3", nameEs: "Farina 16oz", nameEn: "Cream of Wheat 16oz", price: "4.50", descEs: "Farina caliente 16oz.", descEn: "Hot cream of wheat 16oz." }
+        ]
+      },
+      {
+        id: "extras",
+        nameEs: "Extras de Revoltillo",
+        nameEn: "Scramble Extras",
+        items: [
+          { id: "e1", nameEs: "Queso", nameEn: "Cheese", price: "1.00", descEs: "Queso extra.", descEn: "Extra cheese." },
+          { id: "e2", nameEs: "Vegetales", nameEn: "Vegetables", price: "1.00", descEs: "Vegetales extra.", descEn: "Extra vegetables." },
+          { id: "e3", nameEs: "Bacon", nameEn: "Bacon", price: "1.50", descEs: "Bacon extra.", descEn: "Extra bacon." },
+          { id: "e4", nameEs: "Salami", nameEn: "Salami", price: "1.00", descEs: "Salami extra.", descEn: "Extra salami." },
+          { id: "e5", nameEs: "Ensalada", nameEn: "Salad", price: "1.00", descEs: "Ensalada extra.", descEn: "Extra salad." }
         ]
       }
     ]
