@@ -1042,7 +1042,7 @@ export default function Home() {
                       <h3 className="text-4xl font-black text-primary uppercase border-b-4 border-primary/20 pb-2 mb-8">
                         {lang === "es" ? cat.nameEs : cat.nameEn}
                       </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                         {cat.items.map(item => (
                           <div key={item.id} className="flex flex-col sm:flex-row gap-4 p-4 rounded-2xl hover:bg-primary/5 transition-all border-2 border-transparent hover:border-primary/10 bg-white/50">
                             {item.image && (
