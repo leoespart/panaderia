@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { Phone, MapPin, Clock, Croissant, ChefHat, ArrowRight, Menu as MenuIcon, Utensils, Globe, Sandwich, Settings, LogOut, Save, Plus, Trash2, Heart } from "lucide-react";
+import { Phone, MapPin, Clock, Croissant, ChefHat, ArrowRight, Menu as MenuIcon, Utensils, Globe, Sandwich, Settings, LogOut, Save, Plus, Trash2, Heart, ChevronDown, ChevronUp, Minus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -135,6 +135,11 @@ export default function Home() {
 
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
+  const [collapsedCats, setCollapsedCats] = useState<Record<string, boolean>>({});
+
+  const toggleCat = (catId: string) => {
+    setCollapsedCats(prev => ({ ...prev, [catId]: !prev[catId] }));
+  };
 
   // Editable State
   const [siteData, setSiteData] = useState({
@@ -585,6 +590,18 @@ export default function Home() {
                 {siteData.categories.map((cat, catIdx) => (
                   <Card key={cat.id} className="overflow-hidden border-2">
                     <div className="p-6 bg-muted/30 border-b-2 flex items-center gap-4">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="p-1 h-auto hover:bg-muted"
+                        onClick={() => toggleCat(cat.id)}
+                      >
+                        {collapsedCats[cat.id] ? (
+                          <Plus className="h-6 w-6 text-primary" />
+                        ) : (
+                          <Minus className="h-6 w-6 text-primary" />
+                        )}
+                      </Button>
                       <Input
                         className="font-black uppercase text-xl flex-1 border-none bg-transparent shadow-none px-0 focus-visible:ring-0"
                         value={cat.nameEs}
@@ -598,96 +615,97 @@ export default function Home() {
                       <span className="text-sm font-mono text-muted-foreground px-3 py-1 bg-muted rounded">EN: {cat.nameEn}</span>
                     </div>
 
-
-                    <div className="p-6 space-y-6">
-                      {cat.items.map((item, itemIdx) => (
-                        <Card key={item.id} className="p-4">
-                          <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6">
-                            <div className="space-y-4">
-                              <div className="aspect-square rounded-lg overflow-hidden bg-muted relative group">
-                                {item.image ? (
-                                  <img src={item.image} alt={item.nameEs} className="w-full h-full object-cover" />
-                                ) : (
-                                  <div className="w-full h-full flex items-center justify-center text-muted-foreground">No img</div>
-                                )}
-                              </div>
-                              <Input
-                                placeholder="URL Imagen"
-                                value={item.image || ""}
-                                onChange={(e) => {
-                                  const newCats = [...siteData.categories];
-                                  newCats[catIdx].items[itemIdx].image = e.target.value;
-                                  setSiteData({ ...siteData, categories: newCats });
-                                }}
-                                className="text-xs"
-                              />
-                            </div>
-
-                            <div className="space-y-4">
-                              <div className="grid md:grid-cols-2 gap-4">
-                                <div className="space-y-1">
-                                  <label className="text-xs font-bold uppercase opacity-50">Nombre</label>
-                                  <Input
-                                    value={item.nameEs}
-                                    className="font-black text-lg"
-                                    onChange={(e) => {
-                                      const newCats = [...siteData.categories];
-                                      newCats[catIdx].items[itemIdx].nameEs = e.target.value;
-                                      newCats[catIdx].items[itemIdx].nameEn = `[EN: ${e.target.value}]`;
-                                      setSiteData({ ...siteData, categories: newCats });
-                                    }}
-                                  />
+                    {!collapsedCats[cat.id] && (
+                      <div className="p-6 space-y-6">
+                        {cat.items.map((item, itemIdx) => (
+                          <Card key={item.id} className="p-4">
+                            <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6">
+                              <div className="space-y-4">
+                                <div className="aspect-square rounded-lg overflow-hidden bg-muted relative group">
+                                  {item.image ? (
+                                    <img src={item.image} alt={item.nameEs} className="w-full h-full object-cover" />
+                                  ) : (
+                                    <div className="w-full h-full flex items-center justify-center text-muted-foreground">No img</div>
+                                  )}
                                 </div>
-                                <div className="space-y-1">
-                                  <label className="text-xs font-bold uppercase opacity-50">Precio</label>
-                                  <Input
-                                    value={item.price}
-                                    className="font-black text-lg text-primary"
-                                    onChange={(e) => {
-                                      const newCats = [...siteData.categories];
-                                      newCats[catIdx].items[itemIdx].price = e.target.value;
-                                      setSiteData({ ...siteData, categories: newCats });
-                                    }}
-                                  />
-                                </div>
-                              </div>
-
-                              <div className="space-y-1">
-                                <label className="text-xs font-bold uppercase opacity-50">Descripción</label>
-                                <Textarea
-                                  value={item.descEs}
-                                  className="min-h-[80px]"
+                                <Input
+                                  placeholder="URL Imagen"
+                                  value={item.image || ""}
                                   onChange={(e) => {
                                     const newCats = [...siteData.categories];
-                                    newCats[catIdx].items[itemIdx].descEs = e.target.value;
-                                    newCats[catIdx].items[itemIdx].descEn = `[EN: ${e.target.value}]`;
+                                    newCats[catIdx].items[itemIdx].image = e.target.value;
                                     setSiteData({ ...siteData, categories: newCats });
                                   }}
+                                  className="text-xs"
                                 />
                               </div>
 
-                              <div className="flex justify-end">
-                                <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive hover:bg-destructive/10 uppercase font-bold" onClick={() => {
-                                  const newCats = [...siteData.categories];
-                                  newCats[catIdx].items.splice(itemIdx, 1);
-                                  setSiteData({ ...siteData, categories: newCats });
-                                }}>
-                                  <Trash2 className="h-4 w-4 mr-2" /> Eliminar
-                                </Button>
+                              <div className="space-y-4">
+                                <div className="grid md:grid-cols-2 gap-4">
+                                  <div className="space-y-1">
+                                    <label className="text-xs font-bold uppercase opacity-50">Nombre</label>
+                                    <Input
+                                      value={item.nameEs}
+                                      className="font-black text-lg"
+                                      onChange={(e) => {
+                                        const newCats = [...siteData.categories];
+                                        newCats[catIdx].items[itemIdx].nameEs = e.target.value;
+                                        newCats[catIdx].items[itemIdx].nameEn = `[EN: ${e.target.value}]`;
+                                        setSiteData({ ...siteData, categories: newCats });
+                                      }}
+                                    />
+                                  </div>
+                                  <div className="space-y-1">
+                                    <label className="text-xs font-bold uppercase opacity-50">Precio</label>
+                                    <Input
+                                      value={item.price}
+                                      className="font-black text-lg text-primary"
+                                      onChange={(e) => {
+                                        const newCats = [...siteData.categories];
+                                        newCats[catIdx].items[itemIdx].price = e.target.value;
+                                        setSiteData({ ...siteData, categories: newCats });
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+
+                                <div className="space-y-1">
+                                  <label className="text-xs font-bold uppercase opacity-50">Descripción</label>
+                                  <Textarea
+                                    value={item.descEs}
+                                    className="min-h-[80px]"
+                                    onChange={(e) => {
+                                      const newCats = [...siteData.categories];
+                                      newCats[catIdx].items[itemIdx].descEs = e.target.value;
+                                      newCats[catIdx].items[itemIdx].descEn = `[EN: ${e.target.value}]`;
+                                      setSiteData({ ...siteData, categories: newCats });
+                                    }}
+                                  />
+                                </div>
+
+                                <div className="flex justify-end">
+                                  <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive hover:bg-destructive/10 uppercase font-bold" onClick={() => {
+                                    const newCats = [...siteData.categories];
+                                    newCats[catIdx].items.splice(itemIdx, 1);
+                                    setSiteData({ ...siteData, categories: newCats });
+                                  }}>
+                                    <Trash2 className="h-4 w-4 mr-2" /> Eliminar
+                                  </Button>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </Card>
-                      ))}
+                          </Card>
+                        ))}
 
-                      <Button variant="outline" className="w-full border-dashed border-2 py-8 uppercase font-bold text-muted-foreground hover:text-primary hover:border-primary" onClick={() => {
-                        const newCats = [...siteData.categories];
-                        newCats[catIdx].items.push({ id: Date.now().toString(), nameEs: "Nuevo Plato", nameEn: "New Dish", price: "0.00", descEs: "", descEn: "", image: "" });
-                        setSiteData({ ...siteData, categories: newCats });
-                      }}>
-                        <Plus className="h-5 w-5 mr-2" /> Agregar Plato a {cat.nameEs}
-                      </Button>
-                    </div>
+                        <Button variant="outline" className="w-full border-dashed border-2 py-8 uppercase font-bold text-muted-foreground hover:text-primary hover:border-primary" onClick={() => {
+                          const newCats = [...siteData.categories];
+                          newCats[catIdx].items.push({ id: Date.now().toString(), nameEs: "Nuevo Plato", nameEn: "New Dish", price: "0.00", descEs: "", descEn: "", image: "" });
+                          setSiteData({ ...siteData, categories: newCats });
+                        }}>
+                          <Plus className="h-5 w-5 mr-2" /> Agregar Plato a {cat.nameEs}
+                        </Button>
+                      </div>
+                    )}
                   </Card>
                 ))}
 
@@ -1035,31 +1053,33 @@ export default function Home() {
               </div>
 
               <div className="space-y-12">
-                {siteData.categories.map(cat => (
-                  <div key={cat.id} className="space-y-4">
-                    <h3 className="text-4xl font-black text-primary uppercase border-b-4 border-primary/20 pb-2 mb-8">
-                      {lang === "es" ? cat.nameEs : cat.nameEn}
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                      {cat.items.map(item => (
-                        <div key={item.id} className="flex flex-col sm:flex-row gap-4 p-4 rounded-2xl hover:bg-primary/5 transition-all border-2 border-transparent hover:border-primary/10 bg-white/50">
-                          {item.image && (
-                            <div className="w-full sm:w-40 h-40 rounded-2xl overflow-hidden flex-shrink-0 shadow-lg">
-                              <img src={item.image} alt={item.nameEs} className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" />
+                {siteData.categories
+                  .filter(cat => selectedCategory === "all" || selectedCategory === cat.id)
+                  .map(cat => (
+                    <div key={cat.id} className="space-y-6">
+                      <h3 className="text-5xl font-black text-primary uppercase border-b-4 border-primary/10 pb-2 mb-8 inline-block">
+                        {lang === "es" ? cat.nameEs : cat.nameEn}
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {cat.items.map(item => (
+                          <div key={item.id} className="flex flex-col sm:flex-row gap-6 p-6 rounded-3xl transition-all border-2 border-transparent bg-white shadow-sm hover:shadow-md">
+                            {item.image && (
+                              <div className="w-full sm:w-32 h-32 rounded-2xl overflow-hidden flex-shrink-0 shadow-sm">
+                                <img src={item.image} alt={item.nameEs} className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" />
+                              </div>
+                            )}
+                            <div className="flex-1 flex flex-col justify-center">
+                              <div className="flex justify-between items-baseline mb-2 gap-4">
+                                <h4 className="text-3xl font-black uppercase leading-tight whitespace-normal">{lang === "es" ? item.nameEs : item.nameEn}</h4>
+                                <span className="text-3xl font-black text-primary whitespace-nowrap">${item.price}</span>
+                              </div>
+                              <p className="text-lg text-muted-foreground font-bold leading-snug">{lang === "es" ? item.descEs : item.descEn}</p>
                             </div>
-                          )}
-                          <div className="flex-1 flex flex-col justify-center">
-                            <div className="flex justify-between items-start mb-2">
-                              <h4 className="text-3xl font-black uppercase leading-tight">{lang === "es" ? item.nameEs : item.nameEn}</h4>
-                              <span className="text-3xl font-black text-primary ml-4">${item.price}</span>
-                            </div>
-                            <p className="text-xl text-muted-foreground font-bold leading-relaxed">{lang === "es" ? item.descEs : item.descEn}</p>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           </DialogContent>
