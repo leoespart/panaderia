@@ -1038,13 +1038,13 @@ export default function Home() {
                 {siteData.categories
                   .filter(cat => selectedCategory === "all" || selectedCategory === cat.id)
                   .map(cat => (
-                    <div key={cat.id} className="space-y-6">
+                    <div key={cat.id} className="space-y-4">
                       <h3 className="text-4xl font-black text-primary uppercase border-b-4 border-primary/20 pb-2 mb-8">
                         {lang === "es" ? cat.nameEs : cat.nameEn}
                       </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {cat.items.map(item => (
-                          <div key={item.id} className="flex flex-col sm:flex-row gap-6 p-6 rounded-3xl hover:bg-primary/5 transition-all border-2 border-transparent hover:border-primary/10 bg-white/50">
+                          <div key={item.id} className="flex flex-col sm:flex-row gap-4 p-4 rounded-2xl hover:bg-primary/5 transition-all border-2 border-transparent hover:border-primary/10 bg-white/50">
                             {item.image && (
                               <div className="w-full sm:w-40 h-40 rounded-2xl overflow-hidden flex-shrink-0 shadow-lg">
                                 <img src={item.image} alt={item.nameEs} className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" />
