@@ -901,20 +901,20 @@ export default function Home() {
         {/* Full Menu Modal */}
         <Dialog open={isMenuModalOpen} onOpenChange={setIsMenuModalOpen}>
           <DialogContent className="max-w-6xl w-[95vw] max-h-[90vh] overflow-y-auto p-0 border-none bg-background rounded-3xl">
-            <div className="sticky top-0 z-30 bg-primary text-white p-8 md:p-12 text-center relative">
+            <div className="sticky top-0 z-30 bg-primary text-white pt-14 pb-8 px-4 md:p-12 text-center relative shadow-lg">
               <button
                 onClick={() => setIsMenuModalOpen(false)}
-                className="absolute top-8 right-8 p-2 hover:bg-white/20 rounded-full transition-colors"
+                className="absolute top-3 right-3 md:top-8 md:right-8 p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors backdrop-blur-sm"
                 title={t.exitBtn}
               >
-                <LogOut className="w-8 h-8 md:w-10 md:h-10 text-white" />
+                <LogOut className="w-6 h-6 md:w-10 md:h-10 text-white" />
               </button>
-              <h2 className="text-5xl md:text-7xl font-black uppercase mb-4">{t.menuTitle}</h2>
-              <p className="text-xl opacity-80 font-bold uppercase tracking-widest">Panaderia La Francesa</p>
+              <h2 className="text-4xl md:text-7xl font-black uppercase mb-2 md:mb-4 leading-none">{t.menuTitle}</h2>
+              <p className="text-sm md:text-xl opacity-90 font-bold uppercase tracking-widest">Panaderia La Francesa</p>
             </div>
 
-            <div className="p-6 md:p-12">
-              <div className="flex flex-wrap justify-center gap-4 mb-12">
+            <div className="p-4 md:p-12">
+              <div className="flex flex-wrap justify-center gap-3 md:gap-4 mb-8 md:mb-12 sticky top-0 bg-background/95 backdrop-blur py-4 z-20 -mt-4">
                 <Button
                   variant={selectedCategory === "all" ? "default" : "outline"}
                   onClick={() => setSelectedCategory("all")}
