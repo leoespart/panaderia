@@ -138,6 +138,7 @@ export default function Home() {
   const [collapsedCats, setCollapsedCats] = useState<Record<string, boolean>>({});
   const [loginError, setLoginError] = useState("");
   const [currentUser, setCurrentUser] = useState<string | null>(null);
+  const [showGreeting, setShowGreeting] = useState(false);
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -323,16 +324,21 @@ export default function Home() {
   };
 
   const handleAdminLogin = async () => {
+    const processLogin = async (user: string) => {
+      setCurrentUser(user);
+      setLoginError("");
+      setShowGreeting(true);
+      await fetch("/api/login", { method: "POST" });
+      setTimeout(() => {
+        setIsLoggedIn(true);
+        setShowGreeting(false);
+      }, 3000);
+    };
+
     if (adminPass === "Yadiel132") {
-      setIsLoggedIn(true);
-      setCurrentUser("Yadiel");
-      setLoginError("");
-      await fetch("/api/login", { method: "POST" });
+      await processLogin("Yadiel");
     } else if (adminPass === "Alexi1976") {
-      setIsLoggedIn(true);
-      setCurrentUser("Alex");
-      setLoginError("");
-      await fetch("/api/login", { method: "POST" });
+      await processLogin("Alex");
     } else {
       setLoginError("Contraseña incorrecta");
     }
@@ -464,12 +470,54 @@ export default function Home() {
             </DialogTitle>
           </DialogHeader>
           <AnimatePresence mode="wait">
-            {!isLoggedIn ? (
+            {showGreeting ? (
+              <motion.div
+                key="greeting-screen"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, y: -100, filter: "blur(10px)" }}
+                transition={{ duration: 0.8, ease: "circOut" }}
+                className="flex flex-col items-center justify-center py-20 space-y-8"
+              >
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: [0, 1.2, 1] }}
+                  transition={{ duration: 1, times: [0, 0.7, 1] }}
+                  className="bg-primary/10 p-8 rounded-full border-4 border-primary/20 shadow-inner"
+                >
+                  <ChefHat className="h-24 w-24 text-primary animate-bounce" />
+                </motion.div>
+                <div className="text-center space-y-4">
+                  <motion.h2
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                    className="text-6xl font-black uppercase tracking-tighter text-primary"
+                  >
+                    {getGreeting()}
+                  </motion.h2>
+                  <motion.p
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                    className="text-4xl font-black uppercase text-gray-800"
+                  >
+                    {currentUser}
+                  </motion.p>
+                </div>
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: "200px" }}
+                  transition={{ delay: 0.8, duration: 1.5 }}
+                  className="h-2 bg-primary rounded-full"
+                />
+              </motion.div>
+            ) : !isLoggedIn ? (
               <motion.div
                 key="login"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95, y: -20 }}
+                exit={{ opacity: 0, scale: 0.8, filter: "blur(8px)" }}
                 className="space-y-6 py-6"
               >
                 <div className="space-y-2">
@@ -487,27 +535,37 @@ export default function Home() {
                     className={`text-lg py-6 ${loginError ? "border-destructive ring-destructive" : ""}`}
                   />
                   {loginError && (
-                    <p className="text-destructive font-bold text-sm uppercase animate-shake px-2">
+                    <motion.p
+                      initial={{ x: -10 }}
+                      animate={{ x: [0, -10, 10, -10, 10, 0] }}
+                      className="text-destructive font-bold text-sm uppercase px-2"
+                    >
                       {loginError}
-                    </p>
+                    </motion.p>
                   )}
                 </div>
-                <Button className="w-full uppercase font-black text-xl py-6" onClick={handleAdminLogin}>Acceder</Button>
+                <Button className="w-full uppercase font-black text-xl py-6 shadow-lg active:scale-95 transition-transform" onClick={handleAdminLogin}>Acceder</Button>
               </motion.div>
             ) : (
               <motion.div
                 key="admin-tabs"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
                 className="space-y-6"
               >
                 <Tabs defaultValue="general" className="w-full">
-                  <TabsList className="flex flex-wrap h-auto gap-2 mb-6">
-                    <TabsTrigger value="general" className="uppercase font-black text-lg py-3 flex-1">General</TabsTrigger>
-                    <TabsTrigger value="menu" className="uppercase font-black text-lg py-3 flex-1">Menú</TabsTrigger>
-                    <TabsTrigger value="design" className="uppercase font-black text-lg py-3 flex-1">Diseño</TabsTrigger>
-                    <TabsTrigger value="promo" className="uppercase font-black text-lg py-3 flex-1">Promociones</TabsTrigger>
-                    <TabsTrigger value="logs" className="uppercase font-black text-lg py-3 flex-1" onClick={fetchLogs}>Logs</TabsTrigger>
+                  <TabsList className="flex flex-wrap h-auto gap-2 mb-6 bg-muted/50 p-2 rounded-2xl">
+                    {["general", "menu", "design", "promo", "logs"].map((tab) => (
+                      <TabsTrigger
+                        key={tab}
+                        value={tab}
+                        onClick={tab === 'logs' ? fetchLogs : undefined}
+                        className="uppercase font-black text-lg py-3 flex-1 data-[state=active]:bg-primary data-[state=active]:text-white transition-all rounded-xl"
+                      >
+                        {tab === 'menu' ? 'Menú' : tab === 'design' ? 'Diseño' : tab === 'promo' ? 'Promociones' : tab}
+                      </TabsTrigger>
+                    ))}
                   </TabsList>
 
                   <TabsContent value="general" className="space-y-8">
