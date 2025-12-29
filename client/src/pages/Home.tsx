@@ -167,20 +167,20 @@ export default function Home() {
     ],
     categories: [
       {
+        id: "almuerzos",
+        nameEs: "Almuerzo",
+        nameEn: "Lunch",
+        items: [
+          { id: "a1", nameEs: "Arroz con Habichuelas y Pollo", nameEn: "Rice with Beans and Chicken", price: "8.50", descEs: "Servido con ensalada y amarillos.", descEn: "Served with salad and sweet plantains.", image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=2000&auto=format&fit=crop" }
+        ]
+      },
+      {
         id: "bebidas",
         nameEs: "Bebidas",
         nameEn: "Drinks",
         items: [
           { id: "b1", nameEs: "Café con Leche", nameEn: "Coffee with Milk", price: "2.50", descEs: "Café colado al momento con leche espumosa.", descEn: "Freshly brewed coffee with frothy milk.", image: "https://images.unsplash.com/photo-1541167760496-1628856ab752?q=80&w=2000&auto=format&fit=crop" },
           { id: "b2", nameEs: "Jugo Natural", nameEn: "Natural Juice", price: "3.50", descEs: "Naranja o Acerola.", descEn: "Orange or Acerola.", image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?q=80&w=2000&auto=format&fit=crop" }
-        ]
-      },
-      {
-        id: "almuerzos",
-        nameEs: "Almuerzo del Día",
-        nameEn: "Daily Lunch",
-        items: [
-          { id: "a1", nameEs: "Arroz con Habichuelas y Pollo", nameEn: "Rice with Beans and Chicken", price: "8.50", descEs: "Servido con ensalada y amarillos.", descEn: "Served with salad and sweet plantains.", image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=2000&auto=format&fit=crop" }
         ]
       },
       {
@@ -301,7 +301,11 @@ export default function Home() {
       privacy: "Privacidad",
       terms: "Términos",
       daysMonSat: "Lun - Sáb",
-      daySun: "Dom"
+      daySun: "Dom",
+      namePlaceholder: "Tu nombre",
+      commentPlaceholder: "¿Qué te pareció nuestro sabor?",
+      allCats: "Todos",
+      exitBtn: "Salir"
     },
     en: {
       heroBadge: siteData.heroBadgeEn,
@@ -333,7 +337,11 @@ export default function Home() {
       privacy: "Privacy",
       terms: "Terms",
       daysMonSat: "Mon - Sat",
-      daySun: "Sun"
+      daySun: "Sun",
+      namePlaceholder: "Your Name",
+      commentPlaceholder: "How was the food?",
+      allCats: "All",
+      exitBtn: "Exit"
     }
   }[lang || "es"];
 
@@ -824,7 +832,7 @@ export default function Home() {
       </motion.section>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8 md:py-16 space-y-16 md:space-y-32 -mt-10 relative z-20">
+      <main className="container mx-auto px-6 md:px-8 py-8 md:py-16 space-y-16 md:space-y-32 -mt-10 relative z-20">
         {/* About Card */}
         <motion.div id="about" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
           <Card className="shadow-2xl border-none overflow-hidden max-w-5xl mx-auto transform hover:-translate-y-2 transition-transform duration-500">
@@ -893,7 +901,14 @@ export default function Home() {
         {/* Full Menu Modal */}
         <Dialog open={isMenuModalOpen} onOpenChange={setIsMenuModalOpen}>
           <DialogContent className="max-w-6xl w-[95vw] max-h-[90vh] overflow-y-auto p-0 border-none bg-background rounded-3xl">
-            <div className="sticky top-0 z-30 bg-primary text-white p-8 md:p-12 text-center">
+            <div className="sticky top-0 z-30 bg-primary text-white p-8 md:p-12 text-center relative">
+              <button
+                onClick={() => setIsMenuModalOpen(false)}
+                className="absolute top-8 right-8 p-2 hover:bg-white/20 rounded-full transition-colors"
+                title={t.exitBtn}
+              >
+                <LogOut className="w-8 h-8 md:w-10 md:h-10 text-white" />
+              </button>
               <h2 className="text-5xl md:text-7xl font-black uppercase mb-4">{t.menuTitle}</h2>
               <p className="text-xl opacity-80 font-bold uppercase tracking-widest">Panaderia La Francesa</p>
             </div>
@@ -905,7 +920,7 @@ export default function Home() {
                   onClick={() => setSelectedCategory("all")}
                   className="px-8 py-6 text-xl font-black uppercase rounded-2xl h-auto"
                 >
-                  TODOS
+                  {t.allCats}
                 </Button>
                 {siteData.categories.map(cat => (
                   <Button
@@ -1061,7 +1076,7 @@ export default function Home() {
       </main>
 
       {/* Reviews Section */}
-      <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="max-w-6xl mx-auto py-20 px-4">
+      <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="max-w-6xl mx-auto py-20 px-6 md:px-8">
         <div className="text-center mb-16">
           <h2 className="text-5xl md:text-7xl font-black uppercase mb-6">{t.reviewsTitle}</h2>
           <div className="w-40 h-3 bg-primary mx-auto rounded-full"></div>
@@ -1084,7 +1099,7 @@ export default function Home() {
           <h3 className="text-3xl font-black uppercase mb-8 text-center">{t.leaveReviewTitle}</h3>
           <div className="space-y-6">
             <Input
-              placeholder="Tu nombre"
+              placeholder={t.namePlaceholder}
               className="text-lg py-6 px-6 rounded-2xl"
               value={newReview.name}
               onChange={(e) => setNewReview({ ...newReview, name: e.target.value })}
@@ -1097,7 +1112,7 @@ export default function Home() {
               ))}
             </div>
             <Textarea
-              placeholder="¿Qué te pareció nuestro sabor?"
+              placeholder={t.commentPlaceholder}
               className="text-lg min-h-[120px] px-6 py-4 rounded-2xl"
               value={newReview.comment}
               onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
@@ -1125,7 +1140,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="bg-primary text-primary-foreground py-16 md:py-32 mt-auto relative overflow-hidden">
-        <div className="container mx-auto px-4 text-center relative z-10">
+        <div className="container mx-auto px-6 md:px-8 text-center relative z-10">
           <img src={logoImg} alt="Logo" className="h-32 w-32 md:h-40 md:w-40 mx-auto mb-8 md:mb-12 rounded-full border-4 border-white shadow-2xl" />
           <div className="mb-10 md:mb-16">
             <h3 className="text-5xl md:text-7xl font-black mb-4 md:mb-6 uppercase">Panaderia</h3>
@@ -1141,7 +1156,7 @@ export default function Home() {
             </p>
           </div>
           <div className="flex flex-wrap justify-center gap-8 md:gap-16 text-lg md:text-2xl font-black opacity-60 uppercase">
-            <span className="hover:opacity-100 transition-opacity cursor-pointer">© 2024</span>
+            <span className="hover:opacity-100 transition-opacity cursor-pointer">© 2025</span>
             <span className="hover:opacity-100 transition-opacity cursor-pointer">{t.privacy}</span>
             <span className="hover:opacity-100 transition-opacity cursor-pointer">{t.terms}</span>
           </div>
