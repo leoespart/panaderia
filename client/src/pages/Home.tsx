@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import logoImg from "@assets/logo_1766883612871.png";
+import logoImg from "@assets/new_logo.jpg";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -1019,7 +1019,7 @@ export default function Home() {
               whileHover={{ scale: 1.05, rotate: 2 }}
               src={siteData.logoUrl || logoImg}
               alt="Logo"
-              className="h-28 md:h-40 w-auto object-contain filter drop-shadow-xl cursor-pointer z-50 py-2"
+              className="h-28 md:h-40 w-auto aspect-square object-cover rounded-full border-4 border-white shadow-2xl cursor-pointer z-50 transform hover:scale-110 transition-transform duration-500 origin-top bg-white"
               onClick={() => scrollTo("top")}
             />
             <div className="hidden md:flex items-center gap-2 pl-28">
