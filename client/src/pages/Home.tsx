@@ -13,7 +13,6 @@ import { Hero } from "@/components/home/Hero";
 import { AboutSection } from "@/components/home/AboutSection"; // New AboutSection
 import { MenuSection } from "@/components/home/MenuSection";
 import { LocationSection } from "@/components/home/LocationSection";
-import { AdminPanel } from "@/components/admin/AdminPanel";
 import { PromoPopup } from "@/components/home/PromoPopup";
 import { SplashScreen } from "@/components/SplashScreen";
 
@@ -71,7 +70,6 @@ export default function Home() {
   const [lang, setLang] = useState<Language | null>(null);
 
   const [isLangOpen, setIsLangOpen] = useState(false);
-  const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [showPromo, setShowPromo] = useState(false);
 
   // Editable State
@@ -288,13 +286,6 @@ export default function Home() {
           </DialogContent>
         </Dialog>
 
-        <AdminPanel
-          isOpen={isAdminOpen}
-          onOpenChange={setIsAdminOpen}
-          siteData={siteData}
-          setSiteData={setSiteData}
-        />
-
         <PromoPopup siteData={siteData} isOpen={showPromo} onClose={() => setShowPromo(false)} />
 
         {/* New Header */}
@@ -303,7 +294,6 @@ export default function Home() {
           lang={lang || "es"}
           setLang={(l) => selectLanguage(l)} // Although dialog is used, passing this for completeness if needed later
           scrollTo={scrollTo}
-          onOpenAdmin={() => setIsAdminOpen(true)}
           isLangOpen={isLangOpen}
           setIsLangOpen={setIsLangOpen}
         />

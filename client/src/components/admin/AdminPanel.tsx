@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Settings, ChefHat, Sparkles, Upload, X, LogOut, Save, Plus, Trash2, Heart, Minus } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Settings, ChefHat, Sparkles, Upload, X, LogOut, Save, Plus, Trash2, Heart, Minus, ArrowLeft } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -11,15 +10,14 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { SiteData } from "@/types";
+import { useLocation } from "wouter";
 
 interface AdminPanelProps {
-    isOpen: boolean;
-    onOpenChange: (open: boolean) => void;
     siteData: any;
     setSiteData: (data: any) => void;
 }
 
-export function AdminPanel({ isOpen, onOpenChange, siteData, setSiteData }: AdminPanelProps) {
+export function AdminPanel({ siteData, setSiteData }: AdminPanelProps) {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [adminPass, setAdminPass] = useState("");
     const [loginError, setLoginError] = useState("");
@@ -27,6 +25,7 @@ export function AdminPanel({ isOpen, onOpenChange, siteData, setSiteData }: Admi
     const [showGreeting, setShowGreeting] = useState(false);
     const [logs, setLogs] = useState<{ timestamp: string, device: string, action: string }[]>([]);
     const [collapsedCats, setCollapsedCats] = useState<Record<string, boolean>>({});
+    const [, setLocation] = useLocation();
 
     const getGreeting = () => {
         const hour = new Date().getHours();
@@ -71,7 +70,7 @@ export function AdminPanel({ isOpen, onOpenChange, siteData, setSiteData }: Admi
                     action: actionDesc
                 })
             });
-            onOpenChange(false);
+            // Show success toast or feedback here if needed
         } catch (e) {
             console.error("Failed to save", e);
         }
@@ -114,24 +113,30 @@ export function AdminPanel({ isOpen, onOpenChange, siteData, setSiteData }: Admi
     };
 
     return (
-        <Dialog open={isOpen} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto z-[90]">
-                <DialogHeader>
-                    <DialogTitle className="flex flex-col gap-1 font-black uppercase text-2xl">
-                        <div className="flex items-center gap-2">
-                            <Settings className="h-6 w-6" /> Panel de Administración
-                        </div>
-                        {isLoggedIn && currentUser && (
-                            <motion.div
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                className="text-primary text-sm font-bold normal-case mt-1"
-                            >
-                                {getGreeting()}, {currentUser}
-                            </motion.div>
-                        )}
-                    </DialogTitle>
-                </DialogHeader>
+        <Card className="min-h-[80vh] w-full max-w-5xl mx-auto shadow-2xl overflow-hidden bg-white/95 backdrop-blur-sm border-0">
+            <div className="p-6 md:p-8 bg-neutral-900 text-white flex justify-between items-start">
+                <div className="flex flex-col gap-1">
+                    <div className="flex items-center gap-3">
+                        <Button variant="ghost" size="icon" onClick={() => setLocation("/")} className="text-white hover:bg-white/20 -ml-2">
+                            <ArrowLeft className="h-6 w-6" />
+                        </Button>
+                        <h1 className="font-black uppercase text-2xl md:text-3xl flex items-center gap-2">
+                            <Settings className="h-6 w-6 md:h-8 md:w-8" /> Panel de Administración
+                        </h1>
+                    </div>
+                    {isLoggedIn && currentUser && (
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            className="text-primary text-sm font-bold ml-10"
+                        >
+                            {getGreeting()}, {currentUser}
+                        </motion.div>
+                    )}
+                </div>
+            </div>
+
+            <div className="p-6 md:p-8">
                 <AnimatePresence mode="wait">
                     {showGreeting ? (
                         <motion.div
@@ -197,9 +202,20 @@ export function AdminPanel({ isOpen, onOpenChange, siteData, setSiteData }: Admi
                             exit={{ opacity: 0, scale: 0.8, filter: "blur(8px)" }}
                             className="space-y-6 py-6"
                         >
-                            <div className="space-y-2">
+                            <div className="space-y-4">
+                                {/* Hidden username field for accessibility/password managers */}
+                                <Input
+                                    type="text"
+                                    name="username"
+                                    autoComplete="username"
+                                    className="hidden"
+                                    aria-hidden="true"
+                                    defaultValue={currentUser || "admin"}
+                                />
                                 <Input
                                     type="password"
+                                    name="password"
+                                    autoComplete="current-password"
                                     placeholder="Contraseña de administrador"
                                     value={adminPass}
                                     onChange={(e) => {
@@ -802,7 +818,14 @@ export function AdminPanel({ isOpen, onOpenChange, siteData, setSiteData }: Admi
                         </motion.div>
                     )}
                 </AnimatePresence>
-            </DialogContent>
-        </Dialog>
+            </div>
+        </Card>
+    );
+}                            </Tabs >
+                        </motion.div >
+                    )}
+                </AnimatePresence >
+            </DialogContent >
+        </Dialog >
     );
 }

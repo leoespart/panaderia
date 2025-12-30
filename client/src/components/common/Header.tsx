@@ -3,19 +3,20 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Globe, Settings, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useLocation } from "wouter";
 
 interface HeaderProps {
     t: any;
     lang: "es" | "en";
     setLang: (l: "es" | "en") => void;
     scrollTo: (id: string) => void;
-    onOpenAdmin: () => void;
     isLangOpen: boolean;
     setIsLangOpen: (open: boolean) => void;
 }
 
-export function Header({ t, lang, setLang, scrollTo, onOpenAdmin, isLangOpen, setIsLangOpen }: HeaderProps) {
+export function Header({ t, lang, setLang, scrollTo, isLangOpen, setIsLangOpen }: HeaderProps) {
     const [isScrolled, setIsScrolled] = useState(false);
+    const [, setLocation] = useLocation();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -91,7 +92,7 @@ export function Header({ t, lang, setLang, scrollTo, onOpenAdmin, isLangOpen, se
                     <Button
                         variant="ghost"
                         size="icon"
-                        onClick={onOpenAdmin}
+                        onClick={() => setLocation("/admin")}
                         className={`${isScrolled ? "text-foreground hover:bg-primary/5" : "text-white hover:bg-white/10 hover:text-white"}`}
                     >
                         <Settings className="h-5 w-5" />
@@ -136,7 +137,8 @@ export function Header({ t, lang, setLang, scrollTo, onOpenAdmin, isLangOpen, se
                                     {lang === "es" ? "Ordena Ahora" : "Order Now"}
                                 </Button>
                                 <hr className="border-border my-2" />
-                                <button onClick={onOpenAdmin} className="flex items-center gap-3 text-lg font-bold uppercase text-left text-muted-foreground hover:text-primary transition-colors">
+                                <hr className="border-border my-2" />
+                                <button onClick={() => setLocation("/admin")} className="flex items-center gap-3 text-lg font-bold uppercase text-left text-muted-foreground hover:text-primary transition-colors">
                                     <Settings className="h-5 w-5" /> Admin
                                 </button>
                             </div>
