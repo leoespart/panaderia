@@ -77,12 +77,7 @@ interface MenuItem {
   image?: string;
 }
 
-interface Review {
-  id: string;
-  name: string;
-  comment: string;
-  rating: number;
-}
+
 
 const DEFAULT_CATEGORIES: MenuCategory[] = [
   {
@@ -131,7 +126,7 @@ export default function Home() {
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [adminPass, setAdminPass] = useState("");
-  const [newReview, setNewReview] = useState<{ name: string, comment: string, rating: number }>({ name: "", comment: "", rating: 5 });
+
 
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
@@ -140,11 +135,31 @@ export default function Home() {
   const [currentUser, setCurrentUser] = useState<string | null>(null);
   const [showGreeting, setShowGreeting] = useState(false);
 
+  const { scrollYProgress } = useScroll();
+  const heroY = useTransform(scrollYProgress, [0, 0.3], [0, 150]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
+  const heroScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.9]);
+  const breadY = useTransform(scrollYProgress, [0, 1], [0, -200]);
+  const breadRotate = useTransform(scrollYProgress, [0, 1], [0, 45]);
+
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return "Buenos días";
     if (hour < 18) return "Buenas tardes";
     return "Buenas noches";
+  };
+
+  const isBakeryOpen = () => {
+    const now = new Date();
+    const day = now.getDay(); // 0 is Sunday
+    const hour = now.getHours();
+    const minutes = now.getMinutes();
+    const currentTime = hour + minutes / 60;
+
+    if (day === 0) { // Sunday
+      return currentTime >= 7 && currentTime <= 13;
+    }
+    return currentTime >= 7 && currentTime <= 18;
   };
 
   const toggleCat = (catId: string) => {
@@ -176,10 +191,7 @@ export default function Home() {
     promoActive: false,
     promoMessage: "🎉 ¡Gran Descuento de Temporada!",
     promoDiscount: "50% OFF",
-    reviews: [
-      { id: "r1", name: "Juan Pérez", comment: "El mejor pan de Barrio Obrero. El café siempre está en su punto.", rating: 5 },
-      { id: "r2", name: "Maria Rodriguez", comment: "Los quesitos son adictivos. Servicio excelente.", rating: 5 }
-    ],
+
     categories: [
       {
         id: "almuerzo",
@@ -273,9 +285,7 @@ export default function Home() {
   const [logs, setLogs] = useState<{ timestamp: string, device: string, action: string }[]>([]);
   const [showPromo, setShowPromo] = useState(false);
 
-  const { scrollY } = useScroll();
-  const heroOpacity = useTransform(scrollY, [200, 600], [1, 0]);
-  const heroScale = useTransform(scrollY, [200, 600], [1, 0.95]);
+
 
   useEffect(() => {
     const savedLang = localStorage.getItem("preferred_lang") as Language;
@@ -366,14 +376,15 @@ export default function Home() {
       visitBtn: "Visítanos",
       directionsBtn: siteData.directionsBtnEs || "CÓMO LLEGAR",
       menuBtn: "Ver Menú",
-      aboutTitle: "Sobre Nosotros",
+      aboutTitle: siteData.heroTitle, // Using as default
       aboutDesc: siteData.aboutDescEs,
       menuTitle: "Nuestro Menú",
       viewFullMenu: "Ver menú completo",
       specialEventsBtn: "Eventos",
       specialEventsTitle: siteData.specialEventsTitleEs,
       specialEventsDesc: siteData.specialEventsDescEs,
-      hoursTitle: "Horarios",
+      hoursTitle: "Horario",
+      addressTitle: "Dirección",
       contactTitle: "Contacto",
       callNow: "Llamar ahora",
       locationTitle: "Ubicación",
@@ -410,6 +421,7 @@ export default function Home() {
       specialEventsTitle: siteData.specialEventsTitleEn,
       specialEventsDesc: siteData.specialEventsDescEn,
       hoursTitle: "Hours",
+      addressTitle: "Address",
       contactTitle: "Contact",
       callNow: "Call now",
       locationTitle: "Location",
@@ -574,7 +586,7 @@ export default function Home() {
               >
                 <Tabs defaultValue="general" className="w-full">
                   <TabsList className="flex flex-wrap h-auto gap-2 mb-6 bg-muted/50 p-2 rounded-2xl">
-                    {["general", "menu", "design", "promo", "logs"]
+                    {["general", "menu", "promo", "logs"]
                       .filter(tab => tab !== 'logs' || currentUser === 'Yadiel')
                       .map((tab) => (
                         <TabsTrigger
@@ -583,7 +595,7 @@ export default function Home() {
                           onClick={tab === 'logs' ? fetchLogs : undefined}
                           className="uppercase font-black text-lg py-3 flex-1 data-[state=active]:bg-primary data-[state=active]:text-white transition-all rounded-xl hover:scale-105 active:scale-95 hover:bg-muted duration-200"
                         >
-                          {tab === 'menu' ? 'Menú' : tab === 'design' ? 'Diseño' : tab === 'promo' ? 'Promociones' : tab}
+                          {tab === 'menu' ? 'Menú' : tab === 'promo' ? 'Promociones' : tab}
                         </TabsTrigger>
                       ))}
                   </TabsList>
@@ -885,36 +897,7 @@ export default function Home() {
                     </motion.div>
                   </TabsContent>
 
-                  <TabsContent value="design" className="space-y-6 py-4">
-                    <Card className="p-6">
-                      <div className="space-y-4">
-                        <h3 className="text-xl font-black uppercase">Logo del Sitio</h3>
-                        <div className="flex gap-6 items-center">
-                          <div className="h-40 w-40 overflow-hidden flex-shrink-0 flex items-center justify-center p-2 rounded-xl transition-all hover:scale-110">
-                            <img src={siteData.logoUrl || logoImg} alt="Preview" className="max-h-full max-w-full object-contain filter drop-shadow-md" />
-                          </div>
-                          <div className="flex-1 space-y-2">
-                            <label className="text-sm font-bold uppercase opacity-70">URL del Logo (Imagen)</label>
-                            <Input
-                              placeholder="https://..."
-                              className="text-lg py-6"
-                              value={siteData.logoUrl}
-                              onChange={(e) => setSiteData({ ...siteData, logoUrl: e.target.value })}
-                            />
-                            <p className="text-xs text-muted-foreground">Deja vacío para usar el logo por defecto.</p>
-                          </div>
-                        </div>
-                      </div>
-                    </Card>
-                    <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
-                      <Button
-                        className="w-full gap-2 uppercase font-black py-8 text-2xl shadow-xl transition-all hover:bg-primary/90"
-                        onClick={() => saveAdminData("Cambió Diseño/Logo")}
-                      >
-                        <Save className="h-6 w-6" /> Guardar Cambios
-                      </Button>
-                    </motion.div>
-                  </TabsContent>
+
 
                   <TabsContent value="promo" className="space-y-6 py-4">
                     <Card className="p-6 bg-accent/5 border-accent/20 border-2">
@@ -1073,7 +1056,7 @@ export default function Home() {
       {/* Hero Section */}
       <motion.section
         className="relative bg-primary text-primary-foreground py-16 md:py-24 px-4 overflow-hidden"
-        style={{ opacity: heroOpacity, scale: heroScale }}
+        style={{ y: heroY, opacity: heroOpacity, scale: heroScale }}
       >
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=2072&auto=format&fit=crop')] bg-cover bg-center opacity-10 mix-blend-overlay"></div>
         <div className="absolute inset-0 bg-gradient-to-b from-primary/40 to-primary"></div>
@@ -1084,7 +1067,13 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <Badge variant="secondary" className="mb-6 px-6 md:px-10 py-3 md:py-4 text-sm md:text-xl rounded-full shadow-lg border-2 border-white/20 uppercase font-black">{t.heroBadge}</Badge>
+            <div className="flex justify-center mb-6">
+              <Badge variant="secondary" className={`px-6 md:px-10 py-3 md:py-4 text-sm md:text-xl rounded-full shadow-lg border-2 uppercase font-black flex items-center gap-3 ${isBakeryOpen() ? "border-green-500/50 bg-green-500/10 text-green-600" : "border-red-500/50 bg-red-500/10 text-red-600"}`}>
+                <div className={`h-3 w-3 rounded-full animate-pulse ${isBakeryOpen() ? "bg-green-500" : "bg-red-500"}`}></div>
+                {isBakeryOpen() ? (lang === "es" ? "Abierto Ahora" : "Open Now") : (lang === "es" ? "Cerrado Ahora" : "Closed Now")}
+              </Badge>
+            </div>
+            <Badge variant="outline" className="mb-6 px-6 md:px-10 py-3 md:py-4 text-sm md:text-xl rounded-full shadow-lg border-2 border-white/20 uppercase font-black text-white bg-white/10">{t.heroBadge}</Badge>
             <div className="flex flex-col items-center gap-2 md:gap-4 mb-8">
               <h1 className="text-6xl md:text-9xl lg:text-[13rem] font-black leading-none tracking-tighter drop-shadow-2xl uppercase hover:text-white transition-colors duration-300 transform hover:scale-105 inline-block cursor-default select-none">
                 Panaderia
@@ -1369,102 +1358,107 @@ export default function Home() {
           </motion.div>
         )}
 
-        {/* Location */}
-        <motion.div id="location" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="max-w-6xl mx-auto pb-10 md:pb-20">
-          <div className="flex flex-col items-center mb-10 md:mb-16 text-center">
-            <div className="p-3 md:p-5 bg-primary/10 rounded-full mb-4 md:mb-8">
-              <MapPin className="h-8 w-8 md:h-12 md:w-12 text-primary" />
-            </div>
-            <h2 className="text-5xl md:text-8xl font-black text-foreground mb-4 md:mb-8 uppercase hover:text-primary transition-colors cursor-default">{t.locationTitle}</h2>
+        {/* Location Section - 3D Snapchat Style */}
+        <motion.div
+          id="location"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeInUp}
+          className="perspective-1000 py-20"
+        >
+          <div className="text-center mb-16">
+            <h2 className="text-5xl md:text-8xl font-black uppercase mb-4">{t.locationTitle}</h2>
+            <div className="w-40 h-3 bg-primary mx-auto rounded-full"></div>
           </div>
-          <Card className="overflow-hidden shadow-2xl border-none rounded-3xl md:rounded-[4rem] group">
-            <div className="grid grid-cols-1 md:grid-cols-3">
-              <div className="p-8 md:p-16 md:col-span-1 bg-primary text-primary-foreground flex flex-col justify-center relative overflow-hidden">
-                <div className="relative z-10">
-                  <h3 className="font-black text-4xl md:text-6xl mb-6 md:mb-10 uppercase leading-none">{t.visitBtn}</h3>
-                  <p className="text-2xl md:text-4xl text-primary-foreground/90 mb-10 md:mb-16 font-bold leading-none">
-                    {siteData.address}
-                  </p>
-                  <Button variant="secondary" onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(siteData.address)}`, '_blank')} className="w-full text-xl md:text-3xl h-16 md:h-24 font-black rounded-xl md:rounded-2xl shadow-xl hover:scale-105 transition-transform uppercase" size="lg">
-                    {t.directionsBtn}
-                  </Button>
+
+          <div className="relative max-w-6xl mx-auto h-[600px] md:h-[800px] group">
+            {/* The 3D Map Card */}
+            <motion.div
+              className="absolute inset-0 bg-white rounded-[3rem] shadow-2xl overflow-hidden border-8 border-white transform-3d transition-transform duration-700 group-hover:rotate-x-12 group-hover:rotate-y-6"
+              style={{ rotateX: 15 }}
+            >
+              {/* Map Background (Mocking a 3D look) */}
+              <div className="absolute inset-0 bg-blue-50/50 bg-[radial-gradient(#ddd_1px,transparent_1px)] [background-size:20px_20px]">
+                {/* 3D Buildings Mockup */}
+                <div className="absolute top-[30%] left-[40%] w-32 h-32 bg-primary/10 rounded-2xl rotate-45 transform-3d border-b-8 border-primary/20"></div>
+                <div className="absolute top-[60%] left-[20%] w-48 h-24 bg-primary/5 rounded-3xl -rotate-12 transform-3d border-b-8 border-primary/10"></div>
+                <div className="absolute top-[10%] left-[70%] w-24 h-48 bg-primary/5 rounded-full rotate-12 transform-3d border-b-8 border-primary/10"></div>
+              </div>
+
+              {/* Real Map Iframe (Clipped to look integrated) */}
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1852.1793740203598!2d-66.0560!3d18.4415!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c036924847e62ef%3A0xe6bf44799015949e!2s1963%20Av.%20Borinquen%2C%20San%20Juan%2C%2000915!5e0!3m2!1ses-419!2spr!4v1714324562021!5m2!1ses-419!2spr"
+                className="w-full h-full border-none opacity-80 mix-blend-multiply grayscale hover:grayscale-0 transition-all duration-700"
+                allowFullScreen
+                loading="lazy"
+              ></iframe>
+
+              {/* Floating Pin / Avatar (Snapchat Style) */}
+              <motion.div
+                animate={{ y: [0, -20, 0] }}
+                transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20"
+              >
+                <div className="relative">
+                  <div className="h-24 w-24 bg-white rounded-full shadow-2xl p-2 border-4 border-primary">
+                    <img src={logoImg} className="h-full w-full object-cover rounded-full" alt="Pin" />
+                  </div>
+                  <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-primary text-white font-black px-6 py-2 rounded-full whitespace-nowrap shadow-xl uppercase italic tracking-widest animate-bounce">
+                    ¡ESTAMOS AQUÍ!
+                  </div>
+                  <div className="w-12 h-12 bg-primary/30 rounded-full blur-xl absolute -bottom-12 left-1/2 -translate-x-1/2 opacity-50"></div>
                 </div>
-              </div>
-              <div className="h-[400px] md:h-auto md:col-span-2 relative overflow-hidden">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3786.1311026046416!2d-66.0592!3d18.4411!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c03666f2f2c8f61%3A0x6a0c0e0c0c0c0c0c!2s1963%20Av.%20Borinquen%2C%20San%20Juan%2C%2000915%2C%20Puerto%20Rico!5e0!3m2!1sen!2sus!4v1710000000000!5m2!1sen!2sus"
-                  width="100%" height="100%" style={{ border: 0 }} allowFullScreen={true} loading="lazy" referrerPolicy="no-referrer-when-downgrade"
-                  className="absolute inset-0 grayscale contrast-125 hover:grayscale-0 transition-all duration-1000"
-                ></iframe>
-                <div className="absolute inset-0 bg-primary/10 pointer-events-none group-hover:bg-transparent transition-colors duration-1000"></div>
-              </div>
-            </div>
-          </Card>
+              </motion.div>
+            </motion.div>
+
+            {/* Info Cards Floating */}
+            <motion.div
+              style={{ y: breadY }}
+              className="absolute -right-8 top-1/4 z-30 hidden lg:block"
+            >
+              <Card className="p-8 shadow-2xl rounded-[2.5rem] border-none bg-white/90 backdrop-blur-md max-w-xs transform rotate-6 hover:rotate-0 transition-transform">
+                <div className="p-4 bg-primary/10 rounded-2xl w-fit mb-6">
+                  <MapPin className="h-8 w-8 text-primary" />
+                </div>
+                <h4 className="text-2xl font-black uppercase mb-4 text-primary">{t.addressTitle}</h4>
+                <p className="text-xl font-bold text-muted-foreground leading-relaxed">{siteData.address}</p>
+              </Card>
+            </motion.div>
+
+            <motion.div
+              style={{ y: useTransform(scrollYProgress, [0.6, 1], [100, -100]) }}
+              className="absolute -left-8 bottom-1/4 z-30 hidden lg:block"
+            >
+              <Card className="p-8 shadow-2xl rounded-[2.5rem] border-none bg-white/90 backdrop-blur-md max-w-xs transform -rotate-6 hover:rotate-0 transition-transform">
+                <div className="p-4 bg-green-500/10 rounded-2xl w-fit mb-6">
+                  <Clock className="h-8 w-8 text-green-600" />
+                </div>
+                <h4 className="text-2xl font-black uppercase mb-4 text-green-600">{t.hoursTitle}</h4>
+                <p className="text-xl font-bold text-muted-foreground leading-relaxed">
+                  L-S: 7am - 6pm<br />
+                  D: 7am - 1pm
+                </p>
+                <Badge variant="outline" className={`mt-4 border-none bg-green-500 text-white font-black py-2 px-4 rounded-xl ${!isBakeryOpen() && "bg-red-500"}`}>
+                  {isBakeryOpen() ? "ACTUALMENTE ABIERTO" : "CERRADO"}
+                </Badge>
+              </Card>
+            </motion.div>
+          </div>
+
+          <div className="mt-20 text-center">
+            <Button
+              size="lg"
+              className="px-16 py-8 text-2xl font-black uppercase rounded-3xl shadow-2xl hover:scale-110 transition-all gap-4 bg-primary"
+              onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(siteData.address)}`, '_blank')}
+            >
+              <MapPin className="h-8 w-8" /> {t.directionsBtn}
+            </Button>
+          </div>
         </motion.div>
       </main>
 
-      {/* Reviews Section */}
-      <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="max-w-6xl mx-auto py-20 px-6 md:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-5xl md:text-7xl font-black uppercase mb-6">{t.reviewsTitle}</h2>
-          <div className="w-40 h-3 bg-primary mx-auto rounded-full"></div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-          {siteData.reviews.map((rev) => (
-            <Card key={rev.id} className="p-8 rounded-[2.5rem] shadow-xl border-none bg-white relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-20 h-20 bg-primary/5 rounded-bl-[4rem] group-hover:bg-primary/10 transition-colors"></div>
-              <div className="flex gap-1 mb-6 text-primary">
-                {[...Array(rev.rating)].map((_, i) => (
-                  <Heart key={i} className="h-6 w-6 fill-current" />
-                ))}
-              </div>
-              <p className="text-2xl font-bold italic mb-8 text-muted-foreground">"{rev.comment}"</p>
-              <p className="text-xl font-black uppercase tracking-widest text-primary">— {rev.name}</p>
-            </Card>
-          ))}
-        </div>
-        <Card className="max-w-2xl mx-auto p-10 rounded-[3rem] shadow-2xl border-none">
-          <h3 className="text-3xl font-black uppercase mb-8 text-center">{t.leaveReviewTitle}</h3>
-          <div className="space-y-6">
-            <Input
-              placeholder={t.namePlaceholder}
-              className="text-lg py-6 px-6 rounded-2xl"
-              value={newReview.name}
-              onChange={(e) => setNewReview({ ...newReview, name: e.target.value })}
-            />
-            <div className="flex gap-2 justify-center py-2">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <button key={star} onClick={() => setNewReview({ ...newReview, rating: star })} type="button" className="focus:outline-none transform transition-transform hover:scale-125">
-                  <Heart className={`h-10 w-10 ${star <= (newReview.rating || 5) ? "fill-primary text-primary" : "text-muted-foreground"}`} />
-                </button>
-              ))}
-            </div>
-            <Textarea
-              placeholder={t.commentPlaceholder}
-              className="text-lg min-h-[120px] px-6 py-4 rounded-2xl"
-              value={newReview.comment}
-              onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
-            />
-            <Button
-              className="w-full py-8 text-2xl font-black uppercase rounded-3xl shadow-lg hover:scale-[1.02] transition-transform"
-              onClick={() => {
-                if (newReview.name && newReview.comment) {
-                  const rev: Review = {
-                    id: Date.now().toString(),
-                    name: newReview.name,
-                    comment: newReview.comment,
-                    rating: newReview.rating
-                  };
-                  setSiteData({ ...siteData, reviews: [rev, ...siteData.reviews] });
-                  setNewReview({ name: "", comment: "", rating: 5 });
-                }
-              }}
-            >
-              {t.submitReviewBtn}
-            </Button>
-          </div>
-        </Card>
-      </motion.div>
+
 
       {/* Footer */}
       <footer className="bg-primary text-primary-foreground py-16 md:py-32 mt-auto relative overflow-hidden">
