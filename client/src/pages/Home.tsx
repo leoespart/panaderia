@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useTransform, AnimatePresence, useMotionValue } from "framer-motion";
 import { Phone, MapPin, Clock, Croissant, ChefHat, ArrowRight, Menu as MenuIcon, Utensils, Globe, Sandwich, Settings, LogOut, Save, Plus, Trash2, Heart, ChevronDown, ChevronUp, Minus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -141,6 +141,11 @@ export default function Home() {
   const heroScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.9]);
   const breadY = useTransform(scrollYProgress, [0, 1], [0, -200]);
   const breadRotate = useTransform(scrollYProgress, [0, 1], [0, 45]);
+
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const mouseTiltX = useTransform(y, [0, 800], [20, -20]);
+  const mouseTiltY = useTransform(x, [0, 1200], [-20, 20]);
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -1372,75 +1377,114 @@ export default function Home() {
             <div className="w-40 h-3 bg-primary mx-auto rounded-full"></div>
           </div>
 
-          <div className="relative max-w-6xl mx-auto h-[600px] md:h-[800px] group">
+          <div
+            className="relative max-w-6xl mx-auto h-[700px] md:h-[900px] group perspective-2000"
+            onMouseMove={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              x.set(e.clientX - rect.left);
+              y.set(e.clientY - rect.top);
+            }}
+            onMouseLeave={() => {
+              x.set(600);
+              y.set(400);
+            }}
+          >
             {/* The 3D Map Card */}
             <motion.div
-              className="absolute inset-0 bg-white rounded-[3rem] shadow-2xl overflow-hidden border-8 border-white transform-3d transition-transform duration-700 group-hover:rotate-x-12 group-hover:rotate-y-6"
-              style={{ rotateX: 15 }}
+              className="absolute inset-0 bg-white rounded-[4rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)] overflow-hidden border-[12px] border-white transform-3d transition-transform duration-200"
+              style={{ rotateX: mouseTiltX, rotateY: mouseTiltY }}
             >
+              <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent z-10 pointer-events-none"></div>
+
               {/* Map Background (Mocking a 3D look) */}
-              <div className="absolute inset-0 bg-blue-50/50 bg-[radial-gradient(#ddd_1px,transparent_1px)] [background-size:20px_20px]">
+              <div className="absolute inset-0 bg-blue-50/50 bg-[radial-gradient(#ddd_1px,transparent_1px)] [background-size:24px_24px]">
                 {/* 3D Buildings Mockup */}
-                <div className="absolute top-[30%] left-[40%] w-32 h-32 bg-primary/10 rounded-2xl rotate-45 transform-3d border-b-8 border-primary/20"></div>
-                <div className="absolute top-[60%] left-[20%] w-48 h-24 bg-primary/5 rounded-3xl -rotate-12 transform-3d border-b-8 border-primary/10"></div>
-                <div className="absolute top-[10%] left-[70%] w-24 h-48 bg-primary/5 rounded-full rotate-12 transform-3d border-b-8 border-primary/10"></div>
+                <motion.div
+                  style={{ translateZ: 50 }}
+                  className="absolute top-[30%] left-[40%] w-32 h-32 bg-primary/10 rounded-2xl rotate-45 transform-3d border-b-8 border-primary/20"
+                ></motion.div>
+                <motion.div
+                  style={{ translateZ: 80 }}
+                  className="absolute top-[60%] left-[20%] w-48 h-24 bg-primary/5 rounded-3xl -rotate-12 transform-3d border-b-8 border-primary/10"
+                ></motion.div>
               </div>
 
               {/* Real Map Iframe (Clipped to look integrated) */}
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1852.1793740203598!2d-66.0560!3d18.4415!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c036924847e62ef%3A0xe6bf44799015949e!2s1963%20Av.%20Borinquen%2C%20San%20Juan%2C%2000915!5e0!3m2!1ses-419!2spr!4v1714324562021!5m2!1ses-419!2spr"
-                className="w-full h-full border-none opacity-80 mix-blend-multiply grayscale hover:grayscale-0 transition-all duration-700"
+                className="w-full h-full border-none opacity-90 mix-blend-multiply grayscale contrast-125 hover:grayscale-0 transition-all duration-1000"
                 allowFullScreen
                 loading="lazy"
               ></iframe>
 
               {/* Floating Pin / Avatar (Snapchat Style) */}
               <motion.div
-                animate={{ y: [0, -20, 0] }}
-                transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+                animate={{ y: [0, -30, 0] }}
+                transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+                style={{ translateZ: 150 }}
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20"
               >
-                <div className="relative">
-                  <div className="h-24 w-24 bg-white rounded-full shadow-2xl p-2 border-4 border-primary">
+                <div className="relative group/pin">
+                  <div className="h-28 w-28 bg-white rounded-full shadow-[0_20px_40px_rgba(0,0,0,0.3)] p-2 border-[6px] border-primary transform hover:scale-110 transition-transform duration-300">
                     <img src={logoImg} className="h-full w-full object-cover rounded-full" alt="Pin" />
                   </div>
-                  <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-primary text-white font-black px-6 py-2 rounded-full whitespace-nowrap shadow-xl uppercase italic tracking-widest animate-bounce">
+                  <motion.div
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="absolute -top-16 left-1/2 -translate-x-1/2 bg-white text-primary font-black px-6 py-2 rounded-2xl whitespace-nowrap shadow-2xl uppercase tracking-tighter text-xl border-2 border-primary/10"
+                  >
+                    🚀 PANADERÍA LA FRANCESA
+                  </motion.div>
+                  <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 bg-primary text-white font-black px-8 py-3 rounded-full whitespace-nowrap shadow-2xl uppercase italic tracking-widest text-lg animate-bounce scale-110">
                     ¡ESTAMOS AQUÍ!
                   </div>
-                  <div className="w-12 h-12 bg-primary/30 rounded-full blur-xl absolute -bottom-12 left-1/2 -translate-x-1/2 opacity-50"></div>
+                  <div className="w-16 h-16 bg-black/20 rounded-full blur-2xl absolute -bottom-20 left-1/2 -translate-x-1/2 opacity-40"></div>
                 </div>
               </motion.div>
+
+              {/* Floating Icons for 3D depth */}
+              <motion.div style={{ translateZ: 100 }} className="absolute top-20 left-20 opacity-20"><Croissant className="h-20 w-20 text-primary rotate-12" /></motion.div>
+              <motion.div style={{ translateZ: 60 }} className="absolute bottom-40 right-20 opacity-20"><Utensils className="h-24 w-24 text-primary -rotate-12" /></motion.div>
             </motion.div>
 
-            {/* Info Cards Floating */}
+            {/* Info Cards Floating with Glassmorphism */}
             <motion.div
-              style={{ y: breadY }}
-              className="absolute -right-8 top-1/4 z-30 hidden lg:block"
+              style={{ y: breadY, translateZ: 200 }}
+              className="absolute -right-4 top-1/4 z-30 hidden lg:block"
             >
-              <Card className="p-8 shadow-2xl rounded-[2.5rem] border-none bg-white/90 backdrop-blur-md max-w-xs transform rotate-6 hover:rotate-0 transition-transform">
-                <div className="p-4 bg-primary/10 rounded-2xl w-fit mb-6">
-                  <MapPin className="h-8 w-8 text-primary" />
+              <Card className="p-10 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.2)] rounded-[3rem] border-none bg-white/80 backdrop-blur-xl max-w-sm transform rotate-3 hover:rotate-0 transition-all duration-500 hover:scale-105">
+                <div className="p-5 bg-primary/10 rounded-3xl w-fit mb-8 shadow-inner">
+                  <MapPin className="h-10 w-10 text-primary" />
                 </div>
-                <h4 className="text-2xl font-black uppercase mb-4 text-primary">{t.addressTitle}</h4>
-                <p className="text-xl font-bold text-muted-foreground leading-relaxed">{siteData.address}</p>
+                <h4 className="text-3xl font-black uppercase mb-4 text-primary tracking-tighter">{t.addressTitle}</h4>
+                <p className="text-2xl font-bold text-muted-foreground leading-tight tracking-tight">{siteData.address}</p>
+                <div className="mt-8 pt-8 border-t border-primary/5">
+                  <p className="text-sm font-black text-primary/40 uppercase tracking-[0.2em]">San Juan, Puerto Rico</p>
+                </div>
               </Card>
             </motion.div>
 
             <motion.div
-              style={{ y: useTransform(scrollYProgress, [0.6, 1], [100, -100]) }}
-              className="absolute -left-8 bottom-1/4 z-30 hidden lg:block"
+              style={{ y: useTransform(scrollYProgress, [0.6, 1], [150, -150]), translateZ: 250 }}
+              className="absolute -left-4 bottom-1/4 z-30 hidden lg:block"
             >
-              <Card className="p-8 shadow-2xl rounded-[2.5rem] border-none bg-white/90 backdrop-blur-md max-w-xs transform -rotate-6 hover:rotate-0 transition-transform">
-                <div className="p-4 bg-green-500/10 rounded-2xl w-fit mb-6">
-                  <Clock className="h-8 w-8 text-green-600" />
+              <Card className="p-10 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.2)] rounded-[3rem] border-none bg-white/80 backdrop-blur-xl max-w-sm transform -rotate-3 hover:rotate-0 transition-all duration-500 hover:scale-105">
+                <div className="p-5 bg-green-500/10 rounded-3xl w-fit mb-8 shadow-inner">
+                  <Clock className="h-10 w-10 text-green-600" />
                 </div>
-                <h4 className="text-2xl font-black uppercase mb-4 text-green-600">{t.hoursTitle}</h4>
-                <p className="text-xl font-bold text-muted-foreground leading-relaxed">
-                  L-S: 7am - 6pm<br />
-                  D: 7am - 1pm
-                </p>
-                <Badge variant="outline" className={`mt-4 border-none bg-green-500 text-white font-black py-2 px-4 rounded-xl ${!isBakeryOpen() && "bg-red-500"}`}>
-                  {isBakeryOpen() ? "ACTUALMENTE ABIERTO" : "CERRADO"}
+                <h4 className="text-3xl font-black uppercase mb-4 text-green-600 tracking-tighter">{t.hoursTitle}</h4>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center text-2xl font-black opacity-80 uppercase tracking-tighter">
+                    <span>L - S</span>
+                    <span className="text-primary">7:00—18:00</span>
+                  </div>
+                  <div className="flex justify-between items-center text-2xl font-black opacity-80 uppercase tracking-tighter border-t border-primary/5 pt-4">
+                    <span>D</span>
+                    <span className="text-primary">7:00—13:00</span>
+                  </div>
+                </div>
+                <Badge variant="outline" className={`mt-8 w-full justify-center border-none shadow-xl text-white font-black py-4 px-6 rounded-2xl text-xl uppercase italic tracking-widest ${isBakeryOpen() ? "bg-green-500 animate-pulse" : "bg-red-500"}`}>
+                  {isBakeryOpen() ? "ABIERTO AHORA" : "CERRADO"}
                 </Badge>
               </Card>
             </motion.div>
