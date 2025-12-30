@@ -1010,36 +1010,60 @@ export default function Home() {
       <PromoPopup siteData={siteData} isOpen={showPromo} onClose={() => setShowPromo(false)} />
 
       {/* Navigation */}
-      <nav className="sticky top-0 z-50 w-full bg-primary text-primary-foreground shadow-md">
-        <div className="container mx-auto px-4 h-24 flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <motion.img
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              whileHover={{ scale: 1.05, rotate: 2 }}
-              src={siteData.logoUrl || logoImg}
-              alt="Logo"
-              className="h-28 md:h-40 w-auto aspect-square object-cover rounded-full border-4 border-white shadow-2xl cursor-pointer z-50 transform hover:scale-110 transition-transform duration-500 origin-top bg-white"
-              onClick={() => scrollTo("top")}
-            />
-            <div className="hidden md:flex items-center gap-2 pl-28">
-              <ChefHat className="h-6 w-6" />
-              <span className="text-xl font-black uppercase whitespace-nowrap">Panaderia La Francesa</span>
+      <nav className="sticky top-0 z-50 w-full bg-white/70 backdrop-blur-xl border-b border-primary/10 transition-all duration-300">
+        <div className="container mx-auto px-6 h-20 md:h-24 flex items-center justify-between">
+          <div className="flex items-center gap-4 group cursor-pointer" onClick={() => scrollTo("top")}>
+            <div className="p-2 bg-primary rounded-xl group-hover:rotate-12 transition-transform duration-300">
+              <Croissant className="h-6 w-6 text-white" />
+            </div>
+            <div className="flex flex-col -space-y-1">
+              <span className="text-xs font-black text-primary/60 uppercase tracking-widest">Panaderia</span>
+              <span className="text-xl md:text-2xl font-black text-primary uppercase tracking-tighter">La Francesa</span>
             </div>
           </div>
-          <div className="flex items-center gap-8">
-            <div className="hidden lg:flex gap-10 text-sm font-black uppercase">
-              <button onClick={() => scrollTo("about")} className="hover:text-white/80 transition-colors cursor-pointer">{t.aboutTitle}</button>
-              <button onClick={() => scrollTo("menu")} className="hover:text-white/80 transition-colors cursor-pointer">Menu</button>
-              <button onClick={() => scrollTo("location")} className="hover:text-white/80 transition-colors cursor-pointer">{t.locationTitle}</button>
+
+          <div className="flex items-center gap-4 md:gap-12">
+            <div className="hidden lg:flex gap-8 text-[13px] font-black uppercase tracking-wider text-muted-foreground">
+              <button
+                onClick={() => scrollTo("about")}
+                className="hover:text-primary transition-colors cursor-pointer relative group"
+              >
+                {t.aboutTitle}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full"></span>
+              </button>
+              <button
+                onClick={() => scrollTo("menu")}
+                className="hover:text-primary transition-colors cursor-pointer relative group"
+              >
+                Menu
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full"></span>
+              </button>
+              <button
+                onClick={() => scrollTo("location")}
+                className="hover:text-primary transition-colors cursor-pointer relative group"
+              >
+                {t.locationTitle}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full"></span>
+              </button>
             </div>
-            <div className="flex items-center gap-4">
-              <Button variant="secondary" size="sm" onClick={() => setIsLangOpen(true)} className="gap-2 font-black shadow-lg px-8 h-14 text-xl hover:scale-110 active:scale-95 transition-transform duration-200">
-                <Globe className="h-6 w-6" />
+
+            <div className="flex items-center gap-3">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setIsLangOpen(true)}
+                className="hidden md:flex gap-2 font-black border-primary/20 hover:bg-primary/5 px-6 h-11 text-sm transition-all hover:scale-105 active:scale-95"
+              >
+                <Globe className="h-4 w-4" />
                 {lang?.toUpperCase() || "..."}
               </Button>
-              <Button variant="ghost" size="icon" onClick={() => setIsAdminOpen(true)} className="text-white hover:bg-white/10">
-                <Settings className="h-6 w-6" />
+              <Button
+                variant="secondary"
+                size="icon"
+                onClick={() => setIsAdminOpen(true)}
+                className="bg-primary/5 hover:bg-primary/10 text-primary h-11 w-11 rounded-xl transition-all hover:rotate-90 active:scale-90"
+              >
+                <Settings className="h-5 w-5" />
               </Button>
             </div>
           </div>
