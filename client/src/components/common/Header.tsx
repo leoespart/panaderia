@@ -89,14 +89,6 @@ export function Header({ t, lang, setLang, scrollTo, isLangOpen, setIsLangOpen }
                         <Globe className="h-4 w-4" />
                         {lang}
                     </Button>
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => setLocation("/admin")}
-                        className={`${isScrolled ? "text-foreground hover:bg-primary/5" : "text-white hover:bg-white/10 hover:text-white"}`}
-                    >
-                        <Settings className="h-5 w-5" />
-                    </Button>
                 </div>
 
                 {/* Mobile Menu */}
@@ -137,10 +129,7 @@ export function Header({ t, lang, setLang, scrollTo, isLangOpen, setIsLangOpen }
                                     {lang === "es" ? "Ordena Ahora" : "Order Now"}
                                 </Button>
                                 <hr className="border-border my-2" />
-                                <hr className="border-border my-2" />
-                                <button onClick={() => setLocation("/admin")} className="flex items-center gap-3 text-lg font-bold uppercase text-left text-muted-foreground hover:text-primary transition-colors">
-                                    <Settings className="h-5 w-5" /> Admin
-                                </button>
+
                             </div>
                         </SheetContent>
                     </Sheet>
