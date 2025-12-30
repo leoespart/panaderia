@@ -26,6 +26,10 @@ export interface SiteData {
     address: string;
     directionsBtnEs: string;
     directionsBtnEn: string;
+    footerDescEs: string;
+    footerDescEn: string;
+    hoursWeekdays: string;
+    hoursWeekend: string;
     aboutDescEs: string;
     aboutDescEn: string;
     showSpecialEvents: boolean;
