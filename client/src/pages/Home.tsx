@@ -320,8 +320,8 @@ export default function Home() {
           <MenuSection siteData={siteData} t={t} lang={lang || "es"} />
 
           {/* Info Grid Container */}
-          <div className="container mx-auto px-4 mt-24">
-            <div className="flex flex-col gap-16 max-w-[1200px] mx-auto w-full">
+          <div className="container mx-auto px-4 mt-16 md:mt-24">
+            <div className="flex flex-col gap-12 md:gap-16 max-w-[1200px] mx-auto w-full">
 
               {/* Contact Card */}
               <motion.div id="contact" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="w-full">
@@ -389,7 +389,7 @@ export default function Home() {
         </main>
 
         {/* Footer */}
-        <footer className="bg-primary text-primary-foreground py-16 md:py-24 mt-auto relative overflow-hidden">
+        <footer className="bg-primary text-primary-foreground py-10 md:py-16 mt-auto relative overflow-hidden">
           {/* Decorative elements */}
           <div className="absolute top-0 left-0 w-full h-px bg-white/20"></div>
 

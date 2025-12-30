@@ -32,7 +32,7 @@ export function Hero({ siteData, t, lang, scrollTo }: HeroProps) {
 
     return (
         <motion.section
-            className="relative bg-primary text-primary-foreground pt-32 pb-48 md:pt-48 md:pb-64 px-4 overflow-hidden"
+            className="relative bg-primary text-primary-foreground pt-24 pb-32 md:pt-40 md:pb-52 px-4 overflow-hidden"
             style={{ y: heroY, opacity: heroOpacity }}
         >
             {/* Background Texture/Gradient Overlay to add depth to the red */}
@@ -48,29 +48,29 @@ export function Hero({ siteData, t, lang, scrollTo }: HeroProps) {
                     className="flex flex-col items-center"
                 >
                     {/* Status Pills */}
-                    <div className="flex flex-col md:flex-row gap-4 mb-12">
-                        <div className={`px-6 py-2 rounded-full border-2 border-white/30 bg-white/10 backdrop-blur-sm text-white font-bold uppercase tracking-wider text-sm flex items-center gap-2 shadow-lg`}>
-                            <div className={`w-3 h-3 rounded-full ${isOpen ? "bg-green-400 shadow-[0_0_10px_#4ade80]" : "bg-red-900"}`}></div>
+                    <div className="flex flex-col md:flex-row gap-4 mb-8">
+                        <div className={`px-5 py-2 rounded-full border-2 border-white/30 bg-white/10 backdrop-blur-sm text-white font-bold uppercase tracking-wider text-xs flex items-center gap-2 shadow-lg`}>
+                            <div className={`w-2.5 h-2.5 rounded-full ${isOpen ? "bg-green-400 shadow-[0_0_10px_#4ade80]" : "bg-red-900"}`}></div>
                             {isOpen ? (lang === "es" ? "Abierto Ahora" : "Open Now") : (lang === "es" ? "Cerrado Ahora" : "Closed Now")}
                         </div>
-                        <div className="px-6 py-2 rounded-full bg-white/10 border-2 border-white/30 backdrop-blur-sm text-white font-bold uppercase tracking-wider text-sm flex items-center gap-2 shadow-lg">
-                            <Clock className="w-4 h-4" />
+                        <div className="px-5 py-2 rounded-full bg-white/10 border-2 border-white/30 backdrop-blur-sm text-white font-bold uppercase tracking-wider text-xs flex items-center gap-2 shadow-lg">
+                            <Clock className="w-3.5 h-3.5" />
                             {siteData.heroBadge || (lang === "es" ? "Desayunos & Almuerzos" : "Breakfast & Lunch")}
                         </div>
                     </div>
 
                     {/* Main Title - Stacked and Big */}
-                    <div className="flex flex-col items-center leading-none mb-10 select-none">
-                        <h1 className="text-7xl md:text-9xl lg:text-[10rem] font-display font-black text-white drop-shadow-[0_4px_0_rgba(0,0,0,0.1)] tracking-tight">
+                    <div className="flex flex-col items-center leading-none mb-8 select-none">
+                        <h1 className="text-5xl md:text-8xl lg:text-[9rem] font-display font-black text-white drop-shadow-[0_4px_0_rgba(0,0,0,0.1)] tracking-tight">
                             PANADERIA
                         </h1>
-                        <h1 className="text-6xl md:text-8xl lg:text-[9rem] font-display font-black text-white drop-shadow-[0_4px_0_rgba(0,0,0,0.1)] tracking-tight -mt-2 md:-mt-6">
+                        <h1 className="text-4xl md:text-7xl lg:text-[8rem] font-display font-black text-white drop-shadow-[0_4px_0_rgba(0,0,0,0.1)] tracking-tight -mt-1 md:-mt-4">
                             LA FRANCESA
                         </h1>
                     </div>
 
                     {/* Description */}
-                    <p className="text-lg md:text-2xl text-white/90 mb-14 max-w-3xl mx-auto font-medium leading-relaxed drop-shadow-md">
+                    <p className="text-base md:text-xl text-white/90 mb-10 max-w-3xl mx-auto font-medium leading-relaxed drop-shadow-md px-4">
                         {t.heroDesc}
                     </p>
 
@@ -83,7 +83,7 @@ export function Hero({ siteData, t, lang, scrollTo }: HeroProps) {
                             <Button
                                 size="lg"
                                 onClick={() => scrollTo("location")}
-                                className="bg-[#FFF0F3] text-primary hover:bg-white border-b-4 border-b-primary-foreground/20 active:border-b-0 active:translate-y-1 transition-all h-16 px-10 rounded-full text-xl font-black uppercase tracking-wide shadow-xl group"
+                                className="bg-[#FFF0F3] text-primary hover:bg-white border-b-4 border-b-primary-foreground/20 active:border-b-0 active:translate-y-1 transition-all h-14 md:h-16 px-8 md:px-10 rounded-full text-lg md:text-xl font-black uppercase tracking-wide shadow-xl group"
                             >
                                 <motion.div
                                     animate={{ y: [0, -4, 0] }}
@@ -104,7 +104,7 @@ export function Hero({ siteData, t, lang, scrollTo }: HeroProps) {
                                 size="lg"
                                 variant="outline"
                                 onClick={() => scrollTo("menu")}
-                                className="bg-transparent border-4 border-white text-white hover:bg-white hover:text-primary transition-all h-16 px-10 rounded-full text-xl font-black uppercase tracking-wide shadow-xl active:scale-95 group"
+                                className="bg-transparent border-4 border-white text-white hover:bg-white hover:text-primary transition-all h-14 md:h-16 px-8 md:px-10 rounded-full text-lg md:text-xl font-black uppercase tracking-wide shadow-xl active:scale-95 group"
                             >
                                 <motion.div
                                     whileHover={{ rotate: 180 }}
