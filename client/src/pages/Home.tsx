@@ -151,14 +151,26 @@ export default function Home() {
     ]
   });
 
+  /* 
+     Handle Splash Complete:
+     Only after the splash screen finishes do we check if we need to show the language selector.
+     This prevents the popup from appearing *behind* the splash screen or too early.
+  */
+  const handleSplashComplete = () => {
+    setShowSplash(false);
+    const savedLang = localStorage.getItem("preferred_lang") as Language;
+    if (!savedLang) {
+      // Small delay to make it feel natural after splash fade out
+      setTimeout(() => setIsLangOpen(true), 300);
+    }
+  };
+
   useEffect(() => {
     const savedLang = localStorage.getItem("preferred_lang") as Language;
     if (savedLang) {
       setLang(savedLang);
-    } else {
-      const timer = setTimeout(() => setIsLangOpen(true), 500);
-      return () => clearTimeout(timer);
     }
+    // Note: We removed the automatic timeout here. It's now handled in handleSplashComplete.
 
     fetch("/api/settings")
       .then(res => res.json())
@@ -248,7 +260,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background font-sans text-foreground selection:bg-primary/20 overflow-x-hidden">
       <AnimatePresence>
-        {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
+        {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
       </AnimatePresence>
 
       <div className="min-h-screen flex flex-col bg-background">

@@ -76,22 +76,46 @@ export function Hero({ siteData, t, lang, scrollTo }: HeroProps) {
 
                     {/* Action Buttons */}
                     <div className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto">
-                        <Button
-                            size="lg"
-                            onClick={() => scrollTo("location")}
-                            className="bg-[#FFF0F3] text-primary hover:bg-white border-b-4 border-b-primary-foreground/20 active:border-b-0 active:translate-y-1 transition-all h-16 px-10 rounded-full text-xl font-black uppercase tracking-wide shadow-xl"
+                        <motion.div
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
                         >
-                            <MapPin className="mr-2 h-6 w-6" /> {t.visitBtn}
-                        </Button>
+                            <Button
+                                size="lg"
+                                onClick={() => scrollTo("location")}
+                                className="bg-[#FFF0F3] text-primary hover:bg-white border-b-4 border-b-primary-foreground/20 active:border-b-0 active:translate-y-1 transition-all h-16 px-10 rounded-full text-xl font-black uppercase tracking-wide shadow-xl group"
+                            >
+                                <motion.div
+                                    animate={{ y: [0, -4, 0] }}
+                                    transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+                                    className="mr-2"
+                                >
+                                    <MapPin className="h-6 w-6" />
+                                </motion.div>
+                                {t.visitBtn}
+                            </Button>
+                        </motion.div>
 
-                        <Button
-                            size="lg"
-                            variant="outline"
-                            onClick={() => scrollTo("menu")}
-                            className="bg-transparent border-4 border-white text-white hover:bg-white hover:text-primary transition-all h-16 px-10 rounded-full text-xl font-black uppercase tracking-wide shadow-xl active:scale-95"
+                        <motion.div
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
                         >
-                            <MenuIcon className="mr-2 h-6 w-6" /> {t.menuBtn}
-                        </Button>
+                            <Button
+                                size="lg"
+                                variant="outline"
+                                onClick={() => scrollTo("menu")}
+                                className="bg-transparent border-4 border-white text-white hover:bg-white hover:text-primary transition-all h-16 px-10 rounded-full text-xl font-black uppercase tracking-wide shadow-xl active:scale-95 group"
+                            >
+                                <motion.div
+                                    whileHover={{ rotate: 180 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="mr-2"
+                                >
+                                    <MenuIcon className="h-6 w-6" />
+                                </motion.div>
+                                {t.menuBtn}
+                            </Button>
+                        </motion.div>
                     </div>
                 </motion.div>
             </div>
