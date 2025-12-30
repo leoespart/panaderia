@@ -21,30 +21,30 @@ export function AdminLayout({ children, currentView, onViewChange, onLogout, cur
     return (
         <div className="flex h-screen bg-neutral-950 text-white overflow-hidden font-sans">
             {/* Sidebar */}
-            <aside className="w-20 md:w-64 bg-black/40 backdrop-blur-xl border-r border-white/5 flex flex-col relative z-20">
-                <div className="p-6 flex items-center gap-3">
-                    <div className="bg-primary/20 p-2 rounded-xl">
-                        <ChefHat className="h-6 w-6 text-primary" />
+            <aside className="w-24 md:w-80 bg-black/40 backdrop-blur-xl border-r border-white/5 flex flex-col relative z-20">
+                <div className="p-8 flex items-center gap-4">
+                    <div className="bg-primary/20 p-3 rounded-2xl">
+                        <ChefHat className="h-8 w-8 text-primary" />
                     </div>
-                    <span className="font-black text-xl tracking-tight hidden md:block">ADMIN<span className="text-primary">PANEL</span></span>
+                    <span className="font-black text-2xl tracking-tight hidden md:block">ADMIN<span className="text-primary">PANEL</span></span>
                 </div>
 
-                <nav className="flex-1 px-4 py-8 space-y-2">
+                <nav className="flex-1 px-6 py-8 space-y-3">
                     {navItems.map((item) => (
                         <button
                             key={item.id}
                             onClick={() => onViewChange(item.id)}
-                            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group ${currentView === item.id
+                            className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 group ${currentView === item.id
                                     ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
                                     : "text-muted-foreground hover:bg-white/5 hover:text-white"
                                 }`}
                         >
-                            <item.icon className={`h-5 w-5 ${currentView === item.id ? "animate-pulse" : ""}`} />
-                            <span className="font-bold hidden md:block">{item.label}</span>
+                            <item.icon className={`h-6 w-6 ${currentView === item.id ? "animate-pulse" : ""}`} />
+                            <span className="font-bold text-lg hidden md:block">{item.label}</span>
                             {currentView === item.id && (
                                 <motion.div
                                     layoutId="activeTab"
-                                    className="absolute left-0 w-1 h-8 bg-white rounded-r-full"
+                                    className="absolute left-0 w-1.5 h-10 bg-white rounded-r-full"
                                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                                 />
                             )}
@@ -52,14 +52,14 @@ export function AdminLayout({ children, currentView, onViewChange, onLogout, cur
                     ))}
                 </nav>
 
-                <div className="p-4 border-t border-white/5 space-y-4">
-                    <div className="hidden md:flex items-center gap-3 px-4 py-2 bg-white/5 rounded-xl">
-                        <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-primary to-purple-500 flex items-center justify-center font-bold text-xs">
+                <div className="p-6 border-t border-white/5 space-y-6">
+                    <div className="hidden md:flex items-center gap-4 px-6 py-4 bg-white/5 rounded-2xl">
+                        <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-primary to-purple-500 flex items-center justify-center font-bold text-sm">
                             {currentUser?.substring(0, 2).toUpperCase()}
                         </div>
                         <div className="flex-1 overflow-hidden">
-                            <p className="text-sm font-bold truncate">{currentUser}</p>
-                            <p className="text-xs text-muted-foreground">Administrador</p>
+                            <p className="text-base font-bold truncate">{currentUser}</p>
+                            <p className="text-sm text-muted-foreground">Administrador</p>
                         </div>
                     </div>
                     <Button

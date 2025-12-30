@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Trash2, Upload, X, Save, Edit3, Image as ImageIcon } from "lucide-react";
+import { Plus, Trash2, Upload, X, Save, Edit3, Image as ImageIcon, Utensils } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,7 +18,7 @@ export function MenuView({ siteData, setSiteData, onSave, onUpload }: MenuViewPr
     const [selectedCatId, setSelectedCatId] = useState<string>(siteData.categories?.[0]?.id || "");
 
     const activeCategoryIndex = siteData.categories.findIndex((c: any) => c.id === selectedCatId);
-    const activeCategory = siteData.categories[activeCategoryIndex];
+    const activeCategory = activeCategoryIndex >= 0 ? siteData.categories[activeCategoryIndex] : null;
 
     const handleAddCategory = () => {
         const newCats = [...siteData.categories];
@@ -60,19 +60,19 @@ export function MenuView({ siteData, setSiteData, onSave, onUpload }: MenuViewPr
             <div className="flex-1 flex gap-8 overflow-hidden">
                 {/* Categories Sidebar */}
                 <div className="w-1/4 flex flex-col gap-4 overflow-y-auto pr-2">
-                    <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-bold uppercase text-muted-foreground tracking-wider">Categorías</span>
-                        <Button variant="ghost" size="icon" onClick={handleAddCategory} className="h-6 w-6 hover:bg-white/10">
-                            <Plus className="h-4 w-4" />
+                    <div className="flex items-center justify-between mb-4">
+                        <span className="text-sm font-black uppercase text-muted-foreground tracking-wider">Categorías</span>
+                        <Button variant="ghost" size="icon" onClick={handleAddCategory} className="h-8 w-8 hover:bg-white/10">
+                            <Plus className="h-6 w-6" />
                         </Button>
                     </div>
                     {siteData.categories.map((cat: any, idx: number) => (
                         <div key={cat.id} className="group flex gap-2">
                             <button
                                 onClick={() => setSelectedCatId(cat.id)}
-                                className={`flex-1 text-left px-4 py-3 rounded-xl font-bold transition-all border border-transparent ${selectedCatId === cat.id
-                                        ? "bg-primary text-primary-foreground border-primary/50 shadow-lg shadow-primary/20"
-                                        : "bg-white/5 text-muted-foreground hover:bg-white/10 hover:text-white border-white/5"
+                                className={`flex-1 text-left px-6 py-4 rounded-xl font-bold text-lg transition-all border border-transparent ${selectedCatId === cat.id
+                                    ? "bg-primary text-primary-foreground border-primary/50 shadow-lg shadow-primary/20"
+                                    : "bg-white/5 text-muted-foreground hover:bg-white/10 hover:text-white border-white/5"
                                     }`}
                             >
                                 {cat.nameEs}
@@ -81,10 +81,9 @@ export function MenuView({ siteData, setSiteData, onSave, onUpload }: MenuViewPr
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    className="text-destructive hover:bg-destructive/10"
                                     onClick={() => handleDeleteCategory(idx)}
                                 >
-                                    <Trash2 className="h-4 w-4" />
+                                    <Trash2 className="h-5 w-5" />
                                 </Button>
                             )}
                         </div>
@@ -103,7 +102,7 @@ export function MenuView({ siteData, setSiteData, onSave, onUpload }: MenuViewPr
                         <div className="space-y-8">
                             <div className="grid grid-cols-2 gap-4 border-b border-white/10 pb-6">
                                 <div className="space-y-2">
-                                    <label className="text-xs uppercase font-bold text-muted-foreground">Nombre Categoría (ES)</label>
+                                    <label className="text-sm uppercase font-bold text-muted-foreground">Nombre Categoría (ES)</label>
                                     <Input
                                         value={activeCategory.nameEs}
                                         onChange={(e) => {
@@ -111,11 +110,11 @@ export function MenuView({ siteData, setSiteData, onSave, onUpload }: MenuViewPr
                                             newCats[activeCategoryIndex].nameEs = e.target.value;
                                             setSiteData({ ...siteData, categories: newCats });
                                         }}
-                                        className="bg-black/20 border-white/10 text-xl font-black focus:border-primary/50"
+                                        className="bg-black/20 border-white/10 text-3xl h-auto py-4 font-black focus:border-primary/50"
                                     />
                                 </div>
                                 <div className="space-y-2 opacity-50">
-                                    <label className="text-xs uppercase font-bold text-muted-foreground">Category Name (EN)</label>
+                                    <label className="text-sm uppercase font-bold text-muted-foreground">Category Name (EN)</label>
                                     <Input
                                         value={activeCategory.nameEn}
                                         onChange={(e) => {
@@ -123,7 +122,7 @@ export function MenuView({ siteData, setSiteData, onSave, onUpload }: MenuViewPr
                                             newCats[activeCategoryIndex].nameEn = e.target.value;
                                             setSiteData({ ...siteData, categories: newCats });
                                         }}
-                                        className="bg-black/20 border-white/10 text-xl font-bold"
+                                        className="bg-black/20 border-white/10 text-3xl h-auto py-4 font-bold"
                                     />
                                 </div>
                             </div>

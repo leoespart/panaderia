@@ -24,8 +24,8 @@ export function DashboardView({ siteData, onNavigate }: DashboardViewProps) {
     return (
         <div className="space-y-8">
             <div className="flex flex-col gap-2">
-                <h2 className="text-4xl font-black uppercase text-white tracking-wide">Dashboard</h2>
-                <p className="text-muted-foreground text-lg">Bienvenido al centro de control.</p>
+                <h2 className="text-6xl font-black uppercase text-white tracking-wide">Dashboard</h2>
+                <p className="text-muted-foreground text-2xl">Bienvenido al centro de control.</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -36,16 +36,16 @@ export function DashboardView({ siteData, onNavigate }: DashboardViewProps) {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.1 }}
                     >
-                        <Card className="p-6 bg-white/5 border-white/10 backdrop-blur-md hover:bg-white/10 transition-colors">
-                            <div className="flex justify-between items-start mb-4">
-                                <div className={`p-3 rounded-xl bg-white/5 ${stat.color}`}>
-                                    <stat.icon className="h-6 w-6" />
+                        <Card className="p-8 bg-white/5 border-white/10 backdrop-blur-md hover:bg-white/10 transition-colors">
+                            <div className="flex justify-between items-start mb-6">
+                                <div className={`p-4 rounded-xl bg-white/5 ${stat.color}`}>
+                                    <stat.icon className="h-8 w-8" />
                                 </div>
-                                <span className="text-green-400 text-xs font-bold bg-green-400/10 px-2 py-1 rounded-full">{stat.change}</span>
+                                <span className="text-green-400 text-sm font-bold bg-green-400/10 px-3 py-1 rounded-full">{stat.change}</span>
                             </div>
-                            <div className="space-y-1">
-                                <h3 className="text-3xl font-black text-white">{stat.value}</h3>
-                                <p className="text-sm text-muted-foreground font-bold uppercase">{stat.label}</p>
+                            <div className="space-y-2">
+                                <h3 className="text-5xl font-black text-white">{stat.value}</h3>
+                                <p className="text-base text-muted-foreground font-bold uppercase">{stat.label}</p>
                             </div>
                         </Card>
                     </motion.div>
@@ -53,35 +53,35 @@ export function DashboardView({ siteData, onNavigate }: DashboardViewProps) {
             </div>
 
             <div className="grid md:grid-cols-2 gap-8">
-                <Card className="p-6 bg-white/5 border-white/10 backdrop-blur-md">
-                    <h3 className="text-xl font-bold text-white mb-4 uppercase">Estado del Sitio</h3>
-                    <div className="space-y-4">
-                        <div className="flex justify-between items-center p-4 rounded-xl bg-white/5 border border-white/5">
+                <Card className="p-8 bg-white/5 border-white/10 backdrop-blur-md">
+                    <h3 className="text-3xl font-bold text-white mb-6 uppercase">Estado del Sitio</h3>
+                    <div className="space-y-6">
+                        <div className="flex justify-between items-center p-6 rounded-2xl bg-white/5 border border-white/5">
                             <div>
-                                <p className="font-bold text-white">Promoción Activa</p>
-                                <p className="text-sm text-muted-foreground">{siteData.promoActive ? "Visible para todos" : "Desactivada"}</p>
+                                <p className="font-bold text-white text-xl">Promoción Activa</p>
+                                <p className="text-base text-muted-foreground">{siteData.promoActive ? "Visible para todos" : "Desactivada"}</p>
                             </div>
-                            <div className={`h-3 w-3 rounded-full ${siteData.promoActive ? "bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]" : "bg-red-500"}`} />
+                            <div className={`h-4 w-4 rounded-full ${siteData.promoActive ? "bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]" : "bg-red-500"}`} />
                         </div>
-                        <div className="flex justify-between items-center p-4 rounded-xl bg-white/5 border border-white/5">
+                        <div className="flex justify-between items-center p-6 rounded-2xl bg-white/5 border border-white/5">
                             <div>
-                                <p className="font-bold text-white">Eventos Especiales</p>
-                                <p className="text-sm text-muted-foreground">{siteData.showSpecialEvents ? "Sección Visible" : "Oculta"}</p>
+                                <p className="font-bold text-white text-xl">Eventos Especiales</p>
+                                <p className="text-base text-muted-foreground">{siteData.showSpecialEvents ? "Sección Visible" : "Oculta"}</p>
                             </div>
-                            <div className={`h-3 w-3 rounded-full ${siteData.showSpecialEvents ? "bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]" : "bg-red-500"}`} />
+                            <div className={`h-4 w-4 rounded-full ${siteData.showSpecialEvents ? "bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]" : "bg-red-500"}`} />
                         </div>
                     </div>
                 </Card>
 
-                <Card className="p-6 bg-gradient-to-br from-primary/20 to-purple-500/20 border-white/10 backdrop-blur-md flex flex-col justify-center items-start gap-4">
-                    <h3 className="text-2xl font-black text-white uppercase">Acciones Rápidas</h3>
-                    <p className="text-gray-300">Gestiona los productos y precios de tu menú rápidamente.</p>
+                <Card className="p-8 bg-gradient-to-br from-primary/20 to-purple-500/20 border-white/10 backdrop-blur-md flex flex-col justify-center items-start gap-6">
+                    <h3 className="text-3xl font-black text-white uppercase">Acciones Rápidas</h3>
+                    <p className="text-gray-300 text-xl">Gestiona los productos y precios de tu menú rápidamente.</p>
                     <Button
                         size="lg"
-                        className="font-bold uppercase shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all"
+                        className="font-bold uppercase text-xl py-8 px-8 shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all rounded-xl"
                         onClick={() => onNavigate("menu")}
                     >
-                        Ir al Menú <ArrowRight className="ml-2 h-5 w-5" />
+                        Ir al Menú <ArrowRight className="ml-3 h-6 w-6" />
                     </Button>
                 </Card>
             </div>

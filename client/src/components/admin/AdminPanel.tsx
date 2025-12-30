@@ -119,22 +119,22 @@ export function AdminPanel({ siteData, setSiteData }: AdminPanelProps) {
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="w-full max-w-md mx-auto"
+                className="w-full max-w-2xl mx-auto"
             >
-                <div className="w-full space-y-8 bg-white/50 dark:bg-black/50 backdrop-blur-xl p-8 rounded-3xl border border-white/20 shadow-2xl relative overflow-hidden">
+                <div className="w-full space-y-12 bg-white/50 dark:bg-black/50 backdrop-blur-xl p-12 rounded-[2.5rem] border border-white/20 shadow-2xl relative overflow-hidden">
                     {/* Decorative Elements */}
-                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary to-purple-500" />
+                    <div className="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-primary to-purple-500" />
 
-                    <div className="text-center space-y-2 relative z-10">
-                        <div className="bg-gradient-to-tr from-primary/20 to-purple-500/20 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 rotate-3 shadow-inner">
-                            <Lock className="h-10 w-10 text-primary" />
+                    <div className="text-center space-y-4 relative z-10">
+                        <div className="bg-gradient-to-tr from-primary/20 to-purple-500/20 w-32 h-32 rounded-3xl flex items-center justify-center mx-auto mb-8 rotate-3 shadow-inner">
+                            <Lock className="h-16 w-16 text-primary" />
                         </div>
-                        <h2 className="text-3xl font-black uppercase tracking-tight text-neutral-900 dark:text-white">Acceso Admin</h2>
-                        <p className="text-muted-foreground font-medium">Sistema de Gestión Central</p>
+                        <h2 className="text-5xl font-black uppercase tracking-tight text-neutral-900 dark:text-white">Acceso Admin</h2>
+                        <p className="text-xl text-muted-foreground font-medium">Sistema de Gestión Central</p>
                     </div>
 
-                    <div className="space-y-6 relative z-10">
-                        <div className="space-y-4">
+                    <div className="space-y-8 relative z-10">
+                        <div className="space-y-6">
                             <Input
                                 type="password"
                                 placeholder="Contraseña Maestra"
@@ -146,26 +146,26 @@ export function AdminPanel({ siteData, setSiteData }: AdminPanelProps) {
                                 onKeyDown={(e) => {
                                     if (e.key === "Enter") handleAdminLogin();
                                 }}
-                                className={`pl-6 text-lg py-6 bg-white/50 dark:bg-black/20 border-neutral-200 dark:border-white/10 focus:border-primary/50 text-center tracking-widest transition-all ${loginError ? "border-destructive ring-destructive/20" : ""}`}
+                                className={`pl-6 text-3xl h-auto py-8 bg-white/50 dark:bg-black/20 border-neutral-200 dark:border-white/10 focus:border-primary/50 text-center tracking-widest transition-all ${loginError ? "border-destructive ring-destructive/20" : ""}`}
                             />
 
                             {loginError && (
                                 <motion.div
                                     initial={{ opacity: 0, y: -10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="bg-destructive/10 text-destructive text-sm font-bold px-4 py-3 rounded-xl flex items-center justify-center gap-2"
+                                    className="bg-destructive/10 text-destructive text-lg font-bold px-6 py-4 rounded-xl flex items-center justify-center gap-3"
                                 >
-                                    <X className="h-4 w-4" />
+                                    <X className="h-6 w-6" />
                                     {loginError}
                                 </motion.div>
                             )}
                         </div>
 
                         <Button
-                            className="w-full uppercase font-black text-lg py-6 shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all rounded-xl hover:-translate-y-1 bg-gradient-to-r from-primary to-purple-600 border-none"
+                            className="w-full uppercase font-black text-2xl h-auto py-8 shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all rounded-2xl hover:-translate-y-1 bg-gradient-to-r from-primary to-purple-600 border-none"
                             onClick={handleAdminLogin}
                         >
-                            <Settings className="mr-2 h-5 w-5 animate-spin-slow" /> Iniciar Sistema
+                            <Settings className="mr-3 h-8 w-8 animate-spin-slow" /> Iniciar Sistema
                         </Button>
                     </div>
                 </div>
