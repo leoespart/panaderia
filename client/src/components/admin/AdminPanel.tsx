@@ -821,11 +821,4 @@ export function AdminPanel({ siteData, setSiteData }: AdminPanelProps) {
             </div>
         </Card>
     );
-}                            </Tabs >
-                        </motion.div >
-                    )}
-                </AnimatePresence >
-            </DialogContent >
-        </Dialog >
-    );
 }
