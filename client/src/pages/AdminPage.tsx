@@ -61,7 +61,7 @@ export default function AdminPage() {
     }
 
     return (
-        <div className="min-h-screen bg-neutral-100 dark:bg-neutral-950 p-4 md:p-8">
+        <div className="min-h-screen bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-950 dark:to-neutral-900 p-4 md:p-8 flex items-center justify-center">
             <div className="max-w-7xl mx-auto">
                 <AdminPanel
                     siteData={siteData}
