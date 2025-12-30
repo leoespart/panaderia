@@ -1,6 +1,34 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import multer from "multer";
+import path from "path";
+import express from "express";
+import fs from "fs";
+
+// Configure multer for disk storage
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => {
+      const uploadDir = path.join(process.cwd(), "uploads");
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir);
+      }
+      cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+      cb(null, uniqueSuffix + path.extname(file.originalname));
+    }
+  })
+});
+
+const requireAuth = (req: any, res: any, next: any) => {
+  if (req.session && req.session.user) {
+    return next();
+  }
+  res.status(401).json({ message: "Unauthorized" });
+};
 
 export async function registerRoutes(
   httpServer: Server,
@@ -8,6 +36,24 @@ export async function registerRoutes(
 ): Promise<Server> {
   // put application routes here
   // prefix all routes with /api
+
+  // Serve uploaded files statically
+  app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+
+  // File Upload Endpoint
+  app.post("/api/upload", requireAuth, upload.single("file"), (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded" });
+      }
+      // Return the full URL or relative path accessible via the static route
+      const fileUrl = `/uploads/${req.file.filename}`;
+      res.json({ url: fileUrl });
+    } catch (error) {
+      console.error("Upload error:", error);
+      res.status(500).json({ message: "File upload failed" });
+    }
+  });
 
   function getDeviceShort(ua: string) {
     if (/iPhone/i.test(ua)) {
@@ -33,7 +79,7 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/settings", async (req, res) => {
+  app.post("/api/settings", requireAuth, async (req, res) => {
     try {
       const { settings, username, action } = req.body;
       const updatedSettings = await storage.updateSiteSettings(settings);
@@ -53,21 +99,31 @@ export async function registerRoutes(
   });
 
   // Admin & Logs Routes
-  app.post("/api/login", async (req, res) => {
-    const { username } = req.body;
+  app.post("/api/login", async (req: any, res) => {
+    const { password } = req.body;
     const userAgent = req.headers["user-agent"] || "";
 
-    // Log the access
-    await storage.logAccess({
-      timestamp: new Date().toISOString(),
-      device: getDeviceShort(userAgent),
-      action: `${username || "Admin"} inició sesión`
-    });
+    let username = null;
+    if (password === "Rodriguez11") username = "Yadiel";
+    if (password === "Alexi1976") username = "Alex";
 
-    res.json({ success: true });
+    if (username) {
+      req.session.user = { username };
+
+      // Log the access
+      await storage.logAccess({
+        timestamp: new Date().toISOString(),
+        device: getDeviceShort(userAgent),
+        action: `${username} inició sesión`
+      });
+
+      res.json({ success: true, username });
+    } else {
+      res.status(401).json({ message: "Invalid credentials" });
+    }
   });
 
-  app.get("/api/logs", async (req, res) => {
+  app.get("/api/logs", requireAuth, async (req, res) => {
     try {
       const logs = await storage.getAccessLogs();
       res.json(logs);
