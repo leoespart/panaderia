@@ -48,34 +48,34 @@ export function Hero({ siteData, t, lang, scrollTo }: HeroProps) {
                     className="flex flex-col items-center"
                 >
                     {/* Status Pills */}
-                    <div className="flex flex-col md:flex-row gap-4 mb-8">
-                        <div className={`px-5 py-2 rounded-full border-2 border-white/30 bg-white/10 backdrop-blur-sm text-white font-bold uppercase tracking-wider text-xs flex items-center gap-2 shadow-lg`}>
-                            <div className={`w-2.5 h-2.5 rounded-full ${isOpen ? "bg-green-400 shadow-[0_0_10px_#4ade80]" : "bg-red-900"}`}></div>
+                    <div className="flex flex-col md:flex-row items-center gap-4 mb-8">
+                        <div className={`px-5 md:px-8 py-2 md:py-3 rounded-full border-2 border-white/30 bg-white/10 backdrop-blur-sm text-white font-bold uppercase tracking-wider text-xs md:text-sm lg:text-base flex items-center gap-2 shadow-lg`}>
+                            <div className={`w-2.5 h-2.5 md:w-3 md:h-3 rounded-full ${isOpen ? "bg-green-400 shadow-[0_0_10px_#4ade80]" : "bg-red-900"}`}></div>
                             {isOpen ? (lang === "es" ? "Abierto Ahora" : "Open Now") : (lang === "es" ? "Cerrado Ahora" : "Closed Now")}
                         </div>
-                        <div className="px-5 py-2 rounded-full bg-white/10 border-2 border-white/30 backdrop-blur-sm text-white font-bold uppercase tracking-wider text-xs flex items-center gap-2 shadow-lg">
-                            <Clock className="w-3.5 h-3.5" />
+                        <div className="px-5 md:px-8 py-2 md:py-3 rounded-full bg-white/10 border-2 border-white/30 backdrop-blur-sm text-white font-bold uppercase tracking-wider text-xs md:text-sm lg:text-base flex items-center gap-2 shadow-lg">
+                            <Clock className="w-3.5 h-3.5 md:w-4 md:h-4" />
                             {siteData.heroBadge || (lang === "es" ? "Desayunos & Almuerzos" : "Breakfast & Lunch")}
                         </div>
                     </div>
 
                     {/* Main Title - Stacked and Big */}
                     <div className="flex flex-col items-center leading-none mb-8 select-none">
-                        <h1 className="text-5xl md:text-8xl lg:text-[9rem] font-display font-black text-white drop-shadow-[0_4px_0_rgba(0,0,0,0.1)] tracking-tight">
+                        <h1 className="text-5xl md:text-8xl lg:text-[11rem] xl:text-[13rem] font-display font-black text-white drop-shadow-[0_4px_0_rgba(0,0,0,0.1)] tracking-tight">
                             PANADERIA
                         </h1>
-                        <h1 className="text-4xl md:text-7xl lg:text-[8rem] font-display font-black text-white drop-shadow-[0_4px_0_rgba(0,0,0,0.1)] tracking-tight -mt-1 md:-mt-4">
+                        <h1 className="text-4xl md:text-7xl lg:text-[10rem] xl:text-[12rem] font-display font-black text-white drop-shadow-[0_4px_0_rgba(0,0,0,0.1)] tracking-tight -mt-1 md:-mt-4 lg:-mt-8">
                             LA FRANCESA
                         </h1>
                     </div>
 
                     {/* Description */}
-                    <p className="text-base md:text-xl text-white/90 mb-10 max-w-3xl mx-auto font-medium leading-relaxed drop-shadow-md px-4">
+                    <p className="text-base md:text-xl lg:text-2xl xl:text-3xl text-white/90 mb-10 lg:mb-16 max-w-3xl lg:max-w-4xl mx-auto font-medium leading-relaxed drop-shadow-md px-4">
                         {t.heroDesc}
                     </p>
 
                     {/* Action Buttons */}
-                    <div className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto">
+                    <div className="flex flex-col sm:flex-row items-center gap-6 w-full sm:w-auto">
                         <motion.div
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
