@@ -376,7 +376,7 @@ export default function Home() {
       visitBtn: "Visítanos",
       directionsBtn: siteData.directionsBtnEs || "CÓMO LLEGAR",
       menuBtn: "Ver Menú",
-      aboutTitle: siteData.heroTitle, // Using as default
+      aboutTitle: "Sobre Nosotros",
       aboutDesc: siteData.aboutDescEs,
       menuTitle: "Nuestro Menú",
       viewFullMenu: "Ver menú completo",
@@ -1068,8 +1068,8 @@ export default function Home() {
             transition={{ duration: 0.8 }}
           >
             <div className="flex justify-center mb-6">
-              <Badge variant="secondary" className={`px-6 md:px-10 py-3 md:py-4 text-sm md:text-xl rounded-full shadow-lg border-2 uppercase font-black flex items-center gap-3 ${isBakeryOpen() ? "border-green-500/50 bg-green-500/10 text-green-600" : "border-red-500/50 bg-red-500/10 text-red-600"}`}>
-                <div className={`h-3 w-3 rounded-full animate-pulse ${isBakeryOpen() ? "bg-green-500" : "bg-red-500"}`}></div>
+              <Badge variant="secondary" className={`px-6 md:px-10 py-3 md:py-4 text-sm md:text-xl rounded-full shadow-lg border-2 uppercase font-black flex items-center gap-3 ${isBakeryOpen() ? "border-green-500/50 bg-green-500/10 text-green-600" : "border-white/50 bg-white/10 text-white"}`}>
+                <div className={`h-3 w-3 rounded-full animate-pulse ${isBakeryOpen() ? "bg-green-500" : "bg-white shadow-[0_0_10px_white]"}`}></div>
                 {isBakeryOpen() ? (lang === "es" ? "Abierto Ahora" : "Open Now") : (lang === "es" ? "Cerrado Ahora" : "Closed Now")}
               </Badge>
             </div>
