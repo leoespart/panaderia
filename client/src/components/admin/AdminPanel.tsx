@@ -202,6 +202,9 @@ export function AdminPanel({ siteData, setSiteData }: AdminPanelProps) {
             {currentView === "logs" && (
                 <LogsView />
             )}
+            {currentView === "lunch" && (
+                <LunchView siteData={siteData} setSiteData={setSiteData} onSave={saveAdminData} />
+            )}
         </AdminLayout>
     );
 }

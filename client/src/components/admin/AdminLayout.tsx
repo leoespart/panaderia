@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { LayoutDashboard, Menu, Settings, LogOut, Sparkles, ChefHat, History } from "lucide-react";
+import { LayoutDashboard, Menu, Settings, LogOut, Sparkles, ChefHat, History, UtensilsCrossed } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface AdminLayoutProps {
@@ -15,6 +15,7 @@ export function AdminLayout({ children, currentView, onViewChange, onLogout, cur
     const navItems = [
         { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
         { id: "menu", label: "Menú & Precios", icon: Menu },
+        { id: "lunch", label: "Almuerzos", icon: UtensilsCrossed },
         { id: "settings", label: "Configuración", icon: Settings },
         { id: "logs", label: "Registro de Cambios", icon: History },
     ];
