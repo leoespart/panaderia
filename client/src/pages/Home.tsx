@@ -107,6 +107,7 @@ export default function Home() {
     promoDiscount: "50% OFF",
 
     isMenuVisible: true, // Menu visibility toggle
+    lunchSpecials: [], // New Lunch Specials
     categories: [
       {
         id: "bebidas",
@@ -248,7 +249,7 @@ export default function Home() {
       aboutTitle: "About Us",
       aboutDesc: siteData.aboutDescEn,
       menuTitle: "Our Menu",
-      viewFullMenu: "Currently in Development",
+      viewFullMenu: "View Menu",
       specialEventsBtn: "Events",
       specialEventsTitle: siteData.specialEventsTitleEn,
       specialEventsDesc: siteData.specialEventsDescEn,

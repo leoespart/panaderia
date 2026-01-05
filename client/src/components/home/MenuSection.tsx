@@ -5,6 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { LunchDisplay } from "./LunchDisplay";
 
 interface MenuSectionProps {
     siteData: any;
@@ -45,6 +46,11 @@ export function MenuSection({ siteData, t, lang }: MenuSectionProps) {
                 <h2 className="text-5xl md:text-8xl font-black text-foreground mb-4 md:mb-8 uppercase hover:text-primary transition-colors cursor-default">{t.menuTitle}</h2>
                 <div className="w-20 md:w-40 h-2 md:h-3 bg-primary rounded-full"></div>
             </div>
+
+            {/* Daily Specials Section */}
+            {siteData.lunchSpecials && siteData.lunchSpecials.length > 0 && (
+                <LunchDisplay items={siteData.lunchSpecials} lang={lang} />
+            )}
 
             <div className="flex justify-center w-full">
                 <motion.div variants={fadeInUp} className="w-full max-w-3xl">
