@@ -113,21 +113,11 @@ export default function Home() {
         nameEs: "Bebidas",
         nameEn: "Beverages",
         items: [
-          // Specials First
-          { id: "be1", nameEs: "Batidas", nameEn: "Shakes", price: "$5.00", descEs: "", descEn: "" },
-          { id: "be2", nameEs: "Morir Soñando", nameEn: "Dominican orange juice with milk", price: "$5.00", descEs: "Jugo de naranja con leche", descEn: "Dominican orange juice with milk" },
-          { id: "be3", nameEs: "Jugos Naturales (16oz)", nameEn: "Natural Juices (16oz)", price: "$3.50", descEs: "100% fruta natural", descEn: "100% natural fruit" },
-
-          // Hot Drinks (Simplified)
-          { id: "bc1", nameEs: "Café", nameEn: "Coffee", price: "$2.24 - $4.22", descEs: "Variedad de tamaños (6oz, 8oz, 12oz)", descEn: "Variety of sizes (6oz, 8oz, 12oz)" },
-          { id: "bc4", nameEs: "Chocolate", nameEn: "Hot Chocolate", price: "$2.75 - $3.75", descEs: "Regular (8oz) o Grande (12oz)", descEn: "Regular (8oz) or Large (12oz)" },
-
-          // Cold Drinks
-          { id: "bf1", nameEs: "Agua", nameEn: "Water", price: "$1.00", descEs: "", descEn: "" },
-          { id: "bf2", nameEs: "Jugo Embotellado", nameEn: "Bottled Juice", price: "$2.00", descEs: "", descEn: "" },
-          { id: "bf3", nameEs: "Refresco de Lata", nameEn: "Canned Soda", price: "$1.35", descEs: "", descEn: "" },
-          { id: "bf4", nameEs: "Refresco de Botella", nameEn: "Bottled Soda", price: "$2.00", descEs: "", descEn: "" },
-          { id: "bf5", nameEs: "Bebidas Energéticas", nameEn: "Energy Drinks", price: "$2.00", descEs: "", descEn: "" }
+          { id: "be1", nameEs: "Batidas", nameEn: "Shakes", price: "", descEs: "Frutas", descEn: "Fruits" },
+          { id: "be2", nameEs: "Morir Soñando", nameEn: "Dominican orange juice with milk", price: "", descEs: "Jugo de naranja con leche", descEn: "Dining orange juice with milk" },
+          { id: "be3", nameEs: "Jugos Naturales (16oz)", nameEn: "Natural Juices (16oz)", price: "", descEs: "100% Natural", descEn: "100% Natural" },
+          { id: "bc1", nameEs: "Café", nameEn: "Coffee", price: "", descEs: "Variedad de tamaños (6oz, 8oz, 12oz)", descEn: "Variety of sizes (6oz, 8oz, 12oz)" },
+          { id: "bc4", nameEs: "Chocolate", nameEn: "Hot Chocolate", price: "", descEs: "Regular (8oz) o Grande (12oz)", descEn: "Regular (8oz) or Large (12oz)" }
         ]
       },
       {
@@ -135,18 +125,9 @@ export default function Home() {
         nameEs: "Desayunos",
         nameEn: "Breakfast",
         items: [
-          // Revoltillo
-          { id: "r1", nameEs: "Revoltillo Regular", nameEn: "Scrambled Eggs Regular", price: "$5.25", descEs: "", descEn: "" },
-          { id: "r2", nameEs: "Revoltillo con Queso Suizo", nameEn: "Scrambled eggs & Swiss Cheese", price: "$6.25", descEs: "", descEn: "" },
-          { id: "r3", nameEs: "Revoltillo Con Todo", nameEn: "Scrambled eggs with everything", price: "$7.25", descEs: "", descEn: "" },
-
-          // Toast
-          { id: "t1", nameEs: "Tostada con Mantequilla", nameEn: "Toast with Butter", price: "$2.25", descEs: "", descEn: "" },
-          { id: "t2", nameEs: "Tostada con Queso", nameEn: "Toast with Cheese", price: "$3.25", descEs: "", descEn: "" },
-
-          // Cremas
-          { id: "c1", nameEs: "Avena", nameEn: "Oatmeal", price: "$3.00", descEs: "Disponible hasta las 11am", descEn: "Available until 11am" },
-          { id: "c2", nameEs: "Crema de Maiz", nameEn: "Cornmeal Porridge", price: "$3.00", descEs: "Disponible hasta las 11am", descEn: "Available until 11am" }
+          { id: "r1", nameEs: "Revoltillos", nameEn: "Scrambled Eggs", price: "", descEs: "Huevos, jamón, queso y tostada", descEn: "Eggs, ham, cheese and toast" },
+          { id: "t1", nameEs: "Tostadas", nameEn: "Toast", price: "", descEs: "Mantequilla o Queso", descEn: "Butter or Cheese" },
+          { id: "c1", nameEs: "Cremas", nameEn: "Porridge", price: "", descEs: "Avena, Farina y Arina", descEn: "Oatmeal, Cream of Wheat, Cornmeal" }
         ]
       },
       {
@@ -154,8 +135,7 @@ export default function Home() {
         nameEs: "Sándwiches",
         nameEn: "Sandwiches",
         items: [
-          // Popular Ones First? Or just mix them. Let's mix them but maybe prioritize popular ones at the top.
-          { id: "sp3", nameEs: "Tripleta", nameEn: "Three Meat Sandwich", price: "$8.00", descEs: "Jamón, Cerdo, Bistec", descEn: "Ham, Pork, Steak" },
+          { id: "sp3", nameEs: "Tripleta", nameEn: "Three Meat Sandwich", price: "$8.00", descEs: "Jamón, Cerdo, Bistec", descEn: "Ham, Pork, Steak", popular: true },
           { id: "sp4", nameEs: "Cubano", nameEn: "Cuban Sandwich", price: "$9.25", descEs: "", descEn: "" },
           { id: "sp1", nameEs: "Jamón, Queso y Huevo", nameEn: "Ham, Cheese & Egg Sandwich", price: "$6.25", descEs: "", descEn: "" },
           { id: "s1", nameEs: "Jamón y Queso", nameEn: "Ham & Cheese Sandwich", price: "$5.25", descEs: "", descEn: "" },
@@ -175,19 +155,12 @@ export default function Home() {
         nameEs: "Dulces y Repostería",
         nameEn: "Sweets & Pastries",
         items: [
-          // Popular First
-          { id: "e1", nameEs: "Quesitos", nameEn: "Cream Cheese Pastry", price: "$2.00", descEs: "¡El favorito de la casa!", descEn: "House favorite!" },
-          { id: "e5", nameEs: "Tres Leches", nameEn: "Three Milks Cake", price: "$3.50", descEs: "", descEn: "" },
-          { id: "e3", nameEs: "Flan de Queso", nameEn: "Cheese Flan", price: "$3.50", descEs: "Cremoso y delicioso", descEn: "Creamy and delicious" },
-          { id: "e4", nameEs: "Cheesecake", nameEn: "Cheesecake", price: "$3.50", descEs: "", descEn: "" },
-
-          // Others
-          { id: "e2", nameEs: "Bizcocho", nameEn: "Cake", price: "$3.00", descEs: "Vainilla o Chocolate", descEn: "Vanilla or Chocolate" },
-          { id: "d3", nameEs: "Donas", nameEn: "Donuts", price: "$1.50 - $2.00", descEs: "Glasadas, chocolate, rellenas", descEn: "Glazed, chocolate, filled" },
-          { id: "d2", nameEs: "Pastelillo Relleno (Tornillo)", nameEn: "Turnovers (Tornillo)", price: "$1.50", descEs: "Guayaba o Queso", descEn: "Guava or Cheese" },
-          { id: "d1", nameEs: "Galletas", nameEn: "Cookies", price: "$0.50", descEs: "", descEn: "" },
-          { id: "d4", nameEs: "Bizcocho de Maiz", nameEn: "Cornbread", price: "$1.50", descEs: "", descEn: "" },
-          { id: "d5", nameEs: "Muffin", nameEn: "Muffin", price: "$2.00", descEs: "Arándanos, Maíz, Chocolate", descEn: "Blueberry, Corn, Chocolate" }
+          { id: "e5", nameEs: "Tres Leches", nameEn: "Three Milks Cake", price: "", descEs: "Bizcocho mojada en 3 leches", descEn: "Cake soaked in 3 milks" },
+          { id: "e3", nameEs: "Flan de Queso", nameEn: "Cheese Flan", price: "", descEs: "Cremoso y delicioso", descEn: "Creamy and delicious" },
+          { id: "e1", nameEs: "Quesitos", nameEn: "Cream Cheese Pastry", price: "", descEs: "¡El favorito de la casa!", descEn: "House favorite!" },
+          { id: "e4", nameEs: "Cheesecake", nameEn: "Cheesecake", price: "", descEs: "Con topping de fresa o plain", descEn: "mStrawberry topping or plain" },
+          { id: "d1", nameEs: "Galletas", nameEn: "Cookies", price: "", descEs: "Mantecaditos", descEn: "Shortbread cookies" },
+          { id: "d5", nameEs: "Muffin", nameEn: "Muffin", price: "", descEs: "Arándanos, Maíz, Chocolate", descEn: "Blueberry, Corn, Chocolate" }
         ]
       }
     ]
@@ -244,7 +217,7 @@ export default function Home() {
       aboutTitle: "Sobre Nosotros",
       aboutDesc: siteData.aboutDescEs,
       menuTitle: "Nuestro Menú",
-      viewFullMenu: "Actualmente en Construcción",
+      viewFullMenu: "VER MENÚ",
       specialEventsBtn: "Eventos",
       specialEventsTitle: siteData.specialEventsTitleEs,
       specialEventsDesc: siteData.specialEventsDescEs,
