@@ -48,29 +48,18 @@ export function MenuSection({ siteData, t, lang }: MenuSectionProps) {
                 <div className="w-20 md:w-40 h-2 md:h-3 bg-primary rounded-full"></div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
-                {/* Featured Items - Dynamically take the first 4 items from the first category if available, or just placeholder logic */}
-                {/* For now, let's just show the first 4 items of the first category as the "preview" */}
-                {siteData.categories?.[0]?.items?.slice(0, 4).map((item: any) => (
-                    <motion.div variants={fadeInUp} key={item.id}>
-                        <Card className="h-full hover:shadow-2xl transition-all border-l-[8px] md:border-l-[16px] border-l-transparent hover:border-l-primary group bg-white p-4">
-                            <CardHeader className="p-4 md:p-6">
-                                <CardTitle className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 group-hover:text-primary transition-colors text-2xl md:text-4xl font-black uppercase">
-                                    <span>{lang === "es" ? item.nameEs : item.nameEn}</span>
-                                    {/* Price removed */}
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="px-4 md:px-6">
-                                <p className="text-lg md:text-2xl text-muted-foreground font-bold">
-                                    {lang === "es" ? item.descEs : item.descEn}
-                                </p>
-                            </CardContent>
-                        </Card>
-                    </motion.div>
-                ))}
-                <motion.div variants={fadeInUp} className="md:col-span-2">
+            <div className="flex justify-center w-full">
+                <motion.div variants={fadeInUp} className="w-full max-w-3xl">
                     <Card
-                        onClick={() => setIsMenuModalOpen(true)}
+                        onClick={() => {
+                            const card = document.getElementById("menu-card");
+                            if (card) {
+                                card.classList.remove("animate-shake");
+                                void card.offsetWidth; // trigger reflow
+                                card.classList.add("animate-shake");
+                            }
+                        }}
+                        id="menu-card"
                         className="bg-primary text-primary-foreground border-none flex items-center justify-center p-12 md:p-20 cursor-pointer hover:bg-primary/90 transition-all shadow-xl group overflow-hidden relative rounded-2xl md:rounded-[2rem]">
                         <div className="text-center relative z-10">
                             <p className="text-3xl md:text-5xl font-black mb-4 md:mb-8 uppercase">{t.viewFullMenu}</p>
@@ -80,7 +69,7 @@ export function MenuSection({ siteData, t, lang }: MenuSectionProps) {
                 </motion.div>
             </div>
 
-            <Dialog open={isMenuModalOpen} onOpenChange={setIsMenuModalOpen}>
+            <Dialog open={false} onOpenChange={() => { }}>
                 <DialogContent className="max-w-6xl w-[95vw] max-h-[90vh] overflow-y-auto p-0 border-none bg-background rounded-3xl">
                     <div className="sticky top-0 z-30 bg-primary text-white pt-14 pb-8 px-4 md:p-12 text-center relative shadow-lg">
                         <button
