@@ -107,7 +107,12 @@ export function MenuSection({ siteData, t, lang }: MenuSectionProps) {
                                         </h3>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                             {cat.items.map((item: any) => (
-                                                <div key={item.id} className="flex flex-col sm:flex-row gap-6 p-6 rounded-3xl transition-all border-2 border-transparent bg-white shadow-sm hover:shadow-md">
+                                                <div key={item.id} className={`flex flex-col sm:flex-row gap-6 p-6 rounded-3xl transition-all border-2 ${item.popular ? 'border-yellow-400 bg-yellow-50/50 relative' : 'border-transparent bg-white'} shadow-sm hover:shadow-md`}>
+                                                    {item.popular && (
+                                                        <Badge className="absolute -top-3 right-6 bg-yellow-500 hover:bg-yellow-600 text-white font-bold uppercase tracking-wider shadow-sm">
+                                                            {lang === "es" ? "★ Popular" : "★ Popular"}
+                                                        </Badge>
+                                                    )}
                                                     {item.image && (
                                                         <div className="w-full sm:w-32 h-32 rounded-2xl overflow-hidden flex-shrink-0 shadow-sm">
                                                             <img src={item.image} alt={item.nameEs} className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" />
@@ -115,7 +120,7 @@ export function MenuSection({ siteData, t, lang }: MenuSectionProps) {
                                                     )}
                                                     <div className="flex-1 flex flex-col justify-center">
                                                         <div className="flex justify-between items-baseline mb-2 gap-4">
-                                                            <h4 className="text-3xl font-black uppercase leading-tight whitespace-normal">{lang === "es" ? item.nameEs : item.nameEn}</h4>
+                                                            <h4 className={`text-3xl font-black uppercase leading-tight whitespace-normal ${item.popular ? 'text-primary' : ''}`}>{lang === "es" ? item.nameEs : item.nameEn}</h4>
                                                             {/* Price removed */}
                                                         </div>
                                                         <p className="text-lg text-muted-foreground font-bold leading-snug">{lang === "es" ? item.descEs : item.descEn}</p>
