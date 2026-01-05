@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { LayoutDashboard, Menu, Settings, LogOut, Sparkles, ChefHat } from "lucide-react";
+import { LayoutDashboard, Menu, Settings, LogOut, Sparkles, ChefHat, History } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface AdminLayoutProps {
@@ -16,6 +16,7 @@ export function AdminLayout({ children, currentView, onViewChange, onLogout, cur
         { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
         { id: "menu", label: "Menú & Precios", icon: Menu },
         { id: "settings", label: "Configuración", icon: Settings },
+        { id: "logs", label: "Registro de Cambios", icon: History },
     ];
 
     return (
@@ -35,8 +36,8 @@ export function AdminLayout({ children, currentView, onViewChange, onLogout, cur
                             key={item.id}
                             onClick={() => onViewChange(item.id)}
                             className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 group ${currentView === item.id
-                                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
-                                    : "text-muted-foreground hover:bg-white/5 hover:text-white"
+                                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
+                                : "text-muted-foreground hover:bg-white/5 hover:text-white"
                                 }`}
                         >
                             <item.icon className={`h-6 w-6 ${currentView === item.id ? "animate-pulse" : ""}`} />

@@ -10,6 +10,7 @@ import { AdminLayout } from "./AdminLayout";
 import { DashboardView } from "./views/DashboardView";
 import { MenuView } from "./views/MenuView";
 import { SettingsView } from "./views/SettingsView";
+import { LogsView } from "./views/LogsView";
 
 interface AdminPanelProps {
     siteData: any;
@@ -197,6 +198,9 @@ export function AdminPanel({ siteData, setSiteData }: AdminPanelProps) {
                     setSiteData={setSiteData}
                     onSave={saveAdminData}
                 />
+            )}
+            {currentView === "logs" && (
+                <LogsView />
             )}
         </AdminLayout>
     );
