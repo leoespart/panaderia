@@ -77,7 +77,7 @@ export function MenuSection({ siteData, t, lang }: MenuSectionProps) {
                 </motion.div>
             </div>
 
-            <Dialog open={false} onOpenChange={() => { }}>
+            <Dialog open={isMenuModalOpen} onOpenChange={setIsMenuModalOpen}>
                 <DialogContent className="max-w-6xl w-[95vw] max-h-[90vh] overflow-y-auto p-0 border-none bg-background rounded-3xl">
                     <div className="sticky top-0 z-30 bg-primary text-white pt-14 pb-8 px-4 md:p-12 text-center relative shadow-lg">
                         <button
