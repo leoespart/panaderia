@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Trash2, Upload, X, Save, Edit3, Image as ImageIcon, Utensils } from "lucide-react";
+import { Plus, Trash2, Upload, X, Save, Edit3, Image as ImageIcon, Utensils, Eye, EyeOff } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -49,12 +49,31 @@ export function MenuView({ siteData, setSiteData, onSave, onUpload }: MenuViewPr
                     <h2 className="text-4xl font-black uppercase text-white tracking-wide">Menú</h2>
                     <p className="text-muted-foreground text-lg">Gestiona tus categorías y platos.</p>
                 </div>
-                <Button
-                    onClick={() => onSave("Editó el Menú")}
-                    className="bg-green-500 hover:bg-green-600 text-white font-bold uppercase shadow-[0_0_20px_rgba(34,197,94,0.3)] hover:shadow-[0_0_30px_rgba(34,197,94,0.5)] transition-all"
-                >
-                    <Save className="mr-2 h-5 w-5" /> Guardar Todo
-                </Button>
+                <div className="flex items-center gap-4">
+                    <Button
+                        onClick={() => {
+                            setSiteData({ ...siteData, isMenuVisible: !siteData.isMenuVisible });
+                        }}
+                        variant={siteData.isMenuVisible ? "default" : "destructive"}
+                        className="font-bold uppercase"
+                    >
+                        {siteData.isMenuVisible ? (
+                            <>
+                                <Eye className="mr-2 h-5 w-5" /> Visible
+                            </>
+                        ) : (
+                            <>
+                                <EyeOff className="mr-2 h-5 w-5" /> Oculto
+                            </>
+                        )}
+                    </Button>
+                    <Button
+                        onClick={() => onSave("Editó el Menú")}
+                        className="bg-green-500 hover:bg-green-600 text-white font-bold uppercase shadow-[0_0_20px_rgba(34,197,94,0.3)] hover:shadow-[0_0_30px_rgba(34,197,94,0.5)] transition-all"
+                    >
+                        <Save className="mr-2 h-5 w-5" /> Guardar Todo
+                    </Button>
+                </div>
             </div>
 
             <div className="flex-1 flex gap-8 overflow-hidden">
@@ -140,7 +159,7 @@ export function MenuView({ siteData, setSiteData, onSave, onUpload }: MenuViewPr
                                                 id: Date.now().toString(),
                                                 nameEs: "Nuevo Plato",
                                                 nameEn: "New Dish",
-                                                price: "0.00",
+                                                price: "",
                                                 descEs: "",
                                                 image: ""
                                             });
@@ -192,18 +211,7 @@ export function MenuView({ siteData, setSiteData, onSave, onUpload }: MenuViewPr
                                                                     setSiteData({ ...siteData, categories: newCats });
                                                                 }}
                                                             />
-                                                            <div className="w-24 relative">
-                                                                <span className="absolute left-0 top-1/2 -translate-y-1/2 text-primary font-bold">$</span>
-                                                                <Input
-                                                                    className="bg-transparent border-transparent hover:border-white/10 focus:border-primary/50 font-bold text-lg p-0 pl-4 h-auto rounded-none border-b text-right text-primary"
-                                                                    value={item.price}
-                                                                    onChange={(e) => {
-                                                                        const newCats = [...siteData.categories];
-                                                                        newCats[activeCategoryIndex].items[itemIdx].price = e.target.value;
-                                                                        setSiteData({ ...siteData, categories: newCats });
-                                                                    }}
-                                                                />
-                                                            </div>
+
                                                         </div>
                                                         <Textarea
                                                             className="bg-white/5 border-transparent focus:border-primary/50 text-sm resize-none h-16"

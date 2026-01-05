@@ -33,7 +33,10 @@ const staggerContainer: Variants = {
 
 export function MenuSection({ siteData, t, lang }: MenuSectionProps) {
     const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
-    const [selectedCategory, setSelectedCategory] = useState<string>("all");
+    // Default to strict first category instead of "all"
+    const [selectedCategory, setSelectedCategory] = useState<string>(siteData.categories?.[0]?.id || "");
+
+    if (!siteData.isMenuVisible) return null;
 
     return (
         <motion.div id="menu" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-5xl mx-auto">
@@ -46,73 +49,25 @@ export function MenuSection({ siteData, t, lang }: MenuSectionProps) {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
-                {/* Café */}
-                <motion.div variants={fadeInUp}>
-                    <Card className="h-full hover:shadow-2xl transition-all border-l-[8px] md:border-l-[16px] border-l-transparent hover:border-l-primary group bg-white p-4">
-                        <CardHeader className="p-4 md:p-6">
-                            <CardTitle className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 group-hover:text-primary transition-colors text-2xl md:text-4xl font-black uppercase">
-                                <span>{lang === "es" ? "Café 8oz" : "Coffee 8oz"}</span>
-                                <Badge variant="secondary" className="text-lg md:text-2xl px-4 md:px-5 py-1 md:py-2 font-black">$3.23</Badge>
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="px-4 md:px-6">
-                            <p className="text-lg md:text-2xl text-muted-foreground font-bold">
-                                {lang === "es" ? "Café colado al momento." : "Freshly brewed coffee."}
-                            </p>
-                        </CardContent>
-                    </Card>
-                </motion.div>
-
-                {/* Sandwich Cubano */}
-                <motion.div variants={fadeInUp}>
-                    <Card className="h-full hover:shadow-2xl transition-all border-l-[8px] md:border-l-[16px] border-l-transparent hover:border-l-primary group bg-white p-4">
-                        <CardHeader className="p-4 md:p-6">
-                            <CardTitle className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 group-hover:text-primary transition-colors text-2xl md:text-4xl font-black uppercase">
-                                <span>{lang === "es" ? "Sandwich Cubano" : "Cuban Sandwich"}</span>
-                                <Badge variant="secondary" className="text-lg md:text-2xl px-4 md:px-5 py-1 md:py-2 font-black">$7.50</Badge>
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="px-4 md:px-6">
-                            <p className="text-lg md:text-2xl text-muted-foreground font-bold">
-                                {lang === "es" ? "Pernil, jamón, queso suizo, pepinillos y mostaza." : "Pork, ham, swiss cheese, pickles and mustard."}
-                            </p>
-                        </CardContent>
-                    </Card>
-                </motion.div>
-
-                {/* Tres Leches */}
-                <motion.div variants={fadeInUp}>
-                    <Card className="h-full hover:shadow-2xl transition-all border-l-[8px] md:border-l-[16px] border-l-transparent hover:border-l-primary group bg-white p-4">
-                        <CardHeader className="p-4 md:p-6">
-                            <CardTitle className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 group-hover:text-primary transition-colors text-2xl md:text-4xl font-black uppercase">
-                                <span>{lang === "es" ? "Tres Leches" : "Tres Leches Cake"}</span>
-                                <Badge variant="secondary" className="text-lg md:text-2xl px-4 md:px-5 py-1 md:py-2 font-black">$3.50</Badge>
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="px-4 md:px-6">
-                            <p className="text-lg md:text-2xl text-muted-foreground font-bold">
-                                {lang === "es" ? "Bizcocho empapado en tres leches." : "Cake soaked in three milks."}
-                            </p>
-                        </CardContent>
-                    </Card>
-                </motion.div>
-
-                {/* Batidas */}
-                <motion.div variants={fadeInUp}>
-                    <Card className="h-full hover:shadow-2xl transition-all border-l-[8px] md:border-l-[16px] border-l-transparent hover:border-l-primary group bg-white p-4">
-                        <CardHeader className="p-4 md:p-6">
-                            <CardTitle className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 group-hover:text-primary transition-colors text-2xl md:text-4xl font-black uppercase">
-                                <span>{lang === "es" ? "Batidas" : "Smoothies"}</span>
-                                <Badge variant="secondary" className="text-lg md:text-2xl px-4 md:px-5 py-1 md:py-2 font-black">$5.00</Badge>
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="px-4 md:px-6">
-                            <p className="text-lg md:text-2xl text-muted-foreground font-bold">
-                                {lang === "es" ? "Batidas de frutas frescas." : "Fresh fruit smoothies."}
-                            </p>
-                        </CardContent>
-                    </Card>
-                </motion.div>
+                {/* Featured Items - Dynamically take the first 4 items from the first category if available, or just placeholder logic */}
+                {/* For now, let's just show the first 4 items of the first category as the "preview" */}
+                {siteData.categories?.[0]?.items?.slice(0, 4).map((item: any) => (
+                    <motion.div variants={fadeInUp} key={item.id}>
+                        <Card className="h-full hover:shadow-2xl transition-all border-l-[8px] md:border-l-[16px] border-l-transparent hover:border-l-primary group bg-white p-4">
+                            <CardHeader className="p-4 md:p-6">
+                                <CardTitle className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 group-hover:text-primary transition-colors text-2xl md:text-4xl font-black uppercase">
+                                    <span>{lang === "es" ? item.nameEs : item.nameEn}</span>
+                                    {/* Price removed */}
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="px-4 md:px-6">
+                                <p className="text-lg md:text-2xl text-muted-foreground font-bold">
+                                    {lang === "es" ? item.descEs : item.descEn}
+                                </p>
+                            </CardContent>
+                        </Card>
+                    </motion.div>
+                ))}
                 <motion.div variants={fadeInUp} className="md:col-span-2">
                     <Card
                         onClick={() => setIsMenuModalOpen(true)}
@@ -141,13 +96,6 @@ export function MenuSection({ siteData, t, lang }: MenuSectionProps) {
 
                     <div className="p-4 md:p-12">
                         <div className="flex flex-wrap justify-center gap-3 md:gap-4 mb-8 md:mb-12">
-                            <Button
-                                variant={selectedCategory === "all" ? "default" : "outline"}
-                                onClick={() => setSelectedCategory("all")}
-                                className="px-8 py-6 text-xl font-black uppercase rounded-2xl h-auto"
-                            >
-                                {t.allCats}
-                            </Button>
                             {siteData.categories.map((cat: any) => (
                                 <Button
                                     key={cat.id}
@@ -179,7 +127,7 @@ export function MenuSection({ siteData, t, lang }: MenuSectionProps) {
                                                     <div className="flex-1 flex flex-col justify-center">
                                                         <div className="flex justify-between items-baseline mb-2 gap-4">
                                                             <h4 className="text-3xl font-black uppercase leading-tight whitespace-normal">{lang === "es" ? item.nameEs : item.nameEn}</h4>
-                                                            <span className="text-3xl font-black text-primary whitespace-nowrap">${item.price}</span>
+                                                            {/* Price removed */}
                                                         </div>
                                                         <p className="text-lg text-muted-foreground font-bold leading-snug">{lang === "es" ? item.descEs : item.descEn}</p>
                                                     </div>

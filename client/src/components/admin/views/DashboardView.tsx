@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { DollarSign, ShoppingBag, Users, TrendingUp, ArrowRight, Utensils } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { QRCodeDisplay } from "@/components/common/QRCodeDisplay";
 
 interface DashboardViewProps {
     siteData: any;
@@ -52,7 +53,7 @@ export function DashboardView({ siteData, onNavigate }: DashboardViewProps) {
                 ))}
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <Card className="p-8 bg-white/5 border-white/10 backdrop-blur-md">
                     <h3 className="text-3xl font-bold text-white mb-6 uppercase">Estado del Sitio</h3>
                     <div className="space-y-6">
@@ -73,12 +74,17 @@ export function DashboardView({ siteData, onNavigate }: DashboardViewProps) {
                     </div>
                 </Card>
 
+                <Card className="p-8 bg-white/5 border-white/10 backdrop-blur-md flex flex-col items-center text-center">
+                    <h3 className="text-3xl font-bold text-white mb-6 uppercase">QR del Sitio</h3>
+                    <QRCodeDisplay url="https://panaderialafrancesa.com" />
+                </Card>
+
                 <Card className="p-8 bg-gradient-to-br from-primary/20 to-purple-500/20 border-white/10 backdrop-blur-md flex flex-col justify-center items-start gap-6">
                     <h3 className="text-3xl font-black text-white uppercase">Acciones Rápidas</h3>
                     <p className="text-gray-300 text-xl">Gestiona los productos y precios de tu menú rápidamente.</p>
                     <Button
                         size="lg"
-                        className="font-bold uppercase text-xl py-8 px-8 shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all rounded-xl"
+                        className="font-bold uppercase text-xl py-8 px-8 shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all rounded-xl w-full"
                         onClick={() => onNavigate("menu")}
                     >
                         Ir al Menú <ArrowRight className="ml-3 h-6 w-6" />

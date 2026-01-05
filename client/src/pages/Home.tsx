@@ -101,41 +101,86 @@ export default function Home() {
     promoMessage: "🎉 ¡Gran Descuento de Temporada!",
     promoDiscount: "50% OFF",
 
+    isMenuVisible: true, // Menu visibility toggle
     categories: [
       {
-        id: "almuerzo",
-        nameEs: "Almuerzo",
-        nameEn: "Lunch",
+        id: "bebidas-calientes",
+        nameEs: "Bebidas Calientes",
+        nameEn: "Hot Beverages",
         items: [
-          { id: "a1", nameEs: "Arroz con Habichuelas y Pollo", nameEn: "Rice with Beans and Chicken", price: "8.50", descEs: "Servido con ensalada y amarillos.", descEn: "Served with salad and sweet plantains." }
+          { id: "bc1", nameEs: "Cafe 6 oz", nameEn: "Coffee 6 oz", price: "", descEs: "", descEn: "" },
+          { id: "bc2", nameEs: "Cafe 8 oz", nameEn: "Coffee 8 oz", price: "", descEs: "", descEn: "" },
+          { id: "bc3", nameEs: "Cafe 12 oz", nameEn: "Coffee 12 oz", price: "", descEs: "", descEn: "" },
+          { id: "bc4", nameEs: "Chocolate 8 oz", nameEn: "Chocolate 8 oz", price: "", descEs: "", descEn: "" },
+          { id: "bc5", nameEs: "Chocolate 12 oz", nameEn: "Chocolate 12 oz", price: "", descEs: "", descEn: "" }
+        ]
+      },
+      {
+        id: "bebidas-especiales",
+        nameEs: "Bebidas Especiales",
+        nameEn: "Special Drinks",
+        items: [
+          { id: "be1", nameEs: "Batidas", nameEn: "Shakes", price: "", descEs: "", descEn: "" },
+          { id: "be2", nameEs: "Morir Soñando", nameEn: "Dominican orange juice with milk", price: "", descEs: "Jugo de naranja con leche", descEn: "Dominican orange juice with milk" },
+          { id: "be3", nameEs: "Jugos Naturales", nameEn: "Natural Juices (16oz)", price: "", descEs: "16oz", descEn: "16oz" }
+        ]
+      },
+      {
+        id: "bebidas-frias",
+        nameEs: "Bebidas Frias",
+        nameEn: "Cold Drinks",
+        items: [
+          { id: "bf1", nameEs: "Agua", nameEn: "Water", price: "", descEs: "", descEn: "" },
+          { id: "bf2", nameEs: "Jugo Embotellado", nameEn: "Bottled Juice", price: "", descEs: "", descEn: "" },
+          { id: "bf3", nameEs: "Refresco de Lata", nameEn: "Canned Soda", price: "", descEs: "", descEn: "" },
+          { id: "bf4", nameEs: "Refresco de Botella", nameEn: "Bottled Soda", price: "", descEs: "", descEn: "" },
+          { id: "bf5", nameEs: "Bebidas Energéticas", nameEn: "Energy Drinks", price: "", descEs: "", descEn: "" }
         ]
       },
       {
         id: "sandwiches",
-        nameEs: "Sandwiches",
+        nameEs: "Sándwiches",
         nameEn: "Sandwiches",
         items: [
-          { id: "s1", nameEs: "Sandwich Cubano", nameEn: "Cuban Sandwich", price: "7.50", descEs: "Pernil, jamón, queso suizo, pepinillos y mostaza.", descEn: "Pork, ham, swiss cheese, pickles and mustard." },
-          { id: "s2", nameEs: "Sandwich de Mezcla", nameEn: "Mix Sandwich", price: "4.50", descEs: "El clásico de la casa.", descEn: "The house classic." }
+          { id: "s1", nameEs: "Jamón y Queso", nameEn: "Ham & Cheese Sandwich", price: "", descEs: "", descEn: "" },
+          { id: "s2", nameEs: "Jamón y Huevo", nameEn: "Ham & Egg Sandwich", price: "", descEs: "", descEn: "" },
+          { id: "s3", nameEs: "Queso y Huevo", nameEn: "Cheese & Egg Sandwich", price: "", descEs: "", descEn: "" },
+          { id: "s4", nameEs: "Mortadella y Queso", nameEn: "Mortadella & Cheese Sandwich", price: "", descEs: "", descEn: "" },
+          { id: "s5", nameEs: "Salami y Queso", nameEn: "Salami & Cheese Sandwich", price: "", descEs: "", descEn: "" },
+          { id: "s6", nameEs: "Pavo", nameEn: "Turkey Sandwich", price: "", descEs: "", descEn: "" },
+          { id: "s7", nameEs: "Pernil", nameEn: "Roast Pork Sandwich", price: "", descEs: "", descEn: "" },
+          { id: "s8", nameEs: "Pastrami", nameEn: "Pastrami Sandwich", price: "", descEs: "", descEn: "" },
+          { id: "s9", nameEs: "Bistec", nameEn: "Steak Sandwich", price: "", descEs: "", descEn: "" }
         ]
       },
       {
-        id: "bebidas",
-        nameEs: "Bebidas",
-        nameEn: "Beverages",
+        id: "sandwiches-populares",
+        nameEs: "Sándwiches Populares",
+        nameEn: "Popular Sandwiches",
         items: [
-          { id: "c1", nameEs: "Posillo", nameEn: "Espresso Shot", price: "1.25", descEs: "Café espresso pequeño.", descEn: "Small espresso shot." },
-          { id: "c2", nameEs: "Café 6oz", nameEn: "Coffee 6oz", price: "2.24", descEs: "Café colado 6oz.", descEn: "Brewed coffee 6oz." },
-          { id: "c3", nameEs: "Café 8oz", nameEn: "Coffee 8oz", price: "3.23", descEs: "Café colado 8oz.", descEn: "Brewed coffee 8oz." },
-          { id: "c4", nameEs: "Café 12oz", nameEn: "Coffee 12oz", price: "4.22", descEs: "Café colado 12oz.", descEn: "Brewed coffee 12oz." }
+          { id: "sp1", nameEs: "Jamón, Queso y Huevo", nameEn: "Ham, Cheese & Egg Sandwich", price: "", descEs: "", descEn: "" },
+          { id: "sp2", nameEs: "Atún", nameEn: "Tuna Sandwich", price: "", descEs: "", descEn: "" },
+          { id: "sp3", nameEs: "Tripleta", nameEn: "Three Meat Sandwich", price: "", descEs: "", descEn: "" },
+          { id: "sp4", nameEs: "Cubano", nameEn: "Cuban Sandwich", price: "", descEs: "", descEn: "" }
         ]
       },
       {
-        id: "desayuno",
-        nameEs: "Desayuno",
-        nameEn: "Breakfast",
+        id: "revoltillo",
+        nameEs: "Revoltillo",
+        nameEn: "Scrambled Eggs",
         items: [
-          { id: "de1", nameEs: "Revoltillo Ensalada", nameEn: "Salad Scramble", price: "6.25", descEs: "Revoltillo con ensalada.", descEn: "Scramble with salad." }
+          { id: "r1", nameEs: "Regular", nameEn: "Scrambled Eggs Regular", price: "", descEs: "", descEn: "" },
+          { id: "r2", nameEs: "Con Queso Suizo", nameEn: "Scrambled eggs & Swiss Cheese", price: "", descEs: "", descEn: "" },
+          { id: "r3", nameEs: "Con todo", nameEn: "Scrambled eggs with everything", price: "", descEs: "", descEn: "" }
+        ]
+      },
+      {
+        id: "tostadas",
+        nameEs: "Tostadas",
+        nameEn: "Toast",
+        items: [
+          { id: "t1", nameEs: "Mantequilla o Mayo", nameEn: "Toast with Butter or Mayo", price: "", descEs: "", descEn: "" },
+          { id: "t2", nameEs: "Queso", nameEn: "Toast with Cheese", price: "", descEs: "", descEn: "" }
         ]
       },
       {
@@ -143,10 +188,27 @@ export default function Home() {
         nameEs: "Dulces",
         nameEn: "Sweets",
         items: [
-          { id: "d1", nameEs: "Donas Azucaradas", nameEn: "Sugar Donuts", price: "1.50", descEs: "Donas esponjosas cubiertas de azúcar.", descEn: "Fluffy donuts coated with sugar." }
+          { id: "d1", nameEs: "Galletas", nameEn: "Cookies", price: "", descEs: "", descEn: "" },
+          { id: "d2", nameEs: "Pastelillo Relleno", nameEn: "Turnovers", price: "", descEs: "", descEn: "" },
+          { id: "d3", nameEs: "Donas", nameEn: "Donuts", price: "", descEs: "", descEn: "" },
+          { id: "d4", nameEs: "Bizcocho de Maiz", nameEn: "Cornbread", price: "", descEs: "", descEn: "" },
+          { id: "d5", nameEs: "Muffin", nameEn: "Muffin", price: "", descEs: "", descEn: "" }
+        ]
+      },
+      {
+        id: "especialidad",
+        nameEs: "✦Especialidad✦",
+        nameEn: "✦Specialty✦",
+        items: [
+          { id: "e1", nameEs: "Quesitos", nameEn: "Tequila, lime, triple sec.", price: "", descEs: "", descEn: "" },
+          { id: "e2", nameEs: "Bizcocho", nameEn: "Squeezed lemon, sugar, water, ice.", price: "", descEs: "", descEn: "" },
+          { id: "e3", nameEs: "Flan", nameEn: "Rum, mint, soda water, lime.", price: "", descEs: "", descEn: "" },
+          { id: "e4", nameEs: "Cheesecake", nameEn: "Espresso with cold water over ice.", price: "", descEs: "", descEn: "" },
+          { id: "e5", nameEs: "Tres Leches", nameEn: "Black tea, peach flavor, ice.", price: "", descEs: "", descEn: "" }
         ]
       }
     ]
+
   });
 
   /* 
