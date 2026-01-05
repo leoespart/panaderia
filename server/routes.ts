@@ -98,6 +98,39 @@ export async function registerRoutes(
     }
   });
 
+  // Visit Counting Routes
+  app.post("/api/visit", async (req, res) => {
+    // Determine if we should count this visit
+    // Use session to avoid duplicates on refresh
+    if (req.session && req.session.visited) {
+      return res.json({ message: "Already visited" });
+    }
+
+    req.session.visited = true;
+    const userAgent = req.headers["user-agent"] || "";
+
+    try {
+      await storage.logAccess({
+        timestamp: new Date().toISOString(),
+        device: getDeviceShort(userAgent),
+        action: "Visitor Access"
+      });
+      res.json({ success: true });
+    } catch (e) {
+      console.error("Visit log error", e);
+      res.status(500).json({ message: "Error logging visit" });
+    }
+  });
+
+  app.get("/api/stats", async (req, res) => {
+    try {
+      const visits = await storage.getVisitCount();
+      res.json({ visits });
+    } catch (e) {
+      res.status(500).json({ message: "Error fetching stats" });
+    }
+  });
+
   // Admin & Logs Routes
   app.post("/api/login", async (req: any, res) => {
     const { password } = req.body;

@@ -10,6 +10,7 @@ export interface IStorage {
   updateSiteSettings(data: any): Promise<void>;
   logAccess(entry: InsertLog): Promise<void>;
   getAccessLogs(): Promise<Log[]>;
+  getVisitCount(): Promise<number>;
 }
 
 export class DbStorage implements IStorage {
@@ -51,6 +52,15 @@ export class DbStorage implements IStorage {
 
   async getAccessLogs(): Promise<Log[]> {
     return await db.select().from(logs).orderBy(desc(logs.id)).limit(100);
+  }
+
+  async getVisitCount(): Promise<number> {
+    // We count entries where action is 'Visitor Access'
+    // In a real app we might want to group by unique IPs or sessions, 
+    // but for now simple counting of filtered logs is a good start.
+    // However, count() is clearer.
+    const result = await db.select({ count: logs.id }).from(logs).where(eq(logs.action, "Visitor Access"));
+    return result.length;
   }
 }
 

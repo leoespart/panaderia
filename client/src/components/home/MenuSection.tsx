@@ -36,8 +36,6 @@ export function MenuSection({ siteData, t, lang }: MenuSectionProps) {
     // Default to strict first category instead of "all"
     const [selectedCategory, setSelectedCategory] = useState<string>(siteData.categories?.[0]?.id || "");
 
-    if (!siteData.isMenuVisible) return null;
-
     return (
         <motion.div id="menu" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-5xl mx-auto">
             <div className="flex flex-col items-center mb-12 md:mb-20 text-center">
@@ -52,18 +50,28 @@ export function MenuSection({ siteData, t, lang }: MenuSectionProps) {
                 <motion.div variants={fadeInUp} className="w-full max-w-3xl">
                     <Card
                         onClick={() => {
-                            const card = document.getElementById("menu-card");
-                            if (card) {
-                                card.classList.remove("animate-shake");
-                                void card.offsetWidth; // trigger reflow
-                                card.classList.add("animate-shake");
+                            if (siteData.isMenuVisible) {
+                                setIsMenuModalOpen(true);
+                            } else {
+                                const card = document.getElementById("menu-card");
+                                if (card) {
+                                    card.classList.remove("animate-shake");
+                                    void card.offsetWidth; // trigger reflow
+                                    card.classList.add("animate-shake");
+                                }
                             }
                         }}
                         id="menu-card"
-                        className="bg-primary text-primary-foreground border-none flex items-center justify-center p-12 md:p-20 cursor-pointer hover:bg-primary/90 transition-all shadow-xl group overflow-hidden relative rounded-2xl md:rounded-[2rem]">
+                        className={`bg-primary text-primary-foreground border-none flex items-center justify-center p-12 md:p-20 cursor-pointer hover:bg-primary/90 transition-all shadow-xl group overflow-hidden relative rounded-2xl md:rounded-[2rem] ${!siteData.isMenuVisible ? 'opacity-90' : ''}`}>
                         <div className="text-center relative z-10">
-                            <p className="text-3xl md:text-5xl font-black mb-4 md:mb-8 uppercase">{t.viewFullMenu}</p>
-                            <ArrowRight className="h-10 w-10 md:h-16 md:w-16 mx-auto group-hover:translate-x-8 transition-transform" />
+                            <p className="text-3xl md:text-5xl font-black mb-4 md:mb-8 uppercase">
+                                {siteData.isMenuVisible ? t.viewFullMenu : "EN CONSTRUCCIÓN"}
+                            </p>
+                            {siteData.isMenuVisible ? (
+                                <ArrowRight className="h-10 w-10 md:h-16 md:w-16 mx-auto group-hover:translate-x-8 transition-transform" />
+                            ) : (
+                                <Utensils className="h-10 w-10 md:h-16 md:w-16 mx-auto opacity-50" />
+                            )}
                         </div>
                     </Card>
                 </motion.div>

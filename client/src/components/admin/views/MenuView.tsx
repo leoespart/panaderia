@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Trash2, Upload, X, Save, Edit3, Image as ImageIcon, Utensils, Eye, EyeOff } from "lucide-react";
+import { motion, AnimatePresence, Reorder } from "framer-motion";
+import { Plus, Trash2, Upload, X, Save, Edit3, Image as ImageIcon, Utensils, Eye, EyeOff, GripVertical } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -42,12 +42,22 @@ export function MenuView({ siteData, setSiteData, onSave, onUpload }: MenuViewPr
         else setSelectedCatId("");
     };
 
+    const handleReorderCategories = (newOrder: any[]) => {
+        setSiteData({ ...siteData, categories: newOrder });
+    };
+
+    const handleReorderItems = (newOrder: any[]) => {
+        const newCats = [...siteData.categories];
+        newCats[activeCategoryIndex].items = newOrder;
+        setSiteData({ ...siteData, categories: newCats });
+    };
+
     return (
         <div className="space-y-6 h-full flex flex-col">
             <div className="flex justify-between items-center">
                 <div>
                     <h2 className="text-4xl font-black uppercase text-white tracking-wide">Menú</h2>
-                    <p className="text-muted-foreground text-lg">Gestiona tus categorías y platos.</p>
+                    <p className="text-muted-foreground text-lg">Gestiona tus categorías y platos. Arrastra para reordenar.</p>
                 </div>
                 <div className="flex items-center gap-4">
                     <Button
@@ -85,28 +95,35 @@ export function MenuView({ siteData, setSiteData, onSave, onUpload }: MenuViewPr
                             <Plus className="h-6 w-6" />
                         </Button>
                     </div>
-                    {siteData.categories.map((cat: any, idx: number) => (
-                        <div key={cat.id} className="group flex gap-2">
-                            <button
-                                onClick={() => setSelectedCatId(cat.id)}
-                                className={`flex-1 text-left px-6 py-4 rounded-xl font-bold text-lg transition-all border border-transparent ${selectedCatId === cat.id
-                                    ? "bg-primary text-primary-foreground border-primary/50 shadow-lg shadow-primary/20"
-                                    : "bg-white/5 text-muted-foreground hover:bg-white/10 hover:text-white border-white/5"
-                                    }`}
-                            >
-                                {cat.nameEs}
-                            </button>
-                            {selectedCatId === cat.id && (
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    onClick={() => handleDeleteCategory(idx)}
-                                >
-                                    <Trash2 className="h-5 w-5" />
-                                </Button>
-                            )}
-                        </div>
-                    ))}
+
+                    <Reorder.Group axis="y" values={siteData.categories} onReorder={handleReorderCategories} className="flex flex-col gap-2">
+                        {siteData.categories.map((cat: any, idx: number) => (
+                            <Reorder.Item key={cat.id} value={cat}>
+                                <div className="group flex gap-2">
+                                    <div
+                                        onClick={() => setSelectedCatId(cat.id)}
+                                        className={`flex-1 flex items-center gap-2 text-left px-4 py-4 rounded-xl font-bold text-lg transition-all border border-transparent cursor-pointer ${selectedCatId === cat.id
+                                            ? "bg-primary text-primary-foreground border-primary/50 shadow-lg shadow-primary/20"
+                                            : "bg-white/5 text-muted-foreground hover:bg-white/10 hover:text-white border-white/5"
+                                            }`}
+                                    >
+                                        <GripVertical className="h-4 w-4 opacity-30 group-hover:opacity-100 cursor-grab active:cursor-grabbing" />
+                                        {cat.nameEs}
+                                    </div>
+                                    {selectedCatId === cat.id && (
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={() => handleDeleteCategory(idx)}
+                                        >
+                                            <Trash2 className="h-5 w-5" />
+                                        </Button>
+                                    )}
+                                </div>
+                            </Reorder.Item>
+                        ))}
+                    </Reorder.Group>
+
                     {siteData.categories.length === 0 && (
                         <div className="text-center py-10 border-2 border-dashed border-white/10 rounded-xl">
                             <p className="text-muted-foreground text-sm mb-4">No hay categorías</p>
@@ -172,78 +189,83 @@ export function MenuView({ siteData, setSiteData, onSave, onUpload }: MenuViewPr
                                 </div>
 
                                 <div className="grid gap-4">
-                                    <AnimatePresence>
-                                        {activeCategory.items.map((item: any, itemIdx: number) => (
-                                            <motion.div
-                                                key={item.id}
-                                                initial={{ opacity: 0, scale: 0.95 }}
-                                                animate={{ opacity: 1, scale: 1 }}
-                                                exit={{ opacity: 0, scale: 0.9 }}
-                                                layout
-                                                className="bg-black/20 border border-white/5 rounded-xl p-4 hover:border-white/20 transition-colors group"
-                                            >
-                                                <div className="flex gap-4">
-                                                    {/* Image Handler */}
-                                                    <div className="w-24 h-24 bg-white/5 rounded-lg shrink-0 overflow-hidden relative border border-white/10">
-                                                        {item.image ? (
-                                                            <img src={item.image} alt="" className="w-full h-full object-cover" />
-                                                        ) : (
-                                                            <div className="w-full h-full flex flex-col items-center justify-center text-muted-foreground p-2 text-center">
-                                                                <ImageIcon className="h-6 w-6 mb-1 opacity-50" />
-                                                                <span className="text-[10px] uppercase font-bold">Sin foto</span>
-                                                            </div>
-                                                        )}
-                                                        <label className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer transition-opacity">
-                                                            <Upload className="h-6 w-6 text-white" />
-                                                            <input type="file" className="hidden" accept="image/*" onChange={(e) => onUpload(e, activeCategoryIndex, itemIdx)} />
-                                                        </label>
-                                                    </div>
+                                    <Reorder.Group axis="y" values={activeCategory.items} onReorder={handleReorderItems} className="space-y-4">
+                                        <AnimatePresence>
+                                            {activeCategory.items.map((item: any, itemIdx: number) => (
+                                                <Reorder.Item key={item.id} value={item}>
+                                                    <motion.div
+                                                        initial={{ opacity: 0, scale: 0.95 }}
+                                                        animate={{ opacity: 1, scale: 1 }}
+                                                        exit={{ opacity: 0, scale: 0.9 }}
+                                                        layout
+                                                        className="bg-black/20 border border-white/5 rounded-xl p-4 hover:border-white/20 transition-colors group flex gap-4"
+                                                    >
+                                                        <div className="flex items-center cursor-grab active:cursor-grabbing text-white/20 hover:text-white">
+                                                            <GripVertical className="h-6 w-6" />
+                                                        </div>
 
-                                                    {/* Fields */}
-                                                    <div className="flex-1 space-y-3">
-                                                        <div className="flex gap-4">
-                                                            <Input
-                                                                className="bg-transparent border-transparent hover:border-white/10 focus:border-primary/50 font-bold text-lg p-0 h-auto rounded-none border-b"
-                                                                value={item.nameEs}
+                                                        {/* Image Handler */}
+                                                        <div className="w-24 h-24 bg-white/5 rounded-lg shrink-0 overflow-hidden relative border border-white/10">
+                                                            {item.image ? (
+                                                                <img src={item.image} alt="" className="w-full h-full object-cover" />
+                                                            ) : (
+                                                                <div className="w-full h-full flex flex-col items-center justify-center text-muted-foreground p-2 text-center">
+                                                                    <ImageIcon className="h-6 w-6 mb-1 opacity-50" />
+                                                                    <span className="text-[10px] uppercase font-bold">Sin foto</span>
+                                                                </div>
+                                                            )}
+                                                            <label className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer transition-opacity">
+                                                                <Upload className="h-6 w-6 text-white" />
+                                                                <input type="file" className="hidden" accept="image/*" onChange={(e) => onUpload(e, activeCategoryIndex, itemIdx)} />
+                                                            </label>
+                                                        </div>
+
+                                                        {/* Fields */}
+                                                        <div className="flex-1 space-y-3">
+                                                            <div className="flex gap-4">
+                                                                <Input
+                                                                    className="bg-transparent border-transparent hover:border-white/10 focus:border-primary/50 font-bold text-lg p-0 h-auto rounded-none border-b"
+                                                                    value={item.nameEs}
+                                                                    onChange={(e) => {
+                                                                        const newCats = [...siteData.categories];
+                                                                        newCats[activeCategoryIndex].items[itemIdx].nameEs = e.target.value;
+                                                                        setSiteData({ ...siteData, categories: newCats });
+                                                                    }}
+                                                                />
+
+                                                            </div>
+                                                            <Textarea
+                                                                className="bg-white/5 border-transparent focus:border-primary/50 text-sm resize-none h-16"
+                                                                placeholder="Descripción del plato..."
+                                                                value={item.descEs}
                                                                 onChange={(e) => {
                                                                     const newCats = [...siteData.categories];
-                                                                    newCats[activeCategoryIndex].items[itemIdx].nameEs = e.target.value;
+                                                                    newCats[activeCategoryIndex].items[itemIdx].descEs = e.target.value;
                                                                     setSiteData({ ...siteData, categories: newCats });
                                                                 }}
                                                             />
-
                                                         </div>
-                                                        <Textarea
-                                                            className="bg-white/5 border-transparent focus:border-primary/50 text-sm resize-none h-16"
-                                                            placeholder="Descripción del plato..."
-                                                            value={item.descEs}
-                                                            onChange={(e) => {
-                                                                const newCats = [...siteData.categories];
-                                                                newCats[activeCategoryIndex].items[itemIdx].descEs = e.target.value;
-                                                                setSiteData({ ...siteData, categories: newCats });
-                                                            }}
-                                                        />
-                                                    </div>
 
-                                                    {/* Actions */}
-                                                    <div className="flex flex-col justify-start">
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="icon"
-                                                            className="text-white/20 hover:text-destructive hover:bg-destructive/10"
-                                                            onClick={() => {
-                                                                const newCats = [...siteData.categories];
-                                                                newCats[activeCategoryIndex].items.splice(itemIdx, 1);
-                                                                setSiteData({ ...siteData, categories: newCats });
-                                                            }}
-                                                        >
-                                                            <Trash2 className="h-5 w-5" />
-                                                        </Button>
-                                                    </div>
-                                                </div>
-                                            </motion.div>
-                                        ))}
-                                    </AnimatePresence>
+                                                        {/* Actions */}
+                                                        <div className="flex flex-col justify-start">
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                className="text-white/20 hover:text-destructive hover:bg-destructive/10"
+                                                                onClick={() => {
+                                                                    const newCats = [...siteData.categories];
+                                                                    newCats[activeCategoryIndex].items.splice(itemIdx, 1);
+                                                                    setSiteData({ ...siteData, categories: newCats });
+                                                                }}
+                                                            >
+                                                                <Trash2 className="h-5 w-5" />
+                                                            </Button>
+                                                        </div>
+                                                    </motion.div>
+                                                </Reorder.Item>
+                                            ))}
+                                        </AnimatePresence>
+                                    </Reorder.Group>
                                 </div>
                             </div>
                         </div>

@@ -71,7 +71,7 @@ export function AdminPanel({ siteData, setSiteData }: AdminPanelProps) {
 
             toast.promise(promise, {
                 loading: 'Guardando cambios...',
-                success: 'Cambios guardados correctamente',
+                success: 'Se han guardado los cambios',
                 error: 'Error al guardar cambios'
             });
 

@@ -72,6 +72,11 @@ export default function Home() {
   const [isLangOpen, setIsLangOpen] = useState(false);
   const [showPromo, setShowPromo] = useState(false);
 
+  // Track visit on mount
+  useEffect(() => {
+    fetch("/api/visit", { method: "POST" }).catch(e => console.error(e));
+  }, []);
+
   // Editable State
   const [siteData, setSiteData] = useState<any>({
     heroBadgeEs: "Desayunos & Almuerzos",

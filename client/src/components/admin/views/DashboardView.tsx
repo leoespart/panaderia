@@ -13,10 +13,18 @@ interface DashboardViewProps {
 export function DashboardView({ siteData, onNavigate }: DashboardViewProps) {
     const categoriesCount = siteData.categories?.length || 0;
     const itemsCount = siteData.categories?.reduce((acc: number, cat: any) => acc + cat.items.length, 0) || 0;
+    const [totalVisits, setTotalVisits] = React.useState<string>("...");
 
-    // Fake stats for visual demo
+    React.useEffect(() => {
+        fetch("/api/stats")
+            .then(res => res.json())
+            .then(data => setTotalVisits(data.visits?.toString() || "0"))
+            .catch(() => setTotalVisits("ERR"));
+    }, []);
+
+    // Stats
     const stats = [
-        { label: "Vistas Totales", value: "12,345", change: "+12%", icon: Users, color: "text-blue-400" },
+        { label: "Vistas Totales", value: totalVisits, change: "Real-time", icon: Users, color: "text-blue-400" },
         { label: "Items en Menú", value: itemsCount, change: "+2", icon: Utensils, color: "text-orange-400" },
         { label: "Categorías", value: categoriesCount, change: "0", icon: ShoppingBag, color: "text-purple-400" },
         { label: "Conversión", value: "3.2%", change: "+0.4%", icon: TrendingUp, color: "text-green-400" },
