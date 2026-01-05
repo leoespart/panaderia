@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence, Reorder } from "framer-motion";
-import { Plus, Trash2, Upload, X, Save, Edit3, Image as ImageIcon, Utensils, Eye, EyeOff, GripVertical } from "lucide-react";
+import { Plus, Trash2, Upload, X, Save, Edit3, Image as ImageIcon, Utensils, Eye, EyeOff, GripVertical, Star } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -248,6 +248,19 @@ export function MenuView({ siteData, setSiteData, onSave, onUpload }: MenuViewPr
 
                                                         {/* Actions */}
                                                         <div className="flex flex-col justify-start">
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                className={`hover:bg-yellow-500/20 ${item.popular ? "text-yellow-400" : "text-white/20 hover:text-yellow-400"}`}
+                                                                onClick={() => {
+                                                                    const newCats = [...siteData.categories];
+                                                                    newCats[activeCategoryIndex].items[itemIdx].popular = !newCats[activeCategoryIndex].items[itemIdx].popular;
+                                                                    setSiteData({ ...siteData, categories: newCats });
+                                                                }}
+                                                                title={item.popular ? "Quitar de populares" : "Marcar como popular"}
+                                                            >
+                                                                <Star className={`h-5 w-5 ${item.popular ? "fill-yellow-400" : ""}`} />
+                                                            </Button>
                                                             <Button
                                                                 variant="ghost"
                                                                 size="icon"
